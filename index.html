@@ -184,6 +184,262 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://zupeinie.github.io/2025/03/24/DFA-FD/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="换个研究">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="换个研究">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2025/03/24/DFA-FD/" class="post-title-link" itemprop="url">DFA-FD</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2025-03-24 21:10:02 / Modified: 21:11:37" itemprop="dateCreated datePublished" datetime="2025-03-24T21:10:02+08:00">2025-03-24</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="DFA-FD"><a href="#DFA-FD" class="headerlink" title="DFA-FD"></a>DFA-FD</h2><h3 id="Iterative-Algorithm-Another-View"><a href="#Iterative-Algorithm-Another-View" class="headerlink" title="Iterative Algorithm, Another View"></a>Iterative Algorithm, Another View</h3><p>给定一个有 k 个节点的 CFG，迭代算法会更新每个节点 n 的 OUT[n] 值。那么就可以考虑把这些值定义为一个 k-tuple：</p>
+<p>$(OUT[n_1],OUT[n_2],…,OUT[n_k])∈(V_1×V_2×…×V_k)=V_k$</p>
+<p>则，我们的数据流分析迭代算法框架就可记为$F:V^k \rightarrow V^k$</p>
+<p>迭代过程就被记为：</p>
+<ul>
+<li>$X_0 = (null, null, …, null)$</li>
+<li>$X_1 = (v_1^1,v_2^1,…,v_k^1) = F(X_0)$</li>
+<li>$X_2 = (v_1^2,v_2^2,…,v_k^2) = F(X_1)$</li>
+<li>…</li>
+<li>$X<em>i = (v_1^i,v_2^i,…,v_k^i) = F(X</em>{i-1})$</li>
+<li>$X<em>{i+1} = (v_1^i,v_2^i,…,v_k^i) = F(X</em>{i})$</li>
+<li>此时我们发现$X<em>i =X</em>{i+1}$，意味着$X_i$就是$F$的一个不动点。</li>
+</ul>
+<p>在这个框架下，我们就有一些想知道的问题：</p>
+<ul>
+<li>Is the algorithm guaranteed to terminate or reach the fixed point, or does it always have a solution?</li>
+<li>If so, is there only one solution or only one fixed point? If more than one, is our solution the best one (most precise)?</li>
+<li>When will the algorithm reach the fixed point, or when can wo get the solution?</li>
+</ul>
+<p>即：</p>
+<ul>
+<li>算法是否确保一定能停止/达到不动点？会不会总是有一个解答？</li>
+<li>如果能到达不动点，那么是不是只有一个不动点？如果有多个不动点，我们的结果是最优的吗？</li>
+<li>什么时候我们会能得到不动点？</li>
+</ul>
+<h3 id="Partial-Order"><a href="#Partial-Order" class="headerlink" title="Partial Order"></a>Partial Order</h3><p>所谓偏序集合（poset），就是一个由集合 $P$ 和偏序关系$\sqsubseteq$所组成$(P, \sqsubseteq)$对。这个对满足以下三个条件：</p>
+<ul>
+<li>Reflexivity 自反性：x $\sqsubseteq$ x</li>
+<li>Antisymmetry 反对称性：x $\sqsubseteq$ y, y $\sqsubseteq$ x, 则 x = y</li>
+<li>Transitivity 传递性：x $\sqsubseteq$ y, y $\sqsubseteq$ z, 则 x $\sqsubseteq$ z</li>
+<li>例子：小于等于关系就是一个偏序关系，但小于关系不是偏序关系，它是全序关系。</li>
+</ul>
+<p>偏序关系与全序关系的区别在于，全序关系可以让任意两个元素比较，而偏序关系不保证所有元素都能进行比较。</p>
+<h3 id="Upper-and-Lower-Bounds"><a href="#Upper-and-Lower-Bounds" class="headerlink" title="Upper and Lower Bounds"></a>Upper and Lower Bounds</h3><p>对于偏序集中的某子集 S 来说：</p>
+<ul>
+<li>若存在元素 u 使得 S 的任意元素 x 有 x $\sqsubseteq$ u，那么我们说 u 是 S 的上界（Upper bound）。</li>
+<li>同理，若存在元素 l 使得 S 的任意元素 x 有 l $\sqsubseteq$ x，那么我们说 l 是 S 的下界（Lower bound）。</li>
+</ul>
+<p>然后我们衍生出最小上界和最大下界的概念：</p>
+<ul>
+<li>在 S 的所有上界中，我们记最小上界（Least upper bound, lub）为$\sqcup S$，满足所有上界 u 对 lub 有： $\sqcup S \sqsubseteq u$</li>
+<li>类似地我们也能定义出最大下界（Greatest lower bound, glb）为$\sqcap S$。</li>
+</ul>
+<p><img src="/.io//上下界例子.jpeg" alt="上下界例子" style="zoom:20%;"></p>
+<p>当 S 的元素个数只有两个{a, b}时，我们还可以有另一种记法：</p>
+<ul>
+<li>最小上界：$a \sqcup b$, a join b</li>
+<li>最大下界：$a \sqcap b$, a meet b</li>
+</ul>
+<p>并不是每个偏序集都有 lub 和 glb，但是如果有，那么该 lub, glb 将是唯一的。（可假设存在多个，然后用自反性证明它们是同一个：假设有两个lub，那其中一个按照定义应该是最小的，那两者中存在一个更小的，和原始定义冲突，故而只能是两者相同即唯一）</p>
+<p><img src="/.io//上下界存在则唯一proof.jpeg" alt="上下界存在则唯一proof" style="zoom:20%;"></p>
+<h3 id="Lattice-Semilattice-Complete-and-Product-Lattic"><a href="#Lattice-Semilattice-Complete-and-Product-Lattic" class="headerlink" title="Lattice, Semilattice, Complete and Product Lattic"></a>Lattice, Semilattice, Complete and Product Lattic</h3><p>给定一个偏序集，如果任意元素 a, b 都有 lub和glb，那么这么偏序集就叫做 <strong>格（lattice）</strong>。</p>
+<ul>
+<li>属于 lattice 的：小于等于关系，子集关系</li>
+<li>不属于 lattice 的：子串关系</li>
+</ul>
+<p>如果偏序集任意两元素的上下界仅有其 lub 和 glb，那么称该偏序集为半格（Semilattice）</p>
+<p>如果在此之上更加严格一些，任意集合都存在 lub 和 glb，那么我们说这个 lattice 为 <strong>全格（complete lattice）</strong></p>
+<ul>
+<li>属于全格的：子集关系</li>
+<li>不属于全格的：小于等于关系，因为全体正整数没有一个边界</li>
+</ul>
+<p>每一个全格都存在着<strong>最大元素$\top$ (top)和最小元素$\bot$ (bottom)</strong>，他们分别是整个集合的 lub 和 glb。</p>
+<p>如果一个 lattice 是有穷的，那么它一定是一个全格。然而，一个全格不一定是有穷的，例如[0, 1]之间的实数是无穷的，但是期间的小于等于关系可以使其成为全格。</p>
+<p>另外还有 <strong>Product Lattice</strong>，多个 lattice 的笛卡尔积也能形成一个新的 lattice。</p>
+<p>需要记住的是：</p>
+<ul>
+<li>product lattice 也是一个 lattice</li>
+<li>如果 product lattice L是全格的积，那么 L 也是全格。</li>
+</ul>
+<p>Example 1. Is $(S, \sqsubseteq)$ a poset where $S$ is a set of integers and <script type="math/tex">\sqsubseteq</script> represents $\leq$ (less than or equal to)? </p>
+<p>Example 2.Is  $(S, \sqsubseteq)$ a poset where $S$ is a set of integers and <script type="math/tex">\sqsubseteq</script> represents $&lt;$ (less than)? </p>
+<p>Example 3.Is $(S, \sqsubseteq)$ a poset where $S$ is a set of English words and <script type="math/tex">\sqsubseteq</script> represents the substring relation,i.e., $s1 \sqsubseteq s2$ means $s1$ is a substring of $s2$? </p>
+<p><img src="/.io//example3.jpeg" alt="example3" style="zoom:20%;"></p>
+<p>Example 4. Is  $(S, \sqsubseteq)$ a poset where $S$ is the power set of set ${a,b,c}$ and $\sqsubseteq$ represents $\subseteq$ (subset)?</p>
+<p><img src="/.io//example4.jpeg" alt="example4" style="zoom:20%;"></p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>example</th>
+<th>偏序</th>
+<th>格</th>
+<th>全格</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>属于</td>
+<td>属于</td>
+<td>无上界，无穷，不属于全格</td>
+</tr>
+<tr>
+<td>2</td>
+<td>不满足自反性</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>3</td>
+<td>属于</td>
+<td>不属于</td>
+<td></td>
+</tr>
+<tr>
+<td>4</td>
+<td>属于</td>
+<td>属于</td>
+<td>属于</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h3 id="Data-Flow-Analysis-Framework-via-Lattice"><a href="#Data-Flow-Analysis-Framework-via-Lattice" class="headerlink" title="Data Flow Analysis Framework via Lattice"></a>Data Flow Analysis Framework via Lattice</h3><p>一个数据流分析框架（D, L, F）由以下元素组成：</p>
+<ul>
+<li>D: 数据流的方向，前向还是后向</li>
+<li>L: 包含了数据值 V 和 meet, join 符号的格（一般选其一，也就是半格）</li>
+<li>F: V -&gt; V 的转移方程族</li>
+</ul>
+<p>从而，数据流分析可以被视为在 lattice 的值上迭代地应用转移方程和 meet/join 操作符。</p>
+<h3 id="Monotonicity-and-Fixed-Point-Theorem"><a href="#Monotonicity-and-Fixed-Point-Theorem" class="headerlink" title="Monotonicity and Fixed Point Theorem"></a>Monotonicity and Fixed Point Theorem</h3><p>回看我们在上面提出的问题：迭代算法在什么条件下可以停止？我们在这里引入不动点定理：</p>
+<p>Monotonicity 单调性：如果$x \sqsubseteq y \Rightarrow f(x)\sqsubseteq f(y)$，则说函数f: L -&gt; L 是<strong>单调的</strong>。</p>
+<p>FIxed Point Theorem 不动点定理：给定一个全格$(L,\sqsubseteq)$，如果：</p>
+<ol>
+<li>$f: L \rightarrow L$是单调的</li>
+<li>$L$是有穷的</li>
+</ol>
+<p>也就是f单调有界+L全格，那么</p>
+<ul>
+<li>迭代$f^k(\bot)$可以得到最小不动点（least fixed point）</li>
+<li>迭代$f^k(\top)$可以得到最大不动点（greatest fixed point）</li>
+</ul>
+<p>证明：</p>
+<p>根据$\bot$和f的定义，我们可以得到：$\bot \sqsubseteq f(\bot)$。</p>
+<p>由于 L 是有限的，且 f 单调，根据鸽笼原理，必然存在一个 k 使得$\bot \sqsubseteq f(\bot) \sqsubseteq f^2(\bot)\sqsubseteq …\sqsubseteq f^k(\bot)\sqsubseteq f^{k+1}(\bot) $，且$f^k(\bot) = f^{k+1}(\bot)$。</p>
+<p>假设我们有另一个任意不动点 x，由于 f 是单调的，因此$f(\bot) \sqsubseteq f(x), f^2(\bot) \sqsubseteq f^2(x),…,f^{Fix} = f^k(\bot)\sqsubseteq f^k(x) = x$</p>
+<p>可知的确$f^{Fix}$是最小不动点。</p>
+<p>通过上面的证明，我们又回答了一个问题：如果我们的迭代算法符合不动点定理的要求，那么迭代得到的不动点，确实就是最优不动点。</p>
+<p><img src="/.io//不动点存在性证明.jpeg" alt="不动点存在性证明" style="zoom:33%;"><img src="/.io//不动点least证明.jpeg" alt="不动点least证明" style="zoom:33%;"></p>
+<h3 id="Relate-Iterative-Algorithm-to-Fixed-Point-Theorem"><a href="#Relate-Iterative-Algorithm-to-Fixed-Point-Theorem" class="headerlink" title="Relate Iterative Algorithm to Fixed Point Theorem"></a>Relate Iterative Algorithm to Fixed Point Theorem</h3><p>以上我们只是定性的描述了是否能得到最优不动点，但是迭代算法怎样才能算是符合了不动点定理的要求呢？接下来介绍关联的方法。</p>
+<p>首先，回想 fact 的形式：$(v_1^1,v_2^1,…,v_k^1)$，可以将其视为一个有限 lattice，它的积也是有限 lattice，因此 fact 对应到 finite lattice 是可以的。</p>
+<p>然后，我们的迭代函数 F 包括了转移函数 f 和 join/meet 函数，证明 F 是单调的，那么也就能得到 $F: L\rightarrow L$ 是单调的。</p>
+<p>这里分两部分。</p>
+<ol>
+<li>转移函数，即 $OUT = gen U (IN - kill)$，显然是单调的。</li>
+<li>那么 join/meet 函数，我们要证明其单调，就是要证明：$\forall x,y,z\in L, x\sqsubseteq y$，有$x \sqcup z \sqsubseteq y \sqcup z$。<ol>
+<li>由定义，$y \sqsubseteq y \sqcup z$</li>
+<li>由传递性，$x \sqsubseteq y \sqcup z$</li>
+<li>则 $y \sqcup z$ 是 $x, z$ 的 lub</li>
+<li>又 $x \sqcup z$ 是 $x, z$ 的 lub</li>
+<li>因此 $x \sqcup z \sqsubseteq y \sqcup z$，证毕。</li>
+</ol>
+</li>
+</ol>
+<p>于是我们就完成了迭代算法到不动点定理的对应。</p>
+<p>现在我们要回答本文开头的第三个问题了，什么时候算法停止？</p>
+<p>这个问题就很简单了，因为每个 lattice 都有其高度。假设 lattice 的高度为 h，而我们的 CFG 节点数为 k，就算每次迭代可以使一个节点在 lattice 上升一个高度，那么最坏情况下，我们的迭代次数也就是 $i = h \times k$</p>
+<p>最后我们再列出这三个问题与其回答：</p>
+<ul>
+<li>算法是否确保一定能停止/达到不动点？<strong>能！</strong>会不会总是有一个解答？<strong>可以！</strong></li>
+<li>如果能到达不动点，那么是不是只有一个不动点？<strong>可以有很多。</strong>如果有多个不动点，我们的结果是最优的吗？<strong>是的！</strong></li>
+<li>什么时候我们会能得到不动点？<strong>最坏情况下，是 lattice 的高度与 CFG 的节点数的乘积。</strong></li>
+</ul>
+<h3 id="May-Must-Analysis-A-Lattice-View"><a href="#May-Must-Analysis-A-Lattice-View" class="headerlink" title="May/Must Analysis, A Lattice View"></a>May/Must Analysis, A Lattice View</h3><p>无论 may 还是 must 分析，都是从一个方向到另一个方向去走。考虑我们的 lattice 抽象成这样一个视图。</p>
+<p>例如，对于到达定值分析，下界代表没有任何可到达的定值，上界代表所有定值都可到达。</p>
+<p>下界代表 unsafe 的情形，即我们认为无到达定值，可对相关变量的存储空间进行替换。上界代表 safe but useless 的情形，即认为定值必然到达，但是这对我们寻找一个可替换掉的存储空间毫无意义。</p>
+<p>而因为我们采用了 join 函数，那么我们必然会从 lattice 的最小下界往上走。而越往上走，我们就会失去更多的精确值。那么，在所有不动点中我们寻找最小不动点，那么就能得到精确值最大的结果。</p>
+<p>反之，在可用表达式分析中，下界代表无可用表达式，上界代表所有表达式都可用。</p>
+<p>下界代表 safe but useless 的情形，因为需要重新计算每个表达式，即使确实有表达式可用。而上界代表 unsafe，因为不是所有路径都能使表达式都可用。与 may analysis 一样，通过寻找最大不动点，我们能得到合法的结果中精确值最大的结果。</p>
+<p><img src="/.io//May:Must Analysis.jpeg" alt="May:Must Analysis" style="zoom:50%;"></p>
+<h3 id="Distributivity-and-MOP"><a href="#Distributivity-and-MOP" class="headerlink" title="Distributivity and MOP"></a>Distributivity and MOP</h3><p>我们引入 Meet-Over-All-Paths Solution，即 MOP。在这个 solution 中，我们不是根据节点与其前驱/后继节点的关系来迭代计算数据流，而是直接查找所有路径，根据所有路径的计算结果再取上/下界。这个结果是最理想的结果。</p>
+<p><img src="/.io//mop.png" alt="mop"></p>
+<p>可以看到，迭代算法是 s3 对前驱取 join 后进行进行 f3 的转移，而 MOP 算法是对到达 s3 之后，s4 之前的路径结果取 join。</p>
+<p>那么迭代算法和 MOP 哪个更精确呢？我们可以证明，$F(x)\sqcup F(y)\sqsubseteq F(x\sqcup y)$：</p>
+<p><img src="/.io//IAvsMOP.jpeg" alt="IAvsMOP" style="zoom:33%;"></p>
+<p>这表明 MOP 是更为精确的。</p>
+<p>但这并没有结束。而如果 F 是可分配的，那么确实可以让偏序符号改为等于号。恰好，gen/kill problem 下，F 确实可分配因此我们能确定，迭代算法的精度与 MOP 相等。</p>
+<h3 id="Constant-Propagation"><a href="#Constant-Propagation" class="headerlink" title="Constant Propagation"></a>Constant Propagation</h3><p>当然有些问题下 F 是不可分配的，如常量传播（Constant Propagation）。</p>
+<p><img src="/.io//常量传播.jpeg" alt="常量传播" style="zoom:33%;"></p>
+<p>在常量传播分析中，其最大上界是 undefine，因为我们不知道一个变量到底被定义为了什么值。最小下界是 NAC（Not A Constant），而中间就是各种常量。这是因为分析一个变量指向的值是否为常量，那么要么它是同一个值，要么它不是常量。</p>
+<p>给定一个 statement s: x = …，我们定义转移函数$OUT[s]=gen\cup(IN[s]-{(x,_)})$。</p>
+<p>其中我们根据赋值号右边的不同，决定不同的 gen 函数：</p>
+<p><img src="/.io//gen 函数.jpeg" alt="gen 函数" style="zoom:25%;"></p>
+<p>注意，const + undef -&gt; undef。因为 undef 变成 const 的过程中是降级，而如果 const1 + undef -&gt; const2，那么 undef 变化为 const 时，const2 会发生改变，原来的 const2 与现在的 const2 不具有偏序关系，那么就不满足偏序关系的单调性了。</p>
+<p>常量传播是不可分配的。以下图为例：对于 c，$F(X)\sqcap F(Y) = 10, F(X\sqcap Y) = \text{NAC}$</p>
+<p><img src="/.io//常量传播不可分配例子.jpeg" alt="常量传播不可分配例子" style="zoom:25%;"></p>
+<h3 id="Worklist-Algorithm"><a href="#Worklist-Algorithm" class="headerlink" title="Worklist Algorithm"></a>Worklist Algorithm</h3><p>在 Worklist 算法中，只在基本块的 fact 发生变化处理其相关基本块，不必再在每次有 fact 变化时处理所有的基本块了。原来算法的优化，比较简单。</p>
+<p><img src="/.io//Worklist Algorithm.jpeg" alt="Worklist Algorithm" style="zoom: 33%;"></p>
+<h3 id="划重点"><a href="#划重点" class="headerlink" title="划重点"></a>划重点</h3><ul>
+<li>理解函数视角下的迭代算法</li>
+<li>对于 lattice 和 complete lattice 的定义</li>
+<li>理解不动点定理</li>
+<li>知道如何用 lattice 来概述 may 和 must analysis</li>
+<li>MOP与迭代算法结果之间的关系</li>
+<li>常量传播分析</li>
+<li>Worklist 算法</li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="https://zupeinie.github.io/2025/03/24/DFA-AP/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -209,7 +465,7 @@
               <span class="post-meta-item-text">Posted on</span>
               
 
-              <time title="Created: 2025-03-24 20:51:19 / Modified: 21:07:35" itemprop="dateCreated datePublished" datetime="2025-03-24T20:51:19+08:00">2025-03-24</time>
+              <time title="Created: 2025-03-24 20:51:19 / Modified: 21:11:08" itemprop="dateCreated datePublished" datetime="2025-03-24T20:51:19+08:00">2025-03-24</time>
             </span>
 
           
@@ -652,9 +908,13 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">2</span>
+          <span class="site-state-item-count">3</span>
           <span class="site-state-item-name">posts</span>
         </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-name">tags</span>
       </div>
   </nav>
 </div>
