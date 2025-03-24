@@ -209,7 +209,7 @@
               <span class="post-meta-item-text">Posted on</span>
               
 
-              <time title="Created: 2025-03-24 20:51:19 / Modified: 21:00:16" itemprop="dateCreated datePublished" datetime="2025-03-24T20:51:19+08:00">2025-03-24</time>
+              <time title="Created: 2025-03-24 20:51:19 / Modified: 21:07:35" itemprop="dateCreated datePublished" datetime="2025-03-24T20:51:19+08:00">2025-03-24</time>
             </span>
 
           
@@ -245,7 +245,7 @@
 </ul>
 <p>2.关于转移方程约束的概念</p>
 <p>分析数据流有前向和后向两种</p>
-<p><img src="/.io//_posts/DFA-AP/数据流前后向.jpeg" alt="数据流前后向" style="zoom:25%;"></p>
+<p><img src="/.io//数据流前后向.jpeg" alt="数据流前后向" style="zoom:25%;"></p>
 <p>3.不会涉及到的概念</p>
 <ul>
 <li>函数调用 Method Calls<ul>
@@ -259,18 +259,18 @@
 </ul>
 <h2 id="Reaching-Definitions-Analysis-到达定值分析"><a href="#Reaching-Definitions-Analysis-到达定值分析" class="headerlink" title="Reaching Definitions Analysis 到达定值分析"></a>Reaching Definitions Analysis 到达定值分析</h2><h3 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h3><p><code>Reaching Definitions：A definition d at program point p reaches a point q if there is a path from p to q such that d is not &quot;killed&quot; along that path.</code></p>
 <p>定义（许畅-编译原理）：假定 x 有定值 d (<strong>definition</strong>)，如果存在一个路径，从紧随 d 的点到达某点 p，并且此路径上面没有 x 的其他定值点，则称 x 的定值 d 到达 (<strong>reaching</strong>) p。如果在这条路径上有对 x 的其它定值，我们说变量 x 的这个定值 d 被杀死 (<strong>killed</strong>) 了</p>
-<p><img src="/.io//_posts/DFA-AP/到达定值分析定义.jpeg" alt="到达定值分析定义" style="zoom:30%;"></p>
+<p><img src="/.io//到达定值分析定义.jpeg" alt="到达定值分析定义" style="zoom:30%;"></p>
 <h3 id="到达定值中的数据流值"><a href="#到达定值中的数据流值" class="headerlink" title="到达定值中的数据流值"></a>到达定值中的数据流值</h3><ul>
 <li>程序中所有变量的定值。</li>
 <li>可以用一个 bit vector 来定义，有多少个赋值语句，就有多少个位。</li>
 </ul>
-<p><img src="/.io//_posts/DFA-AP/到达定值数据流值.png" alt="到达定值数据流值" style="zoom:40%;"></p>
+<p><img src="/.io//到达定值数据流值.png" alt="到达定值数据流值" style="zoom:40%;"></p>
 <h3 id="到达定值的转移方程和控制流处理"><a href="#到达定值的转移方程和控制流处理" class="headerlink" title="到达定值的转移方程和控制流处理"></a>到达定值的转移方程和控制流处理</h3><p><code>That statement &quot;generates&quot; a definition D of variable v and &quot;kills&quot; a;; the other definitions in the program that define variable v, while leaving the remaining incoming definitions unaffected.</code></p>
 <p>语句 S 对变量 v 创建了一个新定义 D（即该语句定义了 v）。该定义 D 会取代程序中所有对 v 的旧定义，这些旧定义在 S 执行后变得无效（被“杀死”）。但是，程序中与变量 v 无关的其他变量的定义不会受影响，仍然保留原样。</p>
 <p>Transfer function:从入口状态删除 kill 掉的定值，并加入新生成的定值；v = x op y，gen v, kill 其它所有的 v</p>
 <p>control flow:任何一个前驱的变量定值都表明，该变量得到了定义。</p>
-<p><img src="/.io//_posts/DFA-AP/到达定值的转移方程.jpeg" alt="到达定值的转移方程" style="zoom:33%;"></p>
-<h3 id="到达定值算法"><a href="#到达定值算法" class="headerlink" title="到达定值算法"></a>到达定值算法</h3><p><img src="/.io//_posts/DFA-AP/到达定值算法.jpeg" alt="到达定值算法"></p>
+<p><img src="/.io//到达定值的转移方程.jpeg" alt="到达定值的转移方程" style="zoom:33%;"></p>
+<h3 id="到达定值算法"><a href="#到达定值算法" class="headerlink" title="到达定值算法"></a>到达定值算法</h3><p><img src="/.io//到达定值算法.jpeg" alt="到达定值算法"></p>
 <p>这是一个经典的迭代算法。</p>
 <ul>
 <li>首先让所有BB和入口的OUT为空。因为你不知道 BB 中有哪些定值被生成。</li>
@@ -281,13 +281,13 @@
 <li>union为并集的意思，即有1为1，全0为0。</li>
 <li>计算抽象说明就是在in上将gen的改为1，将kill的改为0。</li>
 </ul>
-<p><img src="/.io//_posts/DFA-AP/到达定值算法例子1.jpeg" alt="到达定值算法例子1"></p>
+<p><img src="/.io//到达定值算法例子1.jpeg" alt="到达定值算法例子1"></p>
 <p>说明：初始定义所有BB的out为全0，之后从上至下依次根据公式更新。此时分析B2的out，注意到B2的in为B1的out和B4的out的union，故要先做union在继续分析B2的out。此时B2的in为11000000 U 00000000 = 11000000，gen为B2自身涉及的D3、D4即00110000，kill为之前涉及的D2（y）即01000000，故结果为00110000 U (11000000-01000000) = 10110000。</p>
-<p><img src="/.io//_posts/DFA-AP/到达定值算法例子2.jpeg" alt="到达定值算法例子2"></p>
+<p><img src="/.io//到达定值算法例子2.jpeg" alt="到达定值算法例子2"></p>
 <p>说明：此时分析B3的out，in为B2的out即10110000，gen为B3自身涉及的D7即00000010，kill为B3涉及到之前的D1（x）即10000000，故结果为00000010 U (10110000-10000000) = 00110010。</p>
-<p><img src="/.io//_posts/DFA-AP/到达定值算法例子3.jpeg" alt="到达定值算法例子3"></p>
+<p><img src="/.io//到达定值算法例子3.jpeg" alt="到达定值算法例子3"></p>
 <p>说明：经过3轮迭代计算，所有BB的out没有改变，此时到达不动点，算法结束。</p>
-<p><img src="/.io//_posts/DFA-AP/到达定值算法最终会停原因.jpeg" alt="到达定值算法最终会停原因"></p>
+<p><img src="/.io//到达定值算法最终会停原因.jpeg" alt="到达定值算法最终会停原因"></p>
 <h3 id="算法一定会停原因"><a href="#算法一定会停原因" class="headerlink" title="算法一定会停原因"></a>算法一定会停原因</h3><p>单调性：OUT[S] 不会缩减</p>
 <ul>
 <li>每次迭代时：<ul>
@@ -313,15 +313,15 @@
 <li>变量 x 在 p 上活跃，当 且仅存在一条从 p 开始的路径，该路径的末端使用了 x，且路径上没有对 x进行覆盖。</li>
 <li>隐藏了这样一个含义：在被使用前，v 没有被重新定义过，即没有被 kill 过。</li>
 </ul>
-<p><img src="/.io//_posts/DFA-AP/活跃变量分析定义.jpeg" alt="活跃变量分析定义" style="zoom:30%;"></p>
+<p><img src="/.io//活跃变量分析定义.jpeg" alt="活跃变量分析定义" style="zoom:30%;"></p>
 <p>这个算法可以用于寄存器分配，当一个变量不会再被使用，那么此变量就可以从寄存器中腾空，用于新值的存储。</p>
 <p>使用backward后向分析来处理活跃变量分析更方便</p>
 <h3 id="活跃变量中的数据流值"><a href="#活跃变量中的数据流值" class="headerlink" title="活跃变量中的数据流值"></a>活跃变量中的数据流值</h3><ul>
 <li>程序中的所有变量</li>
 <li>依然可以用 bit vector 来表示，每个 bit 代表一个变量</li>
 </ul>
-<p><img src="/.io//_posts/DFA-AP/活跃变量中的数据流值.png" alt="活跃变量中的数据流值" style="zoom:40%;"></p>
-<h3 id="活跃变量的转移方程和控制流处理"><a href="#活跃变量的转移方程和控制流处理" class="headerlink" title="活跃变量的转移方程和控制流处理"></a>活跃变量的转移方程和控制流处理</h3><p><img src="/.io//_posts/DFA-AP/活跃变量分析转移方程和控制流处理.jpeg" alt="活跃变量分析转移方程和控制流处理"></p>
+<p><img src="/.io//活跃变量中的数据流值.png" alt="活跃变量中的数据流值" style="zoom:40%;"></p>
+<h3 id="活跃变量的转移方程和控制流处理"><a href="#活跃变量的转移方程和控制流处理" class="headerlink" title="活跃变量的转移方程和控制流处理"></a>活跃变量的转移方程和控制流处理</h3><p><img src="/.io//活跃变量分析转移方程和控制流处理.jpeg" alt="活跃变量分析转移方程和控制流处理"></p>
 <ul>
 <li>一个基本块内，若 v = exp, 则 def v。若 exp = exp op v，那么 use v。一个变量要么是 use，要么是 def，根据 def 和 use 的先后顺序来决定。</li>
 <li>考虑基本块 B 及其后继 S。若 S 中，变量 v 被使用，那么我们就把 v 放到 S 的 IN 中，交给 B 来分析。</li>
@@ -330,18 +330,18 @@
 <li>因此对于转移方程，IN 是从 OUT 中删去重新定值的变量，然后并上使用过的变量。需要注意，如果同一个块中，变量 v 的 def 先于 use ，那么实际上效果和没有 use 是一样的。</li>
 <li>注意use和def的顺序，如图中的4和6。</li>
 </ul>
-<h3 id="活跃变量算法"><a href="#活跃变量算法" class="headerlink" title="活跃变量算法"></a>活跃变量算法</h3><p><img src="/.io//_posts/DFA-AP/活跃变量算法.jpeg" alt="活跃变量算法"></p>
+<h3 id="活跃变量算法"><a href="#活跃变量算法" class="headerlink" title="活跃变量算法"></a>活跃变量算法</h3><p><img src="/.io//活跃变量算法.jpeg" alt="活跃变量算法"></p>
 <ul>
 <li>我们不知道块中有哪些活跃变量，而且我们的目标是知道在一个块开始时哪些变量活跃，因此把 IN 初始化为空。</li>
 <li>计算过程类似上文到达定值算法。</li>
 <li>初始化的判断技巧：may analysis 是空（全0），must analysis 是 top（全1）。</li>
 <li>计算抽象说明就是在out上将use的改为1，def的改为0。</li>
 </ul>
-<p><img src="/.io//_posts/DFA-AP/活跃变量算法例子1.jpeg" alt="活跃变量算法例子1"></p>
+<p><img src="/.io//活跃变量算法例子1.jpeg" alt="活跃变量算法例子1"></p>
 <p>说明：算法初始化所有BB的in为全0，自下而上的迭代分析。此时需要分析B3的in，out为B5的in即0001000，use为B3自身涉及的x（注意这个表达式x=x-3，此时x为先use后def，故而仍然算是use并且def为0000000）即1000000，故而in为1000000 U (0001000 - 0000000) = 1001000。</p>
-<p><img src="/.io//_posts/DFA-AP/活跃变量算法例子2.jpeg" alt="活跃变量算法例子2"></p>
+<p><img src="/.io//活跃变量算法例子2.jpeg" alt="活跃变量算法例子2"></p>
 <p>说明：此时分析B4的in，注意到B4的out有两个，需要先union，0001000（B5的in）U 0000000（初始值）= 0001000，use为B4涉及的y即0100000，def为x即1000000，故而in为0100000 U (0001000 - 1000000) = 0101000。</p>
-<p><img src="/.io//_posts/DFA-AP/活跃变量算法例子3.jpeg" alt="活跃变量算法例子3"></p>
+<p><img src="/.io//活跃变量算法例子3.jpeg" alt="活跃变量算法例子3"></p>
 <p>说明：经过3轮迭代计算，所有BB的in都没有改变，算法结束。</p>
 <h2 id="Available-Expression-Analysis-可用表达式分析"><a href="#Available-Expression-Analysis-可用表达式分析" class="headerlink" title="Available Expression Analysis 可用表达式分析"></a>Available Expression Analysis 可用表达式分析</h2><h3 id="定义-2"><a href="#定义-2" class="headerlink" title="定义"></a>定义</h3><p><code>An expression x op y is a available at program point p if (1) all paths from the entry to p must pass through the evaluation of x op y, and (2) after the last evaluation of x op y, there is no redefinition of x op y.</code></p>
 <p>x + y 在 p 点可用的条件：从流图入口结点到达 p 的每条路径都对 x + y 求了值，且在最后一次求值之后再没有对 x 或 y 赋值</p>
@@ -350,8 +350,8 @@
 <li>程序中的所有表达式</li>
 <li>bit vector 中，一个 bit 就是一个表达式</li>
 </ul>
-<p><img src="/.io//_posts/DFA-AP/可用表达式的数据流值.png" alt="可用表达式的数据流值" style="zoom:40%;"></p>
-<h3 id="可用表达式的转移方程和控制流处理"><a href="#可用表达式的转移方程和控制流处理" class="headerlink" title="可用表达式的转移方程和控制流处理"></a>可用表达式的转移方程和控制流处理</h3><p><img src="/.io//_posts/DFA-AP/可用表达式的转移方程和控制流处理.jpeg" alt="可用表达式的转移方程和控制流处理"></p>
+<p><img src="/.io//可用表达式的数据流值.png" alt="可用表达式的数据流值" style="zoom:40%;"></p>
+<h3 id="可用表达式的转移方程和控制流处理"><a href="#可用表达式的转移方程和控制流处理" class="headerlink" title="可用表达式的转移方程和控制流处理"></a>可用表达式的转移方程和控制流处理</h3><p><img src="/.io//可用表达式的转移方程和控制流处理.jpeg" alt="可用表达式的转移方程和控制流处理"></p>
 <ul>
 <li>我们要求无论从哪条路径到达 B，表达式都应该已经计算，才能将其视为可用表达式，因此这是一个 must analysis。</li>
 <li>注意到图中，两条不同的路径可能会导致表达式的结果最终不一致。但是我们只关心它的值能不能够再被重复利用，因此可以认为表达式可用。</li>
@@ -359,19 +359,19 @@
 <li>转移方程很好理解，和到达定值差不多。但是，由于我们是 must analysis，因此控制流处理是取交集，而非到达定值那样取并集。</li>
 <li>注意gen和kill的顺序，先kill后gen还是gen。</li>
 </ul>
-<h3 id="可用表达式的算法"><a href="#可用表达式的算法" class="headerlink" title="可用表达式的算法"></a>可用表达式的算法</h3><p><img src="/.io//_posts/DFA-AP/可用表达式的算法.jpeg" alt="可用表达式的算法"></p>
+<h3 id="可用表达式的算法"><a href="#可用表达式的算法" class="headerlink" title="可用表达式的算法"></a>可用表达式的算法</h3><p><img src="/.io//可用表达式的算法.jpeg" alt="可用表达式的算法"></p>
 <ul>
 <li>注意此时的初始化：一开始确实无任何表达式可用，因此OUT[entry]被初始化为空集是自然的。但是，其它基本块的 OUT 被初始化为全集，这是因为当 CFG 存在环时，一个空的初始化值，会让取交集阶段直接把第一次迭代的 IN 设置成 0，无法进行正确的判定了。</li>
 <li>如果一个表达式从来都不可用，那么OUT[entry]的全 0 值会通过交操作将其置为 0，因此不用担心初始化为全 1 会否导致算法不正确。</li>
 <li>计算抽象说明就是在out上将gen的改为1，kill的改为0。</li>
 </ul>
-<p><img src="/.io//_posts/DFA-AP/可用表达式的算法例子1.jpeg" alt="可用表达式的算法例子1"></p>
+<p><img src="/.io//可用表达式的算法例子1.jpeg" alt="可用表达式的算法例子1"></p>
 <p>说明：初始化entry处的out为全0，其他为全1。此时需要分析B2的out，注意到B2的in有两部分，取两部分的交集即10000，gen为B2自身涉及的z/5、e^7*x即01010，kill为B2涉及的p即10000，故而out为01010 U (10000 - 10000) = 01010。</p>
-<p><img src="/.io//_posts/DFA-AP/可用表达式的算法例子2.jpeg" alt="可用表达式的算法例子2"></p>
+<p><img src="/.io//可用表达式的算法例子2.jpeg" alt="可用表达式的算法例子2"></p>
 <p>说明：此时分析B4的out，in为B2的out即01010，gen为B4自身涉及的2<em>y、e^7\</em>x(注意这里是先kill后gen)即00110，kill为00000，故而out为01010 U (00110 - 00000) = 01110。</p>
-<p><img src="/.io//_posts/DFA-AP/可用表达式的算法例子3.jpeg" alt="可用表达式的算法例子3"></p>
+<p><img src="/.io//可用表达式的算法例子3.jpeg" alt="可用表达式的算法例子3"></p>
 <p>说明：经过2轮迭代计算，所有BB的out都没有改变，算法结束。</p>
-<h2 id="三种数据流分析总结"><a href="#三种数据流分析总结" class="headerlink" title="三种数据流分析总结"></a>三种数据流分析总结</h2><p><img src="/.io//_posts/DFA-AP/三种数据流分析总结对比.jpeg" alt="三种数据流分析总结对比"></p>
+<h2 id="三种数据流分析总结"><a href="#三种数据流分析总结" class="headerlink" title="三种数据流分析总结"></a>三种数据流分析总结</h2><p><img src="/.io//三种数据流分析总结对比.jpeg" alt="三种数据流分析总结对比"></p>
 <h3 id="分析目标"><a href="#分析目标" class="headerlink" title="分析目标"></a>分析目标</h3><ul>
 <li><strong>Reaching Definitions（到达定义分析）</strong>：<br>分析程序中每个基本块的定义信息（哪些变量的定义可以从前面流入当前块）。</li>
 <li><strong>Live Variables（活跃变量分析）</strong>：<br>分析程序中每个基本块的活跃变量（哪些变量的值在未来可能被使用，需保留其定义）。</li>
