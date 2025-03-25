@@ -20,12 +20,12 @@
     var CONFIG = {"hostname":"zupeinie.github.io","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":false,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta name="description" content="DFA-AP 数据流分析总揽 数据流分析的核心：How Data Flows on CFG? 将这句话展开来，所谓数据流分析就是： How application-specific Data (对数据的抽象：+, -, 0 等……) Flows (根据分析的类型，做出合适的估算) through the Nodes (数据如何 transfer, 如 + op + &#x3D; +) and Edges (">
+  <meta name="description" content="DFA-AP数据流分析总揽数据流分析的核心：How Data Flows on CFG? 将这句话展开来，所谓数据流分析就是： How application-specific Data (对数据的抽象：+, -, 0 等……)  Flows (根据分析的类型，做出合适的估算) through the  Nodes (数据如何 transfer, 如 + op + &#x3D; +) and  Edges">
 <meta property="og:type" content="article">
 <meta property="og:title" content="DFA-AP">
 <meta property="og:url" content="https://zupeinie.github.io/2025/03/24/DFA-AP/index.html">
 <meta property="og:site_name" content="换个研究">
-<meta property="og:description" content="DFA-AP 数据流分析总揽 数据流分析的核心：How Data Flows on CFG? 将这句话展开来，所谓数据流分析就是： How application-specific Data (对数据的抽象：+, -, 0 等……) Flows (根据分析的类型，做出合适的估算) through the Nodes (数据如何 transfer, 如 + op + &#x3D; +) and Edges (">
+<meta property="og:description" content="DFA-AP数据流分析总揽数据流分析的核心：How Data Flows on CFG? 将这句话展开来，所谓数据流分析就是： How application-specific Data (对数据的抽象：+, -, 0 等……)  Flows (根据分析的类型，做出合适的估算) through the  Nodes (数据如何 transfer, 如 + op + &#x3D; +) and  Edges">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://zupeinie.github.io/2025/03/24/DFA-AP/%E6%95%B0%E6%8D%AE%E6%B5%81%E5%89%8D%E5%90%8E%E5%90%91.jpeg">
 <meta property="og:image" content="https://zupeinie.github.io/2025/03/24/DFA-AP/%E5%88%B0%E8%BE%BE%E5%AE%9A%E5%80%BC%E5%88%86%E6%9E%90%E5%AE%9A%E4%B9%89.jpeg">
@@ -267,15 +267,13 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h1>DFA-AP</h1>
-<h2 id="数据流分析总揽">数据流分析总揽</h2>
-<p>数据流分析的核心：How Data Flows on CFG?</p>
+        <h1 id="DFA-AP"><a href="#DFA-AP" class="headerlink" title="DFA-AP"></a>DFA-AP</h1><h2 id="数据流分析总揽"><a href="#数据流分析总揽" class="headerlink" title="数据流分析总揽"></a>数据流分析总揽</h2><p>数据流分析的核心：How Data Flows on CFG?</p>
 <p>将这句话展开来，所谓数据流分析就是：</p>
 <p>How application-specific Data (对数据的抽象：+, -, 0 等……)</p>
-<p>Flows (根据分析的类型，做出合适的估算) through the</p>
-<p>Nodes (数据如何 transfer, 如 + op + = +) and</p>
-<p>Edges (控制流如何处理，例如两个控制流汇入一个BB) of</p>
-<p>CFG (整个程序) ?</p>
+<p> Flows (根据分析的类型，做出合适的估算) through the</p>
+<p> Nodes (数据如何 transfer, 如 + op + = +) and</p>
+<p> Edges (控制流如何处理，例如两个控制流汇入一个BB) of</p>
+<p> CFG (整个程序) ?</p>
 <p>不同的数据流分析，有着不同的data abstraction, flow safe-approximation策略，transfer functions&amp;control-flow handlings。</p>
 <p><code>may analysis ：outputs information that may be true(over-approximation)</code></p>
 <p>May analysis 关注程序中可能发生的行为，即分析的结果是程序中所有可能会发生的情况的<strong>上界</strong>，输出结果可能为真，可能引入假阳性（实际未发生也被标记为可能）</p>
@@ -284,47 +282,39 @@
 <p><code>Over- and under-approximations are both for safety of analysis.</code></p>
 <p>Over-approximation（May Analysis）：为了避免遗漏潜在的危险行为，may analysis 通常牺牲精确性来涵盖所有可能性。这在安全性分析中非常重要，因为任何可能的漏洞都不能被忽略。</p>
 <p>Under-approximation（Must Analysis）：强调分析结果的可信度和可靠性，即分析所证明的属性一定是真实的。这对验证某些安全性条件是否始终满足非常关键。</p>
-<h2 id="数据流分析的初步准备">数据流分析的初步准备</h2>
-<p>1.Input and Output States 输入输出状态</p>
+<h2 id="数据流分析的初步准备"><a href="#数据流分析的初步准备" class="headerlink" title="数据流分析的初步准备"></a>数据流分析的初步准备</h2><p>1.Input and Output States 输入输出状态</p>
 <ul>
 <li>每一条IR的执行，都会使状态从<strong>输入状态</strong>变成新的<strong>输出状态</strong></li>
 <li>输入/输出状态与语句前/后的 <strong>program point</strong> 相关联。</li>
 </ul>
 <p>2.关于转移方程约束的概念</p>
 <p>分析数据流有前向和后向两种</p>
-<img src="/2025/03/24/DFA-AP/数据流前后向.jpeg" alt="数据流前后向" style="zoom:25%;">
+<p><img src="/2025/03/24/DFA-AP/数据流前后向.jpeg" alt="数据流前后向" style="zoom:25%;"></p>
 <p>3.不会涉及到的概念</p>
 <ul>
-<li>函数调用 Method Calls
-<ul>
+<li>函数调用 Method Calls<ul>
 <li>我们将分析的是过程本身中的事情，即 Intra-procedural。而过程之间的分析，将在 Inter-procedural Analysis 中介绍</li>
 </ul>
 </li>
-<li>变量别名 Aliases
-<ul>
+<li>变量别名 Aliases<ul>
 <li>变量不能有别名。有关问题将在指针分析中介绍。</li>
 </ul>
 </li>
 </ul>
-<h2 id="Reaching-Definitions-Analysis-到达定值分析">Reaching Definitions Analysis 到达定值分析</h2>
-<h3 id="定义">定义</h3>
-<p><code>Reaching Definitions：A definition d at program point p reaches a point q if there is a path from p to q such that d is not &quot;killed&quot; along that path.</code></p>
+<h2 id="Reaching-Definitions-Analysis-到达定值分析"><a href="#Reaching-Definitions-Analysis-到达定值分析" class="headerlink" title="Reaching Definitions Analysis 到达定值分析"></a>Reaching Definitions Analysis 到达定值分析</h2><h3 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h3><p><code>Reaching Definitions：A definition d at program point p reaches a point q if there is a path from p to q such that d is not &quot;killed&quot; along that path.</code></p>
 <p>定义（许畅-编译原理）：假定 x 有定值 d (<strong>definition</strong>)，如果存在一个路径，从紧随 d 的点到达某点 p，并且此路径上面没有 x 的其他定值点，则称 x 的定值 d 到达 (<strong>reaching</strong>) p。如果在这条路径上有对 x 的其它定值，我们说变量 x 的这个定值 d 被杀死 (<strong>killed</strong>) 了</p>
-<img src="/2025/03/24/DFA-AP/到达定值分析定义.jpeg" alt="到达定值分析定义" style="zoom:30%;">
-<h3 id="到达定值中的数据流值">到达定值中的数据流值</h3>
-<ul>
+<p><img src="/2025/03/24/DFA-AP/到达定值分析定义.jpeg" alt="到达定值分析定义" style="zoom:30%;"></p>
+<h3 id="到达定值中的数据流值"><a href="#到达定值中的数据流值" class="headerlink" title="到达定值中的数据流值"></a>到达定值中的数据流值</h3><ul>
 <li>程序中所有变量的定值。</li>
 <li>可以用一个 bit vector 来定义，有多少个赋值语句，就有多少个位。</li>
 </ul>
-<img src="/2025/03/24/DFA-AP/到达定值数据流值.png" alt="到达定值数据流值" style="zoom:40%;">
-<h3 id="到达定值的转移方程和控制流处理">到达定值的转移方程和控制流处理</h3>
-<p><code>That statement &quot;generates&quot; a definition D of variable v and &quot;kills&quot; a;; the other definitions in the program that define variable v, while leaving the remaining incoming definitions unaffected. </code></p>
+<p><img src="/2025/03/24/DFA-AP/到达定值数据流值.png" alt="到达定值数据流值" style="zoom:40%;"></p>
+<h3 id="到达定值的转移方程和控制流处理"><a href="#到达定值的转移方程和控制流处理" class="headerlink" title="到达定值的转移方程和控制流处理"></a>到达定值的转移方程和控制流处理</h3><p><code>That statement &quot;generates&quot; a definition D of variable v and &quot;kills&quot; a;; the other definitions in the program that define variable v, while leaving the remaining incoming definitions unaffected.</code></p>
 <p>语句 S 对变量 v 创建了一个新定义 D（即该语句定义了 v）。该定义 D 会取代程序中所有对 v 的旧定义，这些旧定义在 S 执行后变得无效（被“杀死”）。但是，程序中与变量 v 无关的其他变量的定义不会受影响，仍然保留原样。</p>
 <p>Transfer function:从入口状态删除 kill 掉的定值，并加入新生成的定值；v = x op y，gen v, kill 其它所有的 v</p>
 <p>control flow:任何一个前驱的变量定值都表明，该变量得到了定义。</p>
-<img src="/2025/03/24/DFA-AP/到达定值的转移方程.jpeg" alt="到达定值的转移方程" style="zoom:33%;">
-<h3 id="到达定值算法">到达定值算法</h3>
-<p><img src="/2025/03/24/DFA-AP/%E5%88%B0%E8%BE%BE%E5%AE%9A%E5%80%BC%E7%AE%97%E6%B3%95.jpeg" alt="到达定值算法"></p>
+<p><img src="/2025/03/24/DFA-AP/到达定值的转移方程.jpeg" alt="到达定值的转移方程" style="zoom:33%;"></p>
+<h3 id="到达定值算法"><a href="#到达定值算法" class="headerlink" title="到达定值算法"></a>到达定值算法</h3><p><img src="/2025/03/24/DFA-AP/到达定值算法.jpeg" alt="到达定值算法"></p>
 <p>这是一个经典的迭代算法。</p>
 <ul>
 <li>首先让所有BB和入口的OUT为空。因为你不知道 BB 中有哪些定值被生成。</li>
@@ -335,18 +325,16 @@
 <li>union为并集的意思，即有1为1，全0为0。</li>
 <li>计算抽象说明就是在in上将gen的改为1，将kill的改为0。</li>
 </ul>
-<p><img src="/2025/03/24/DFA-AP/%E5%88%B0%E8%BE%BE%E5%AE%9A%E5%80%BC%E7%AE%97%E6%B3%95%E4%BE%8B%E5%AD%901.jpeg" alt="到达定值算法例子1"></p>
+<p><img src="/2025/03/24/DFA-AP/到达定值算法例子1.jpeg" alt="到达定值算法例子1"></p>
 <p>说明：初始定义所有BB的out为全0，之后从上至下依次根据公式更新。此时分析B2的out，注意到B2的in为B1的out和B4的out的union，故要先做union在继续分析B2的out。此时B2的in为11000000 U 00000000 = 11000000，gen为B2自身涉及的D3、D4即00110000，kill为之前涉及的D2（y）即01000000，故结果为00110000 U (11000000-01000000) = 10110000。</p>
-<p><img src="/2025/03/24/DFA-AP/%E5%88%B0%E8%BE%BE%E5%AE%9A%E5%80%BC%E7%AE%97%E6%B3%95%E4%BE%8B%E5%AD%902.jpeg" alt="到达定值算法例子2"></p>
+<p><img src="/2025/03/24/DFA-AP/到达定值算法例子2.jpeg" alt="到达定值算法例子2"></p>
 <p>说明：此时分析B3的out，in为B2的out即10110000，gen为B3自身涉及的D7即00000010，kill为B3涉及到之前的D1（x）即10000000，故结果为00000010 U (10110000-10000000) = 00110010。</p>
-<p><img src="/2025/03/24/DFA-AP/%E5%88%B0%E8%BE%BE%E5%AE%9A%E5%80%BC%E7%AE%97%E6%B3%95%E4%BE%8B%E5%AD%903.jpeg" alt="到达定值算法例子3"></p>
+<p><img src="/2025/03/24/DFA-AP/到达定值算法例子3.jpeg" alt="到达定值算法例子3"></p>
 <p>说明：经过3轮迭代计算，所有BB的out没有改变，此时到达不动点，算法结束。</p>
-<p><img src="/2025/03/24/DFA-AP/%E5%88%B0%E8%BE%BE%E5%AE%9A%E5%80%BC%E7%AE%97%E6%B3%95%E6%9C%80%E7%BB%88%E4%BC%9A%E5%81%9C%E5%8E%9F%E5%9B%A0.jpeg" alt="到达定值算法最终会停原因"></p>
-<h3 id="算法一定会停原因">算法一定会停原因</h3>
-<p>单调性：OUT[S] 不会缩减</p>
+<p><img src="/2025/03/24/DFA-AP/到达定值算法最终会停原因.jpeg" alt="到达定值算法最终会停原因"></p>
+<h3 id="算法一定会停原因"><a href="#算法一定会停原因" class="headerlink" title="算法一定会停原因"></a>算法一定会停原因</h3><p>单调性：OUT[S] 不会缩减</p>
 <ul>
-<li>每次迭代时：
-<ul>
+<li>每次迭代时：<ul>
 <li>$gen_S$ 和 $kill_S$ 是固定不变的。</li>
 <li>$OUT[S]$ 只会因为新增的 $gen_S$ 或 $ survivors$ 增加新的事实，但不会减少已有事实。</li>
 <li>因此，$OUT[S]$ 是一个单调增长的集合。</li>
@@ -363,25 +351,21 @@
 <li>当所有 $OUT[S]$ 在某次迭代中不再有新事实加入时（即不再有新增的 $gen_S$ 或 $survivors$），算法达到收敛。</li>
 <li>由于 $OUT[S]$ 永不缩减且集合有限，算法总会收敛到一个固定点（即最终的结果）。</li>
 </ul>
-<h2 id="Live-Variables-Analysis-活跃变量分析">Live Variables Analysis 活跃变量分析</h2>
-<h3 id="定义-2">定义</h3>
-<p><code>Live variables analysis tells whether the value of variable v at program point p could be used along some path in CFG starting at p. If so, v is live at p;otherwise, v is dead at p.</code></p>
+<h2 id="Live-Variables-Analysis-活跃变量分析"><a href="#Live-Variables-Analysis-活跃变量分析" class="headerlink" title="Live Variables Analysis 活跃变量分析"></a>Live Variables Analysis 活跃变量分析</h2><h3 id="定义-1"><a href="#定义-1" class="headerlink" title="定义"></a>定义</h3><p><code>Live variables analysis tells whether the value of variable v at program point p could be used along some path in CFG starting at p. If so, v is live at p;otherwise, v is dead at p.</code></p>
 <ul>
 <li>变量 x 在程序点 p 上的值是否会在某条从 p 出发的路径中使用。</li>
 <li>变量 x 在 p 上活跃，当 且仅存在一条从 p 开始的路径，该路径的末端使用了 x，且路径上没有对 x进行覆盖。</li>
 <li>隐藏了这样一个含义：在被使用前，v 没有被重新定义过，即没有被 kill 过。</li>
 </ul>
-<img src="/2025/03/24/DFA-AP/活跃变量分析定义.jpeg" alt="活跃变量分析定义" style="zoom:30%;">
+<p><img src="/2025/03/24/DFA-AP/活跃变量分析定义.jpeg" alt="活跃变量分析定义" style="zoom:30%;"></p>
 <p>这个算法可以用于寄存器分配，当一个变量不会再被使用，那么此变量就可以从寄存器中腾空，用于新值的存储。</p>
 <p>使用backward后向分析来处理活跃变量分析更方便</p>
-<h3 id="活跃变量中的数据流值">活跃变量中的数据流值</h3>
-<ul>
+<h3 id="活跃变量中的数据流值"><a href="#活跃变量中的数据流值" class="headerlink" title="活跃变量中的数据流值"></a>活跃变量中的数据流值</h3><ul>
 <li>程序中的所有变量</li>
 <li>依然可以用 bit vector 来表示，每个 bit 代表一个变量</li>
 </ul>
-<img src="/2025/03/24/DFA-AP/活跃变量中的数据流值.png" alt="活跃变量中的数据流值" style="zoom:40%;">
-<h3 id="活跃变量的转移方程和控制流处理">活跃变量的转移方程和控制流处理</h3>
-<p><img src="/2025/03/24/DFA-AP/%E6%B4%BB%E8%B7%83%E5%8F%98%E9%87%8F%E5%88%86%E6%9E%90%E8%BD%AC%E7%A7%BB%E6%96%B9%E7%A8%8B%E5%92%8C%E6%8E%A7%E5%88%B6%E6%B5%81%E5%A4%84%E7%90%86.jpeg" alt="活跃变量分析转移方程和控制流处理"></p>
+<p><img src="/2025/03/24/DFA-AP/活跃变量中的数据流值.png" alt="活跃变量中的数据流值" style="zoom:40%;"></p>
+<h3 id="活跃变量的转移方程和控制流处理"><a href="#活跃变量的转移方程和控制流处理" class="headerlink" title="活跃变量的转移方程和控制流处理"></a>活跃变量的转移方程和控制流处理</h3><p><img src="/2025/03/24/DFA-AP/活跃变量分析转移方程和控制流处理.jpeg" alt="活跃变量分析转移方程和控制流处理"></p>
 <ul>
 <li>一个基本块内，若 v = exp, 则 def v。若 exp = exp op v，那么 use v。一个变量要么是 use，要么是 def，根据 def 和 use 的先后顺序来决定。</li>
 <li>考虑基本块 B 及其后继 S。若 S 中，变量 v 被使用，那么我们就把 v 放到 S 的 IN 中，交给 B 来分析。</li>
@@ -390,33 +374,28 @@
 <li>因此对于转移方程，IN 是从 OUT 中删去重新定值的变量，然后并上使用过的变量。需要注意，如果同一个块中，变量 v 的 def 先于 use ，那么实际上效果和没有 use 是一样的。</li>
 <li>注意use和def的顺序，如图中的4和6。</li>
 </ul>
-<h3 id="活跃变量算法">活跃变量算法</h3>
-<p><img src="/2025/03/24/DFA-AP/%E6%B4%BB%E8%B7%83%E5%8F%98%E9%87%8F%E7%AE%97%E6%B3%95.jpeg" alt="活跃变量算法"></p>
+<h3 id="活跃变量算法"><a href="#活跃变量算法" class="headerlink" title="活跃变量算法"></a>活跃变量算法</h3><p><img src="/2025/03/24/DFA-AP/活跃变量算法.jpeg" alt="活跃变量算法"></p>
 <ul>
 <li>我们不知道块中有哪些活跃变量，而且我们的目标是知道在一个块开始时哪些变量活跃，因此把 IN 初始化为空。</li>
 <li>计算过程类似上文到达定值算法。</li>
 <li>初始化的判断技巧：may analysis 是空（全0），must analysis 是 top（全1）。</li>
 <li>计算抽象说明就是在out上将use的改为1，def的改为0。</li>
 </ul>
-<p><img src="/2025/03/24/DFA-AP/%E6%B4%BB%E8%B7%83%E5%8F%98%E9%87%8F%E7%AE%97%E6%B3%95%E4%BE%8B%E5%AD%901.jpeg" alt="活跃变量算法例子1"></p>
+<p><img src="/2025/03/24/DFA-AP/活跃变量算法例子1.jpeg" alt="活跃变量算法例子1"></p>
 <p>说明：算法初始化所有BB的in为全0，自下而上的迭代分析。此时需要分析B3的in，out为B5的in即0001000，use为B3自身涉及的x（注意这个表达式x=x-3，此时x为先use后def，故而仍然算是use并且def为0000000）即1000000，故而in为1000000 U (0001000 - 0000000) = 1001000。</p>
-<p><img src="/2025/03/24/DFA-AP/%E6%B4%BB%E8%B7%83%E5%8F%98%E9%87%8F%E7%AE%97%E6%B3%95%E4%BE%8B%E5%AD%902.jpeg" alt="活跃变量算法例子2"></p>
+<p><img src="/2025/03/24/DFA-AP/活跃变量算法例子2.jpeg" alt="活跃变量算法例子2"></p>
 <p>说明：此时分析B4的in，注意到B4的out有两个，需要先union，0001000（B5的in）U 0000000（初始值）= 0001000，use为B4涉及的y即0100000，def为x即1000000，故而in为0100000 U (0001000 - 1000000) = 0101000。</p>
-<p><img src="/2025/03/24/DFA-AP/%E6%B4%BB%E8%B7%83%E5%8F%98%E9%87%8F%E7%AE%97%E6%B3%95%E4%BE%8B%E5%AD%903.jpeg" alt="活跃变量算法例子3"></p>
+<p><img src="/2025/03/24/DFA-AP/活跃变量算法例子3.jpeg" alt="活跃变量算法例子3"></p>
 <p>说明：经过3轮迭代计算，所有BB的in都没有改变，算法结束。</p>
-<h2 id="Available-Expression-Analysis-可用表达式分析">Available Expression Analysis 可用表达式分析</h2>
-<h3 id="定义-3">定义</h3>
-<p><code>An expression x op y is a available at program point p if (1) all paths from the entry to p must pass through the evaluation of x op y, and (2) after the last evaluation of x op y, there is no redefinition of x op y.</code></p>
+<h2 id="Available-Expression-Analysis-可用表达式分析"><a href="#Available-Expression-Analysis-可用表达式分析" class="headerlink" title="Available Expression Analysis 可用表达式分析"></a>Available Expression Analysis 可用表达式分析</h2><h3 id="定义-2"><a href="#定义-2" class="headerlink" title="定义"></a>定义</h3><p><code>An expression x op y is a available at program point p if (1) all paths from the entry to p must pass through the evaluation of x op y, and (2) after the last evaluation of x op y, there is no redefinition of x op y.</code></p>
 <p>x + y 在 p 点可用的条件：从流图入口结点到达 p 的每条路径都对 x + y 求了值，且在最后一次求值之后再没有对 x 或 y 赋值</p>
 <p>可用表达式可以用于全局公共子表达式的计算。也就是说，如果一个表达式上次计算的值到这次仍然可用，我们就能直接利用其中值，而不用进行再次的计算。</p>
-<h3 id="可用表达式分析中的数据流值">可用表达式分析中的数据流值</h3>
-<ul>
+<h3 id="可用表达式分析中的数据流值"><a href="#可用表达式分析中的数据流值" class="headerlink" title="可用表达式分析中的数据流值"></a>可用表达式分析中的数据流值</h3><ul>
 <li>程序中的所有表达式</li>
 <li>bit vector 中，一个 bit 就是一个表达式</li>
 </ul>
-<img src="/2025/03/24/DFA-AP/可用表达式的数据流值.png" alt="可用表达式的数据流值" style="zoom:40%;">
-<h3 id="可用表达式的转移方程和控制流处理">可用表达式的转移方程和控制流处理</h3>
-<p><img src="/2025/03/24/DFA-AP/%E5%8F%AF%E7%94%A8%E8%A1%A8%E8%BE%BE%E5%BC%8F%E7%9A%84%E8%BD%AC%E7%A7%BB%E6%96%B9%E7%A8%8B%E5%92%8C%E6%8E%A7%E5%88%B6%E6%B5%81%E5%A4%84%E7%90%86.jpeg" alt="可用表达式的转移方程和控制流处理"></p>
+<p><img src="/2025/03/24/DFA-AP/可用表达式的数据流值.png" alt="可用表达式的数据流值" style="zoom:40%;"></p>
+<h3 id="可用表达式的转移方程和控制流处理"><a href="#可用表达式的转移方程和控制流处理" class="headerlink" title="可用表达式的转移方程和控制流处理"></a>可用表达式的转移方程和控制流处理</h3><p><img src="/2025/03/24/DFA-AP/可用表达式的转移方程和控制流处理.jpeg" alt="可用表达式的转移方程和控制流处理"></p>
 <ul>
 <li>我们要求无论从哪条路径到达 B，表达式都应该已经计算，才能将其视为可用表达式，因此这是一个 must analysis。</li>
 <li>注意到图中，两条不同的路径可能会导致表达式的结果最终不一致。但是我们只关心它的值能不能够再被重复利用，因此可以认为表达式可用。</li>
@@ -424,100 +403,76 @@
 <li>转移方程很好理解，和到达定值差不多。但是，由于我们是 must analysis，因此控制流处理是取交集，而非到达定值那样取并集。</li>
 <li>注意gen和kill的顺序，先kill后gen还是gen。</li>
 </ul>
-<h3 id="可用表达式的算法">可用表达式的算法</h3>
-<p><img src="/2025/03/24/DFA-AP/%E5%8F%AF%E7%94%A8%E8%A1%A8%E8%BE%BE%E5%BC%8F%E7%9A%84%E7%AE%97%E6%B3%95.jpeg" alt="可用表达式的算法"></p>
+<h3 id="可用表达式的算法"><a href="#可用表达式的算法" class="headerlink" title="可用表达式的算法"></a>可用表达式的算法</h3><p><img src="/2025/03/24/DFA-AP/可用表达式的算法.jpeg" alt="可用表达式的算法"></p>
 <ul>
 <li>注意此时的初始化：一开始确实无任何表达式可用，因此OUT[entry]被初始化为空集是自然的。但是，其它基本块的 OUT 被初始化为全集，这是因为当 CFG 存在环时，一个空的初始化值，会让取交集阶段直接把第一次迭代的 IN 设置成 0，无法进行正确的判定了。</li>
 <li>如果一个表达式从来都不可用，那么OUT[entry]的全 0 值会通过交操作将其置为 0，因此不用担心初始化为全 1 会否导致算法不正确。</li>
 <li>计算抽象说明就是在out上将gen的改为1，kill的改为0。</li>
 </ul>
-<p><img src="/2025/03/24/DFA-AP/%E5%8F%AF%E7%94%A8%E8%A1%A8%E8%BE%BE%E5%BC%8F%E7%9A%84%E7%AE%97%E6%B3%95%E4%BE%8B%E5%AD%901.jpeg" alt="可用表达式的算法例子1"></p>
+<p><img src="/2025/03/24/DFA-AP/可用表达式的算法例子1.jpeg" alt="可用表达式的算法例子1"></p>
 <p>说明：初始化entry处的out为全0，其他为全1。此时需要分析B2的out，注意到B2的in有两部分，取两部分的交集即10000，gen为B2自身涉及的z/5、e^7*x即01010，kill为B2涉及的p即10000，故而out为01010 U (10000 - 10000) = 01010。</p>
-<p><img src="/2025/03/24/DFA-AP/%E5%8F%AF%E7%94%A8%E8%A1%A8%E8%BE%BE%E5%BC%8F%E7%9A%84%E7%AE%97%E6%B3%95%E4%BE%8B%E5%AD%902.jpeg" alt="可用表达式的算法例子2"></p>
-<p>说明：此时分析B4的out，in为B2的out即01010，gen为B4自身涉及的2*y、e^7*x(注意这里是先kill后gen)即00110，kill为00000，故而out为01010 U (00110 - 00000) = 01110。</p>
-<p><img src="/2025/03/24/DFA-AP/%E5%8F%AF%E7%94%A8%E8%A1%A8%E8%BE%BE%E5%BC%8F%E7%9A%84%E7%AE%97%E6%B3%95%E4%BE%8B%E5%AD%903.jpeg" alt="可用表达式的算法例子3"></p>
+<p><img src="/2025/03/24/DFA-AP/可用表达式的算法例子2.jpeg" alt="可用表达式的算法例子2"></p>
+<p>说明：此时分析B4的out，in为B2的out即01010，gen为B4自身涉及的2<em>y、e^7\</em>x(注意这里是先kill后gen)即00110，kill为00000，故而out为01010 U (00110 - 00000) = 01110。</p>
+<p><img src="/2025/03/24/DFA-AP/可用表达式的算法例子3.jpeg" alt="可用表达式的算法例子3"></p>
 <p>说明：经过2轮迭代计算，所有BB的out都没有改变，算法结束。</p>
-<h2 id="三种数据流分析总结">三种数据流分析总结</h2>
-<p><img src="/2025/03/24/DFA-AP/%E4%B8%89%E7%A7%8D%E6%95%B0%E6%8D%AE%E6%B5%81%E5%88%86%E6%9E%90%E6%80%BB%E7%BB%93%E5%AF%B9%E6%AF%94.jpeg" alt="三种数据流分析总结对比"></p>
-<h3 id="分析目标">分析目标</h3>
-<ul>
-<li><strong>Reaching Definitions（到达定义分析）</strong>：<br>
-分析程序中每个基本块的定义信息（哪些变量的定义可以从前面流入当前块）。</li>
-<li><strong>Live Variables（活跃变量分析）</strong>：<br>
-分析程序中每个基本块的活跃变量（哪些变量的值在未来可能被使用，需保留其定义）。</li>
-<li><strong>Available Expressions（可用表达式分析）</strong>：<br>
-分析程序中每个基本块的表达式信息（哪些表达式在当前块之前已经计算且未被修改，可以直接复用）。</li>
+<h2 id="三种数据流分析总结"><a href="#三种数据流分析总结" class="headerlink" title="三种数据流分析总结"></a>三种数据流分析总结</h2><p><img src="/2025/03/24/DFA-AP/三种数据流分析总结对比.jpeg" alt="三种数据流分析总结对比"></p>
+<h3 id="分析目标"><a href="#分析目标" class="headerlink" title="分析目标"></a>分析目标</h3><ul>
+<li><strong>Reaching Definitions（到达定义分析）</strong>：<br>分析程序中每个基本块的定义信息（哪些变量的定义可以从前面流入当前块）。</li>
+<li><strong>Live Variables（活跃变量分析）</strong>：<br>分析程序中每个基本块的活跃变量（哪些变量的值在未来可能被使用，需保留其定义）。</li>
+<li><strong>Available Expressions（可用表达式分析）</strong>：<br>分析程序中每个基本块的表达式信息（哪些表达式在当前块之前已经计算且未被修改，可以直接复用）。</li>
 </ul>
-<h3 id="分析方向">分析方向</h3>
-<ul>
-<li><strong>Reaching Definitions</strong>：<strong>前向分析</strong>（Forwards）<br>
-从程序的入口点向后传播，计算哪些定义到达了当前基本块。</li>
-<li><strong>Live Variables</strong>：<strong>后向分析</strong>（Backwards）<br>
-从程序的出口点向前传播，计算哪些变量在未来的基本块中会被使用。</li>
-<li><strong>Available Expressions</strong>：<strong>前向分析</strong>（Forwards）<br>
-从程序的入口点向后传播，计算哪些表达式在当前块可以直接复用。</li>
+<h3 id="分析方向"><a href="#分析方向" class="headerlink" title="分析方向"></a>分析方向</h3><ul>
+<li><strong>Reaching Definitions</strong>：<strong>前向分析</strong>（Forwards）<br>从程序的入口点向后传播，计算哪些定义到达了当前基本块。</li>
+<li><strong>Live Variables</strong>：<strong>后向分析</strong>（Backwards）<br>从程序的出口点向前传播，计算哪些变量在未来的基本块中会被使用。</li>
+<li><strong>Available Expressions</strong>：<strong>前向分析</strong>（Forwards）<br>从程序的入口点向后传播，计算哪些表达式在当前块可以直接复用。</li>
 </ul>
-<h3 id="May-Must-属性">May / Must 属性</h3>
-<ul>
-<li><strong>Reaching Definitions</strong>：<strong>May Analysis</strong>
-<ul>
+<h3 id="May-Must-属性"><a href="#May-Must-属性" class="headerlink" title="May / Must 属性"></a>May / Must 属性</h3><ul>
+<li><strong>Reaching Definitions</strong>：<strong>May Analysis</strong><ul>
 <li>关心“某些定义可能到达当前块”。</li>
 <li>结果是所有可能的定义（宽松的上界）。</li>
 </ul>
 </li>
-<li><strong>Live Variables</strong>：<strong>May Analysis</strong>
-<ul>
+<li><strong>Live Variables</strong>：<strong>May Analysis</strong><ul>
 <li>关心“某些变量可能在未来使用”。</li>
 <li>结果是所有可能活跃的变量（宽松的上界）。</li>
 </ul>
 </li>
-<li><strong>Available Expressions</strong>：<strong>Must Analysis</strong>
-<ul>
+<li><strong>Available Expressions</strong>：<strong>Must Analysis</strong><ul>
 <li>关心“某些表达式必须在当前块可用”。</li>
 <li>结果是所有必须可用的表达式（严格的下界）。</li>
 </ul>
 </li>
 </ul>
-<h3 id="边界条件（Boundary-Condition）">边界条件（Boundary Condition）</h3>
-<ul>
-<li><strong>Reaching Definitions</strong>：
-<ul>
+<h3 id="边界条件（Boundary-Condition）"><a href="#边界条件（Boundary-Condition）" class="headerlink" title="边界条件（Boundary Condition）"></a>边界条件（Boundary Condition）</h3><ul>
+<li><strong>Reaching Definitions</strong>：<ul>
 <li>$OUT[entry] = \varnothing$（入口点没有到达的定义）。</li>
 </ul>
 </li>
-<li><strong>Live Variables</strong>：
-<ul>
+<li><strong>Live Variables</strong>：<ul>
 <li>$IN[exit] = \varnothing$（程序出口没有活跃变量，因为没有后续的使用）。</li>
 </ul>
 </li>
-<li><strong>Available Expressions</strong>：
-<ul>
+<li><strong>Available Expressions</strong>：<ul>
 <li>$OUT[entry] = \varnothing$（入口点没有可用表达式）。</li>
 </ul>
 </li>
 </ul>
-<h3 id="初始化（Initialization）">初始化（Initialization）</h3>
-<ul>
-<li><strong>Reaching Definitions</strong>:
-<ul>
+<h3 id="初始化（Initialization）"><a href="#初始化（Initialization）" class="headerlink" title="初始化（Initialization）"></a>初始化（Initialization）</h3><ul>
+<li><strong>Reaching Definitions</strong>:<ul>
 <li>初始化 $OUT[B] = \varnothing$（默认没有到达的定义）。</li>
 </ul>
 </li>
-<li><strong>Live Variables</strong>:
-<ul>
+<li><strong>Live Variables</strong>:<ul>
 <li>初始化 $IN[B] = \varnothing$（默认没有活跃变量）。</li>
 </ul>
 </li>
-<li><strong>Available Expressions:</strong>
-<ul>
+<li><strong>Available Expressions:</strong><ul>
 <li>初始化 $OUT[B] = U$（所有表达式都被假定为可用，直到证伪）。</li>
 </ul>
 </li>
 </ul>
-<h3 id="传递函数（Transfer-Function）">传递函数（Transfer Function）</h3>
-<ul>
-<li>
-<p>所有分析都基于以下公式的传递规则：</p>
+<h3 id="传递函数（Transfer-Function）"><a href="#传递函数（Transfer-Function）" class="headerlink" title="传递函数（Transfer Function）"></a>传递函数（Transfer Function）</h3><ul>
+<li><p>所有分析都基于以下公式的传递规则：</p>
 <p>$OUT[B] = gen_B \cup (IN[B] - kill_B)$</p>
 <ul>
 <li>$gen_B$：表示在当前基本块中生成的新信息。</li>
@@ -525,14 +480,11 @@
 </ul>
 </li>
 </ul>
-<h3 id="合并操作（Meet-Operation）">合并操作（Meet Operation）</h3>
-<ul>
-<li><strong>Reaching Definitions</strong> 和 <strong>Live Variables</strong>：<br>
-合并操作是<strong>并集（Union）</strong>，即所有可能到达或活跃的信息的集合。</li>
-<li><strong>Available Expressions</strong>：<br>
-合并操作是<strong>交集（Intersection）</strong>，即所有路径上共同可用的表达式。</li>
+<h3 id="合并操作（Meet-Operation）"><a href="#合并操作（Meet-Operation）" class="headerlink" title="合并操作（Meet Operation）"></a>合并操作（Meet Operation）</h3><ul>
+<li><strong>Reaching Definitions</strong> 和 <strong>Live Variables</strong>：<br>合并操作是<strong>并集（Union）</strong>，即所有可能到达或活跃的信息的集合。</li>
+<li><strong>Available Expressions</strong>：<br>合并操作是<strong>交集（Intersection）</strong>，即所有路径上共同可用的表达式。</li>
 </ul>
-<h3 id="总结">总结</h3>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><div class="table-container">
 <table>
 <thead>
 <tr>
@@ -587,14 +539,14 @@
 </tr>
 </tbody>
 </table>
+</div>
 <p>每种分析都为程序优化提供不同的信息：</p>
 <ul>
 <li><strong>Reaching Definitions</strong> 支持常量传播、死代码消除等。</li>
 <li><strong>Live Variables</strong> 支持寄存器分配、内存优化。</li>
 <li><strong>Available Expressions</strong> 支持公共子表达式消除等优化。</li>
 </ul>
-<h2 id="参考">参考</h2>
-<p><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1oE411K79d?spm_id_from=333.788.videopod.sections&amp;vd_source=068a446a106a7db814d0a819ae62f901">南京大学《软件分析》课程03（Data Flow Analysis I）_哔哩哔哩_bilibili</a></p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1oE411K79d?spm_id_from=333.788.videopod.sections&amp;vd_source=068a446a106a7db814d0a819ae62f901">南京大学《软件分析》课程03（Data Flow Analysis I）_哔哩哔哩_bilibili</a></p>
 <p><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV19741197zA?spm_id_from=333.788.videopod.sections&amp;vd_source=068a446a106a7db814d0a819ae62f901">南京大学《软件分析》课程04（Data Flow Analysis II）_哔哩哔哩_bilibili</a></p>
 <p><a target="_blank" rel="noopener" href="https://ranger-nju.gitbook.io/static-program-analysis-book/ch1/34dataflowanalysis">数据流分析上 | Static Program Analysis Book (gitbook.io)</a></p>
 
@@ -680,7 +632,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">1.</span> <span class="nav-text">DFA-AP</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E6%B5%81%E5%88%86%E6%9E%90%E6%80%BB%E6%8F%BD"><span class="nav-number">1.1.</span> <span class="nav-text">数据流分析总揽</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E6%B5%81%E5%88%86%E6%9E%90%E7%9A%84%E5%88%9D%E6%AD%A5%E5%87%86%E5%A4%87"><span class="nav-number">1.2.</span> <span class="nav-text">数据流分析的初步准备</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Reaching-Definitions-Analysis-%E5%88%B0%E8%BE%BE%E5%AE%9A%E5%80%BC%E5%88%86%E6%9E%90"><span class="nav-number">1.3.</span> <span class="nav-text">Reaching Definitions Analysis 到达定值分析</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9A%E4%B9%89"><span class="nav-number">1.3.1.</span> <span class="nav-text">定义</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%B0%E8%BE%BE%E5%AE%9A%E5%80%BC%E4%B8%AD%E7%9A%84%E6%95%B0%E6%8D%AE%E6%B5%81%E5%80%BC"><span class="nav-number">1.3.2.</span> <span class="nav-text">到达定值中的数据流值</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%B0%E8%BE%BE%E5%AE%9A%E5%80%BC%E7%9A%84%E8%BD%AC%E7%A7%BB%E6%96%B9%E7%A8%8B%E5%92%8C%E6%8E%A7%E5%88%B6%E6%B5%81%E5%A4%84%E7%90%86"><span class="nav-number">1.3.3.</span> <span class="nav-text">到达定值的转移方程和控制流处理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%B0%E8%BE%BE%E5%AE%9A%E5%80%BC%E7%AE%97%E6%B3%95"><span class="nav-number">1.3.4.</span> <span class="nav-text">到达定值算法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AE%97%E6%B3%95%E4%B8%80%E5%AE%9A%E4%BC%9A%E5%81%9C%E5%8E%9F%E5%9B%A0"><span class="nav-number">1.3.5.</span> <span class="nav-text">算法一定会停原因</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Live-Variables-Analysis-%E6%B4%BB%E8%B7%83%E5%8F%98%E9%87%8F%E5%88%86%E6%9E%90"><span class="nav-number">1.4.</span> <span class="nav-text">Live Variables Analysis 活跃变量分析</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9A%E4%B9%89-2"><span class="nav-number">1.4.1.</span> <span class="nav-text">定义</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B4%BB%E8%B7%83%E5%8F%98%E9%87%8F%E4%B8%AD%E7%9A%84%E6%95%B0%E6%8D%AE%E6%B5%81%E5%80%BC"><span class="nav-number">1.4.2.</span> <span class="nav-text">活跃变量中的数据流值</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B4%BB%E8%B7%83%E5%8F%98%E9%87%8F%E7%9A%84%E8%BD%AC%E7%A7%BB%E6%96%B9%E7%A8%8B%E5%92%8C%E6%8E%A7%E5%88%B6%E6%B5%81%E5%A4%84%E7%90%86"><span class="nav-number">1.4.3.</span> <span class="nav-text">活跃变量的转移方程和控制流处理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B4%BB%E8%B7%83%E5%8F%98%E9%87%8F%E7%AE%97%E6%B3%95"><span class="nav-number">1.4.4.</span> <span class="nav-text">活跃变量算法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Available-Expression-Analysis-%E5%8F%AF%E7%94%A8%E8%A1%A8%E8%BE%BE%E5%BC%8F%E5%88%86%E6%9E%90"><span class="nav-number">1.5.</span> <span class="nav-text">Available Expression Analysis 可用表达式分析</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9A%E4%B9%89-3"><span class="nav-number">1.5.1.</span> <span class="nav-text">定义</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%AF%E7%94%A8%E8%A1%A8%E8%BE%BE%E5%BC%8F%E5%88%86%E6%9E%90%E4%B8%AD%E7%9A%84%E6%95%B0%E6%8D%AE%E6%B5%81%E5%80%BC"><span class="nav-number">1.5.2.</span> <span class="nav-text">可用表达式分析中的数据流值</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%AF%E7%94%A8%E8%A1%A8%E8%BE%BE%E5%BC%8F%E7%9A%84%E8%BD%AC%E7%A7%BB%E6%96%B9%E7%A8%8B%E5%92%8C%E6%8E%A7%E5%88%B6%E6%B5%81%E5%A4%84%E7%90%86"><span class="nav-number">1.5.3.</span> <span class="nav-text">可用表达式的转移方程和控制流处理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%AF%E7%94%A8%E8%A1%A8%E8%BE%BE%E5%BC%8F%E7%9A%84%E7%AE%97%E6%B3%95"><span class="nav-number">1.5.4.</span> <span class="nav-text">可用表达式的算法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89%E7%A7%8D%E6%95%B0%E6%8D%AE%E6%B5%81%E5%88%86%E6%9E%90%E6%80%BB%E7%BB%93"><span class="nav-number">1.6.</span> <span class="nav-text">三种数据流分析总结</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%86%E6%9E%90%E7%9B%AE%E6%A0%87"><span class="nav-number">1.6.1.</span> <span class="nav-text">分析目标</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%86%E6%9E%90%E6%96%B9%E5%90%91"><span class="nav-number">1.6.2.</span> <span class="nav-text">分析方向</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#May-Must-%E5%B1%9E%E6%80%A7"><span class="nav-number">1.6.3.</span> <span class="nav-text">May &#x2F; Must 属性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BE%B9%E7%95%8C%E6%9D%A1%E4%BB%B6%EF%BC%88Boundary-Condition%EF%BC%89"><span class="nav-number">1.6.4.</span> <span class="nav-text">边界条件（Boundary Condition）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%9D%E5%A7%8B%E5%8C%96%EF%BC%88Initialization%EF%BC%89"><span class="nav-number">1.6.5.</span> <span class="nav-text">初始化（Initialization）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BC%A0%E9%80%92%E5%87%BD%E6%95%B0%EF%BC%88Transfer-Function%EF%BC%89"><span class="nav-number">1.6.6.</span> <span class="nav-text">传递函数（Transfer Function）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%90%88%E5%B9%B6%E6%93%8D%E4%BD%9C%EF%BC%88Meet-Operation%EF%BC%89"><span class="nav-number">1.6.7.</span> <span class="nav-text">合并操作（Meet Operation）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-number">1.6.8.</span> <span class="nav-text">总结</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-number">1.7.</span> <span class="nav-text">参考</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#DFA-AP"><span class="nav-number">1.</span> <span class="nav-text">DFA-AP</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E6%B5%81%E5%88%86%E6%9E%90%E6%80%BB%E6%8F%BD"><span class="nav-number">1.1.</span> <span class="nav-text">数据流分析总揽</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E6%B5%81%E5%88%86%E6%9E%90%E7%9A%84%E5%88%9D%E6%AD%A5%E5%87%86%E5%A4%87"><span class="nav-number">1.2.</span> <span class="nav-text">数据流分析的初步准备</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Reaching-Definitions-Analysis-%E5%88%B0%E8%BE%BE%E5%AE%9A%E5%80%BC%E5%88%86%E6%9E%90"><span class="nav-number">1.3.</span> <span class="nav-text">Reaching Definitions Analysis 到达定值分析</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9A%E4%B9%89"><span class="nav-number">1.3.1.</span> <span class="nav-text">定义</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%B0%E8%BE%BE%E5%AE%9A%E5%80%BC%E4%B8%AD%E7%9A%84%E6%95%B0%E6%8D%AE%E6%B5%81%E5%80%BC"><span class="nav-number">1.3.2.</span> <span class="nav-text">到达定值中的数据流值</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%B0%E8%BE%BE%E5%AE%9A%E5%80%BC%E7%9A%84%E8%BD%AC%E7%A7%BB%E6%96%B9%E7%A8%8B%E5%92%8C%E6%8E%A7%E5%88%B6%E6%B5%81%E5%A4%84%E7%90%86"><span class="nav-number">1.3.3.</span> <span class="nav-text">到达定值的转移方程和控制流处理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%B0%E8%BE%BE%E5%AE%9A%E5%80%BC%E7%AE%97%E6%B3%95"><span class="nav-number">1.3.4.</span> <span class="nav-text">到达定值算法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AE%97%E6%B3%95%E4%B8%80%E5%AE%9A%E4%BC%9A%E5%81%9C%E5%8E%9F%E5%9B%A0"><span class="nav-number">1.3.5.</span> <span class="nav-text">算法一定会停原因</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Live-Variables-Analysis-%E6%B4%BB%E8%B7%83%E5%8F%98%E9%87%8F%E5%88%86%E6%9E%90"><span class="nav-number">1.4.</span> <span class="nav-text">Live Variables Analysis 活跃变量分析</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9A%E4%B9%89-1"><span class="nav-number">1.4.1.</span> <span class="nav-text">定义</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B4%BB%E8%B7%83%E5%8F%98%E9%87%8F%E4%B8%AD%E7%9A%84%E6%95%B0%E6%8D%AE%E6%B5%81%E5%80%BC"><span class="nav-number">1.4.2.</span> <span class="nav-text">活跃变量中的数据流值</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B4%BB%E8%B7%83%E5%8F%98%E9%87%8F%E7%9A%84%E8%BD%AC%E7%A7%BB%E6%96%B9%E7%A8%8B%E5%92%8C%E6%8E%A7%E5%88%B6%E6%B5%81%E5%A4%84%E7%90%86"><span class="nav-number">1.4.3.</span> <span class="nav-text">活跃变量的转移方程和控制流处理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B4%BB%E8%B7%83%E5%8F%98%E9%87%8F%E7%AE%97%E6%B3%95"><span class="nav-number">1.4.4.</span> <span class="nav-text">活跃变量算法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Available-Expression-Analysis-%E5%8F%AF%E7%94%A8%E8%A1%A8%E8%BE%BE%E5%BC%8F%E5%88%86%E6%9E%90"><span class="nav-number">1.5.</span> <span class="nav-text">Available Expression Analysis 可用表达式分析</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9A%E4%B9%89-2"><span class="nav-number">1.5.1.</span> <span class="nav-text">定义</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%AF%E7%94%A8%E8%A1%A8%E8%BE%BE%E5%BC%8F%E5%88%86%E6%9E%90%E4%B8%AD%E7%9A%84%E6%95%B0%E6%8D%AE%E6%B5%81%E5%80%BC"><span class="nav-number">1.5.2.</span> <span class="nav-text">可用表达式分析中的数据流值</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%AF%E7%94%A8%E8%A1%A8%E8%BE%BE%E5%BC%8F%E7%9A%84%E8%BD%AC%E7%A7%BB%E6%96%B9%E7%A8%8B%E5%92%8C%E6%8E%A7%E5%88%B6%E6%B5%81%E5%A4%84%E7%90%86"><span class="nav-number">1.5.3.</span> <span class="nav-text">可用表达式的转移方程和控制流处理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%AF%E7%94%A8%E8%A1%A8%E8%BE%BE%E5%BC%8F%E7%9A%84%E7%AE%97%E6%B3%95"><span class="nav-number">1.5.4.</span> <span class="nav-text">可用表达式的算法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89%E7%A7%8D%E6%95%B0%E6%8D%AE%E6%B5%81%E5%88%86%E6%9E%90%E6%80%BB%E7%BB%93"><span class="nav-number">1.6.</span> <span class="nav-text">三种数据流分析总结</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%86%E6%9E%90%E7%9B%AE%E6%A0%87"><span class="nav-number">1.6.1.</span> <span class="nav-text">分析目标</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%86%E6%9E%90%E6%96%B9%E5%90%91"><span class="nav-number">1.6.2.</span> <span class="nav-text">分析方向</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#May-Must-%E5%B1%9E%E6%80%A7"><span class="nav-number">1.6.3.</span> <span class="nav-text">May &#x2F; Must 属性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BE%B9%E7%95%8C%E6%9D%A1%E4%BB%B6%EF%BC%88Boundary-Condition%EF%BC%89"><span class="nav-number">1.6.4.</span> <span class="nav-text">边界条件（Boundary Condition）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%9D%E5%A7%8B%E5%8C%96%EF%BC%88Initialization%EF%BC%89"><span class="nav-number">1.6.5.</span> <span class="nav-text">初始化（Initialization）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BC%A0%E9%80%92%E5%87%BD%E6%95%B0%EF%BC%88Transfer-Function%EF%BC%89"><span class="nav-number">1.6.6.</span> <span class="nav-text">传递函数（Transfer Function）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%90%88%E5%B9%B6%E6%93%8D%E4%BD%9C%EF%BC%88Meet-Operation%EF%BC%89"><span class="nav-number">1.6.7.</span> <span class="nav-text">合并操作（Meet Operation）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-number">1.6.8.</span> <span class="nav-text">总结</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-number">1.7.</span> <span class="nav-text">参考</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -699,8 +651,10 @@
         </a>
       </div>
       <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
         <span class="site-state-item-count">1</span>
-        <span class="site-state-item-name">categories</span>
+        <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
