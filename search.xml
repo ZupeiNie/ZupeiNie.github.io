@@ -584,4 +584,20 @@
         <tag>SPA</tag>
       </tags>
   </entry>
+  <entry>
+    <title>Gopher论文pre</title>
+    <url>/2025/03/30/Gopher%E8%AE%BA%E6%96%87pre/</url>
+    <content><![CDATA[<object data="source/pdf/pre.pdf" type="application/pdf" width="100%" height="100vh">
+<p>
+您的浏览器不支持 PDF 预览。请 <a href="source/pdf/pre.pdf">点击这里下载</a>。
+</p>
+</object>
+]]></content>
+      <categories>
+        <category>科研</category>
+      </categories>
+      <tags>
+        <tag>论文</tag>
+      </tags>
+  </entry>
 </search>
