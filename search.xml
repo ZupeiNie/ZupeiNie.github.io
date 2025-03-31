@@ -592,7 +592,6 @@
     <title>interprocedural_Analysis</title>
     <url>/2025/03/31/interprocedural_Analysis/</url>
     <content><![CDATA[<h1 id="interprocedural-analysis">Interprocedural Analysis</h1>
-<p>[TOC]</p>
 <h2 id="过程间分析简介">过程间分析简介</h2>
 <p>本小节通过四个部分介绍过程间分析。</p>
 <ol type="1">
@@ -612,7 +611,7 @@
 </ul></li>
 <li>Interprocedural Data-Flow Analysis
 <ul>
-<li>通过一个例子（也就是实验一中做的常量传播分析）来<strong>总结</strong>过程间分析</li>
+<li>通过一个例子（也就是实验一中做的常量传播分析）来<strong>总结</strong>过程间分析 <span id="more"></span></li>
 </ul></li>
 </ol>
 <h2 id="motivation">Motivation</h2>
