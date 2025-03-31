@@ -1,0 +1,1069 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"gh0st.top","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":false,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="Interprocedural Analysis[TOC] 过程间分析简介本小节通过四个部分介绍过程间分析。  Motivation 为什么 要引入过程间分析？   Call Graph Construction (CHA) 介绍一个过程间分析 必要的数据结构Call Graph 当前有数种方法来构建Call Graph，本节介绍其中速度最快的一种（Class hierarchy analysis">
+<meta property="og:type" content="article">
+<meta property="og:title" content="interprocedural Analysis">
+<meta property="og:url" content="hhttps://gh0st.top/2025/03/31/interprocedural Analysis/index.html">
+<meta property="og:site_name" content="换个研究">
+<meta property="og:description" content="Interprocedural Analysis[TOC] 过程间分析简介本小节通过四个部分介绍过程间分析。  Motivation 为什么 要引入过程间分析？   Call Graph Construction (CHA) 介绍一个过程间分析 必要的数据结构Call Graph 当前有数种方法来构建Call Graph，本节介绍其中速度最快的一种（Class hierarchy analysis">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="hhttps://gh0st.top/2025/03/31/interprocedural%20Analysis/call%20graph.jpeg">
+<meta property="og:image" content="hhttps://gh0st.top/2025/03/31/interprocedural%20Analysis/call%20graph%20%E6%9E%84%E9%80%A0%E6%96%B9%E6%B3%95.jpeg">
+<meta property="og:image" content="hhttps://gh0st.top/2025/03/31/interprocedural%20Analysis/method%20calls%20in%20java.jpeg">
+<meta property="og:image" content="hhttps://gh0st.top/2025/03/31/interprocedural%20Analysis/Virtual%20call1.jpeg">
+<meta property="og:image" content="hhttps://gh0st.top/2025/03/31/interprocedural%20Analysis/dispatch%20and%20example.jpeg">
+<meta property="og:image" content="hhttps://gh0st.top/2025/03/31/interprocedural%20Analysis/CHA%E7%AE%97%E6%B3%95.jpeg">
+<meta property="og:image" content="hhttps://gh0st.top/2025/03/31/interprocedural%20Analysis/cha%20static%20call.jpeg">
+<meta property="og:image" content="hhttps://gh0st.top/2025/03/31/interprocedural%20Analysis/cha%20Special%20call.jpeg">
+<meta property="og:image" content="hhttps://gh0st.top/2025/03/31/interprocedural%20Analysis/targetmethod.jpeg">
+<meta property="og:image" content="hhttps://gh0st.top/2025/03/31/interprocedural%20Analysis/cha%20Virtual%20call.jpeg">
+<meta property="og:image" content="hhttps://gh0st.top/2025/03/31/interprocedural%20Analysis/cha%20example.jpeg">
+<meta property="og:image" content="hhttps://gh0st.top/2025/03/31/interprocedural%20Analysis/Algorithm.jpeg">
+<meta property="og:image" content="hhttps://gh0st.top/2025/03/31/interprocedural%20Analysis/intra%20vs%20inter.jpeg">
+<meta property="og:image" content="hhttps://gh0st.top/2025/03/31/interprocedural%20Analysis/example1.jpeg">
+<meta property="og:image" content="hhttps://gh0st.top/2025/03/31/interprocedural%20Analysis/example2.jpeg">
+<meta property="og:image" content="hhttps://gh0st.top/2025/03/31/interprocedural%20Analysis/%E8%BF%87%E7%A8%8B%E5%86%85%E5%88%86%E6%9E%90.jpeg">
+<meta property="article:published_time" content="2025-03-31T01:54:15.000Z">
+<meta property="article:modified_time" content="2025-03-31T02:02:56.361Z">
+<meta property="article:author" content="换个研究">
+<meta property="article:tag" content="SPA">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="hhttps://gh0st.top/2025/03/31/interprocedural%20Analysis/call%20graph.jpeg">
+
+<link rel="canonical" href="hhttps://gh0st.top/2025/03/31/interprocedural Analysis/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>interprocedural Analysis | 换个研究</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<style>mjx-container[jax="SVG"] {
+  direction: ltr;
+}
+
+mjx-container[jax="SVG"] > svg {
+  overflow: visible;
+}
+
+mjx-container[jax="SVG"][display="true"] {
+  display: block;
+  text-align: center;
+  margin: 1em 0;
+}
+
+mjx-container[jax="SVG"][justify="left"] {
+  text-align: left;
+}
+
+mjx-container[jax="SVG"][justify="right"] {
+  text-align: right;
+}
+
+g[data-mml-node="merror"] > g {
+  fill: red;
+  stroke: red;
+}
+
+g[data-mml-node="merror"] > rect[data-background] {
+  fill: yellow;
+  stroke: none;
+}
+
+g[data-mml-node="mtable"] > line[data-line] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > rect[data-frame] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > .mjx-dashed {
+  stroke-dasharray: 140;
+}
+
+g[data-mml-node="mtable"] > .mjx-dotted {
+  stroke-linecap: round;
+  stroke-dasharray: 0,140;
+}
+
+g[data-mml-node="mtable"] > svg {
+  overflow: visible;
+}
+
+[jax="SVG"] mjx-tool {
+  display: inline-block;
+  position: relative;
+  width: 0;
+  height: 0;
+}
+
+[jax="SVG"] mjx-tool > mjx-tip {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+mjx-tool > mjx-tip {
+  display: inline-block;
+  padding: .2em;
+  border: 1px solid #888;
+  font-size: 70%;
+  background-color: #F8F8F8;
+  color: black;
+  box-shadow: 2px 2px 5px #AAAAAA;
+}
+
+g[data-mml-node="maction"][data-toggle] {
+  cursor: pointer;
+}
+
+mjx-status {
+  display: block;
+  position: fixed;
+  left: 1em;
+  bottom: 1em;
+  min-width: 25%;
+  padding: .2em .4em;
+  border: 1px solid #888;
+  font-size: 90%;
+  background-color: #F8F8F8;
+  color: black;
+}
+
+foreignObject[data-mjx-xml] {
+  font-family: initial;
+  line-height: normal;
+  overflow: visible;
+}
+
+.MathJax path {
+  stroke-width: 3;
+}
+
+mjx-container[display="true"] {
+  overflow: auto hidden;
+}
+
+mjx-container[display="true"] + br {
+  display: none;
+}
+</style></head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">换个研究</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">个人记录</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="hhttps://gh0st.top/2025/03/31/interprocedural Analysis/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="换个研究">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="换个研究">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          interprocedural Analysis
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2025-03-31 09:54:15 / 修改时间：10:02:56" itemprop="dateCreated datePublished" datetime="2025-03-31T09:54:15+08:00">2025-03-31</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%8A%80%E6%9C%AF/" itemprop="url" rel="index"><span itemprop="name">技术</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="Interprocedural-Analysis"><a href="#Interprocedural-Analysis" class="headerlink" title="Interprocedural Analysis"></a>Interprocedural Analysis</h1><p>[TOC]</p>
+<h2 id="过程间分析简介"><a href="#过程间分析简介" class="headerlink" title="过程间分析简介"></a>过程间分析简介</h2><p>本小节通过四个部分介绍过程间分析。</p>
+<ol>
+<li>Motivation<ul>
+<li><strong>为什么</strong> 要引入过程间分析？</li>
+</ul>
+</li>
+<li>Call Graph Construction (CHA)<ul>
+<li>介绍一个过程间分析 <strong>必要的数据结构Call Graph</strong></li>
+<li>当前有数种方法来<strong>构建Call Graph</strong>，本节介绍其中<strong>速度最快的一种（Class hierarchy analysis，简称CHA）</strong></li>
+</ul>
+</li>
+<li>Interprocedural Control-Flow Graph<ul>
+<li>之前的章节关注CFG，引入过程间分析后，我们向CFG中<strong>添加相应的元素</strong>，得到过程间的控制流图（ICFG）</li>
+<li>讨论由于添加了新元素而需要<strong>增加的操作</strong></li>
+</ul>
+</li>
+<li>Interprocedural Data-Flow Analysis<ul>
+<li>通过一个例子（也就是实验一中做的常量传播分析）来<strong>总结</strong>过程间分析</li>
+</ul>
+</li>
+</ol>
+<h2 id="Motivation"><a href="#Motivation" class="headerlink" title="Motivation"></a>Motivation</h2><p>注意区别 interprocedural 和 intraprocedural，过程间和过程内分析</p>
+<p>如何处理 method call：做最保守的假设，即为<strong>函数调用返回NAC</strong>，而这种情况会<strong>丢失精度</strong>，<strong>引入过程间分析能够提高精度</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 示例代码</span></span><br><span class="line"><span class="type">int</span> <span class="title function_">foo</span><span class="params">()</span> { <span class="keyword">return</span> <span class="number">10</span>; }</span><br><span class="line"><span class="keyword">void</span> <span class="title function_">bar</span><span class="params">()</span> { </span><br><span class="line">    <span class="type">int</span> <span class="variable">x</span> <span class="operator">=</span> foo();  <span class="comment">// 方法调用点</span></span><br><span class="line">    System.out.println(x); </span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:center"><strong>分析方法</strong></th>
+<th style="text-align:center"><strong>处理逻辑</strong></th>
+<th style="text-align:center"><strong>x的取值分析结果</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center"><strong>过程内分析</strong></td>
+<td style="text-align:center">保守假设：所有外部方法返回NAC（Not A Constant）</td>
+<td style="text-align:center">NAC</td>
+</tr>
+<tr>
+<td style="text-align:center"><strong>过程间分析</strong></td>
+<td style="text-align:center">通过调用图追踪foo()方法的具体实现，获取精确返回值</td>
+<td style="text-align:center">常量10</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h2 id="Call-Graph-Construction-CHA"><a href="#Call-Graph-Construction-CHA" class="headerlink" title="Call Graph Construction (CHA)"></a>Call Graph Construction (CHA)</h2><p><code>Definition of Call Graph: A representation of calling relationships in the program. A call graph is a set of call edges from call-sites to their target methods(callees)</code></p>
+<p><img src="/2025/03/31/interprocedural Analysis/call graph.jpeg" alt="call graph" style="zoom:67%;"></p>
+<h3 id="Call-Graph-Construction"><a href="#Call-Graph-Construction" class="headerlink" title="Call Graph Construction"></a>Call Graph Construction</h3><p>call graph用在OOPLs，主要是java，这里说明最准确的（K-CFA）和最快速的（CHA）</p>
+<p><img src="/2025/03/31/interprocedural Analysis/call graph 构造方法.jpeg" alt="call graph 构造方法" style="zoom:67%;"></p>
+<h3 id="Call-type-in-java"><a href="#Call-type-in-java" class="headerlink" title="Call type in java"></a>Call type in java</h3><p>主要关注Java的调用关系图构建。在Java中call可分为三类（static call、special call、virtual call）</p>
+<ul>
+<li>Instruction：指Java的<strong>IR中的指令</strong></li>
+<li>Receiver objects：方法调用对应的实例对象（static方法调用不需要对应实例）</li>
+<li>Target methods：表达<strong>IR指令到被调用目标方法的映射关系</strong></li>
+<li>Num of target methods：call对应的可能被调用的目标方法的数量。Virtual call与动态绑定和多态实现有关，可以对应多个对象下的重写方法。所以<strong>Virtual call的可能对象可能超过1个</strong></li>
+<li>Determinacy：指什么时候能够确定这个call的对应方法。Virtual call与多态有关，只能在运行时决定调用哪一个具体方法的实现。其他两种call都和多态机制不相关，编译时刻就可以确定</li>
+</ul>
+<p><img src="/2025/03/31/interprocedural Analysis/method calls in java.jpeg" alt="method calls in java" style="zoom:67%;"></p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:center"><strong>调用类型</strong></th>
+<th style="text-align:center"><strong>字节码指令</strong></th>
+<th style="text-align:center"><strong>接收对象</strong></th>
+<th style="text-align:center"><strong>目标方法数</strong></th>
+<th style="text-align:center"><strong>确定性</strong></th>
+<th style="text-align:center"><strong>多态支持</strong></th>
+<th style="text-align:center"><strong>典型场景</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center"><strong>Static Call</strong></td>
+<td style="text-align:center"><code>invokestatic</code></td>
+<td style="text-align:center">无</td>
+<td style="text-align:center">1</td>
+<td style="text-align:center">编译时确定</td>
+<td style="text-align:center">❌</td>
+<td style="text-align:center"><code>Math.pow()</code>, 工具类方法</td>
+</tr>
+<tr>
+<td style="text-align:center"><strong>Special Call</strong></td>
+<td style="text-align:center"><code>invokespecial</code></td>
+<td style="text-align:center">有</td>
+<td style="text-align:center">1</td>
+<td style="text-align:center">编译时确定</td>
+<td style="text-align:center">❌</td>
+<td style="text-align:center">构造函数、<code>super.method()</code></td>
+</tr>
+<tr>
+<td style="text-align:center"><strong>Virtual Call</strong></td>
+<td style="text-align:center"><code>invokevirtual</code></td>
+<td style="text-align:center">有</td>
+<td style="text-align:center">≥1</td>
+<td style="text-align:center">运行时确定</td>
+<td style="text-align:center">✔️</td>
+<td style="text-align:center">普通实例方法调用（非final）</td>
+</tr>
+<tr>
+<td style="text-align:center"><strong>Interface Call</strong></td>
+<td style="text-align:center"><code>invokeinterface</code></td>
+<td style="text-align:center">有</td>
+<td style="text-align:center">≥1</td>
+<td style="text-align:center">运行时确定</td>
+<td style="text-align:center">✔️</td>
+<td style="text-align:center">接口方法调用（如<code>List.add()</code>）</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h3 id="Virtual-call-and-dispatch"><a href="#Virtual-call-and-dispatch" class="headerlink" title="Virtual call and dispatch"></a>Virtual call and dispatch</h3><p>Virtual call是几种调用中最为复杂的一种，在动态运行时，Virtual call基于两点决定调用哪个具体方法：</p>
+<ol>
+<li>Type of object</li>
+<li>Method signature<ul>
+<li>Signature = class type + method name + descriptor</li>
+<li>Descriptor = return type + parameter types</li>
+</ul>
+</li>
+</ol>
+<p><img src="/2025/03/31/interprocedural Analysis/Virtual call1.jpeg" alt="Virtual call1" style="zoom:67%;"></p>
+<p>Java中Dispatch机制决定具体调用哪个方法：c是一个类的定义，m是一个方法。如果能在本类中找到name和descriptor一致的方法，则调用c的方法，否则到父类中寻找</p>
+<p>​    <code>We define function Dispatch(𝑐, 𝑚) to simulate the procedure of run-time method dispatch.</code></p>
+<p>下面为Dispatch机制说明，并给出对应的例子说明</p>
+<p><img src="/2025/03/31/interprocedural Analysis/dispatch and example.jpeg" alt="dispatch and example" style="zoom:67%;"></p>
+<h2 id="Class-Hierarchy-Analysis-CHA"><a href="#Class-Hierarchy-Analysis-CHA" class="headerlink" title="Class Hierarchy Analysis (CHA)"></a>Class Hierarchy Analysis (CHA)</h2><p><code>Require the class hierarchy information (inheritance structure) of the whole program</code></p>
+<p>需要首先获得整个程序的类继承关系图</p>
+<p><code>Resolve a virtual call based on the declared type of receiver variable of the call site</code></p>
+<p>通过接收变量的声明类型来解析Virtual call，接收变量的例子：在<code>a.foo()</code>中，a就是接收变量</p>
+<p><code>Assume the receiver variable a may point to objects of class A or all subclasses of A（Resolve target methods by looking up the class hierarchy of class A）</code></p>
+<p>假设一个接收变量能够指向A或A的所有子类</p>
+<p>Algorithm of Resolve</p>
+<p><img src="/2025/03/31/interprocedural Analysis/CHA算法.jpeg" alt="CHA算法" style="zoom:67%;"></p>
+<ul>
+<li>call site(cs)就是调用语句，m(method)就是对应的函数签名</li>
+<li>T集合中保存找到的结果</li>
+<li>三个if分支分别对应之前提到的Java中的三种call类型<ol>
+<li>Static call(所有的静态方法调用)</li>
+<li>Special call(使用super关键字的调用，构造函数调用和Private instance method)</li>
+<li>Virtual call(其他所有调用)</li>
+</ol>
+</li>
+</ul>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:center"><strong>调用类型</strong></th>
+<th style="text-align:center">处理逻辑</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center"><strong>Static Call</strong></td>
+<td style="text-align:center">直接绑定到声明类的静态方法（唯一目标）</td>
+</tr>
+<tr>
+<td style="text-align:center"><strong>Special Call</strong></td>
+<td style="text-align:center">通过<code>Dispatch</code>解析父类或构造方法（如<code>super()</code>调用）</td>
+</tr>
+<tr>
+<td style="text-align:center"><strong>Virtual Call</strong></td>
+<td style="text-align:center">动态遍历接收对象所有子类，生成可能的目标方法集合</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><strong>Static call</strong></p>
+<ul>
+<li>对于不了解OOP中静态方法可以参考<a target="_blank" rel="noopener" href="https://www.geeksforgeeks.org/static-methods-vs-instance-methods-java/">这里</a>。具体来说，静态方法调用前写的是类名，而非静态方法调用前写的是变量或指针名。静态方法调用不需要依赖类实例</li>
+</ul>
+<p><img src="/2025/03/31/interprocedural Analysis/cha static call.jpeg" alt="cha static call" style="zoom:67%;"></p>
+<p><strong>Special call</strong></p>
+<ul>
+<li>Superclass instance method（super关键字）最为复杂，故优先考虑这种情况</li>
+</ul>
+<p><img src="/2025/03/31/interprocedural Analysis/cha Special call.jpeg" alt="cha Special call" style="zoom:67%;"></p>
+<p>处理super调用需要使用Dispatch函数，在下图所示情况中没有Dispatch函数时无法正确解析C类的super.foo调用</p>
+<p><img src="/2025/03/31/interprocedural Analysis/targetmethod.jpeg" alt="targetmethod" style="zoom:25%;"></p>
+<p>而Private instance method和Constructor（一定由类实现或有默认的构造函数）都会在本类的实现中给出，使用Dispatch函数能够将这三种情况都包含，简化代码</p>
+<p><strong>Virtual call</strong></p>
+<ul>
+<li>receiver variable在例子中就是c</li>
+<li>对receiver c和c的所有直接间接子类都作为call site调用Dispatch</li>
+</ul>
+<p><img src="/2025/03/31/interprocedural Analysis/cha Virtual call.jpeg" alt="cha Virtual call" style="zoom:67%;"></p>
+<p><img src="/2025/03/31/interprocedural Analysis/cha example.jpeg" alt="cha example" style="zoom:67%;"></p>
+<p>CHA的特征</p>
+<ol>
+<li>只考虑类继承结构，所以<strong>很快</strong></li>
+<li>因为忽略了数据流和控制流的信息，所以<strong>不太准确</strong></li>
+</ol>
+<p>Call Graph Construction</p>
+<ul>
+<li>Build call graph for whole program via CHA<ul>
+<li>通过CHA构造整个程序的call graph</li>
+</ul>
+</li>
+<li>Start from entry methods (focus on main method)<ul>
+<li>通常从main函数开始</li>
+</ul>
+</li>
+<li>For each reachable method 𝑚, resolve target methods for each call site 𝑐𝑠 in 𝑚 via CHA (Resolve(𝑐𝑠))<ul>
+<li>递归地处理每个可达的方法</li>
+</ul>
+</li>
+<li>Repeat until no new method is discovered<ul>
+<li>当不能拓展新的可达方法时停止</li>
+</ul>
+</li>
+<li>整个过程和计算理论中求闭包的过程很相似</li>
+</ul>
+<p>Algorithm</p>
+<p><img src="/2025/03/31/interprocedural Analysis/Algorithm.jpeg" alt="Algorithm" style="zoom:67%;"></p>
+<ul>
+<li>Worklist记录需要处理的methods</li>
+<li>Call graph是需要构建的目标，是call edges的集合</li>
+<li>Reachable method (RM) 是已经处理过的目标，在Worklist中取新目标时，不需要再次处理已经在RM中的目标</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Main</span> {</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> {</span><br><span class="line">        <span class="type">A</span> <span class="variable">a</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">B</span>();</span><br><span class="line">        a.foo();       <span class="comment">// 虚方法调用（可能指向B.foo()或A.foo()）</span></span><br><span class="line">        C.bar();       <span class="comment">// 静态方法调用（唯一目标C.bar()）</span></span><br><span class="line">    }</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">A</span> { <span class="keyword">void</span> <span class="title function_">foo</span><span class="params">()</span> {...} }</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">B</span> <span class="keyword">extends</span> <span class="title class_">A</span> { <span class="keyword">void</span> <span class="title function_">foo</span><span class="params">()</span> {...} }</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">C</span> { <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">bar</span><span class="params">()</span> {...} }</span><br></pre></td></tr></table></figure>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:left"><strong>步骤</strong></th>
+<th style="text-align:left">操作</th>
+<th style="text-align:center">WL</th>
+<th style="text-align:center">RM</th>
+<th style="text-align:center">CG 新增边</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">初始化</td>
+<td style="text-align:left"><code>WL=[Main.main]</code></td>
+<td style="text-align:center">[Main.main]</td>
+<td style="text-align:center">∅</td>
+<td style="text-align:center">∅</td>
+</tr>
+<tr>
+<td style="text-align:left">第1轮</td>
+<td style="text-align:left">处理<code>Main.main</code></td>
+<td style="text-align:center">∅</td>
+<td style="text-align:center">{Main.main}</td>
+<td style="text-align:center"><code>Main.main → C.bar</code>（静态调用） <br><code>Main.main → B.foo</code>（CHA解析结果）</td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left">新增<code>C.bar</code>和<code>B.foo</code>到WL</td>
+<td style="text-align:center">[C.bar, B.foo]</td>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
+</tr>
+<tr>
+<td style="text-align:left">第2轮</td>
+<td style="text-align:left">处理<code>C.bar</code>（无调用点）</td>
+<td style="text-align:center">[B.foo]</td>
+<td style="text-align:center">{Main.main, C.bar}</td>
+<td style="text-align:center">无</td>
+</tr>
+<tr>
+<td style="text-align:left">第3轮</td>
+<td style="text-align:left">处理<code>B.foo</code>（假设其无新调用点）</td>
+<td style="text-align:center">∅</td>
+<td style="text-align:center">{Main.main, C.bar, B.foo}</td>
+<td style="text-align:center">无</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Interprocedural Control-Flow Graph</p>
+<p><code>ICFG = CFGs + call &amp; return edges</code></p>
+<p>ICFG可以通过CFG加上两种边构造得到</p>
+<ol>
+<li>Call edges: from call sites to the entry nodes of their callees</li>
+<li>Return edges: from return statements of the callees to the statements following their call sites (i.e., return sites)</li>
+</ol>
+<h2 id="Interprocedural-Data-Flow-Analysis"><a href="#Interprocedural-Data-Flow-Analysis" class="headerlink" title="Interprocedural Data-Flow Analysis"></a>Interprocedural Data-Flow Analysis</h2><h3 id="定义与比较"><a href="#定义与比较" class="headerlink" title="定义与比较"></a>定义与比较</h3><p><img src="/2025/03/31/interprocedural Analysis/intra vs inter.jpeg" alt="intra vs inter" style="zoom:67%;"></p>
+<ul>
+<li>Call edge transfer<ul>
+<li>从调用者向被调用者传递参数</li>
+</ul>
+</li>
+<li>Return edge transfer<ul>
+<li>被调用者向调用者传递返回值</li>
+</ul>
+</li>
+<li>Node transfer<ul>
+<li>大部分与过程内的常数传播分析一样，不过对于每一个函数调用，都要kill掉LHS（Left hand side）的变量</li>
+</ul>
+</li>
+</ul>
+<h3 id="example"><a href="#example" class="headerlink" title="example"></a>example</h3><p><img src="/2025/03/31/interprocedural Analysis/example1.jpeg" alt="example1" style="zoom:67%;"></p>
+<p><img src="/2025/03/31/interprocedural Analysis/example2.jpeg" alt="example2" style="zoom:67%;"></p>
+<p><img src="/2025/03/31/interprocedural Analysis/过程内分析.jpeg" alt="过程内分析" style="zoom:67%;"></p>
+<p>对比过程内分析和过程间分析，明显过程内分析精度低</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:center"><strong>分析维度</strong></th>
+<th style="text-align:center">过程内分析</th>
+<th style="text-align:center">过程间分析</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center"><strong>方法调用处理</strong></td>
+<td style="text-align:center">假设所有调用返回NAC（Not A Constant）</td>
+<td style="text-align:center">精确追踪参数传递与返回值</td>
+</tr>
+<tr>
+<td style="text-align:center"><strong>多态方法解析</strong></td>
+<td style="text-align:center">无法处理虚方法调用</td>
+<td style="text-align:center">基于类层次分析（CHA）或指针分析解析目标方法</td>
+</tr>
+<tr>
+<td style="text-align:center"><strong>时间复杂度</strong></td>
+<td style="text-align:center">O(n)（n为单个方法代码量）</td>
+<td style="text-align:center">O(k·n)（k为跨方法调用次数，n为全局代码量）</td>
+</tr>
+<tr>
+<td style="text-align:center"><strong>内存消耗</strong></td>
+<td style="text-align:center">低（单方法内存模型）</td>
+<td style="text-align:center">高（需存储全局ICFG和跨过程数据流）</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:center"><strong>工具名称</strong></th>
+<th style="text-align:center">分析策略</th>
+<th style="text-align:center">技术亮点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">Soot</td>
+<td style="text-align:center">基于Spark框架的指针分析</td>
+<td style="text-align:center">支持多种上下文敏感策略</td>
+</tr>
+<tr>
+<td style="text-align:center">WALA</td>
+<td style="text-align:center">混合CHA与指针分析</td>
+<td style="text-align:center">增量式调用图构建</td>
+</tr>
+<tr>
+<td style="text-align:center">CodeQL</td>
+<td style="text-align:center">声明式数据流分析</td>
+<td style="text-align:center">跨语言过程间分析（Java/C++/Python）</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p>
+  <a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1GQ4y1T7zm?spm_id_from=333.788.videopod.sections&vd_source=068a446a106a7db814d0a819ae62f901">
+    南京大学《软件分析》课程 07 （Interprocedural Analysis） - 哔哩哔哩
+  </a>
+</p>
+
+<p><a target="_blank" rel="noopener" href="https://ranger-nju.gitbook.io/static-program-analysis-book/ch2/ch2#interprocedural-data-flow-analysis">过程间分析简介 | Static Program Analysis Book (gitbook.io)</a></p>
+
+    </div>
+
+    
+    
+    
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>换个研究
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="hhttps://gh0st.top/2025/03/31/interprocedural Analysis/" title="interprocedural Analysis">hhttps://gh0st.top/2025/03/31/interprocedural Analysis/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-CN" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/SPA/" rel="tag"># SPA</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2025/03/24/DFA-FD/" rel="prev" title="DFA-FD">
+      <i class="fa fa-chevron-left"></i> DFA-FD
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Interprocedural-Analysis"><span class="nav-number">1.</span> <span class="nav-text">Interprocedural Analysis</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BF%87%E7%A8%8B%E9%97%B4%E5%88%86%E6%9E%90%E7%AE%80%E4%BB%8B"><span class="nav-number">1.1.</span> <span class="nav-text">过程间分析简介</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Motivation"><span class="nav-number">1.2.</span> <span class="nav-text">Motivation</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Call-Graph-Construction-CHA"><span class="nav-number">1.3.</span> <span class="nav-text">Call Graph Construction (CHA)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Call-Graph-Construction"><span class="nav-number">1.3.1.</span> <span class="nav-text">Call Graph Construction</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Call-type-in-java"><span class="nav-number">1.3.2.</span> <span class="nav-text">Call type in java</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Virtual-call-and-dispatch"><span class="nav-number">1.3.3.</span> <span class="nav-text">Virtual call and dispatch</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Class-Hierarchy-Analysis-CHA"><span class="nav-number">1.4.</span> <span class="nav-text">Class Hierarchy Analysis (CHA)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Interprocedural-Data-Flow-Analysis"><span class="nav-number">1.5.</span> <span class="nav-text">Interprocedural Data-Flow Analysis</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9A%E4%B9%89%E4%B8%8E%E6%AF%94%E8%BE%83"><span class="nav-number">1.5.1.</span> <span class="nav-text">定义与比较</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#example"><span class="nav-number">1.5.2.</span> <span class="nav-text">example</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-number">1.6.</span> <span class="nav-text">参考</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="换个研究"
+      src="/images/avatar.gif">
+  <p class="site-author-name" itemprop="name">换个研究</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">3</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/ZupeiNie" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;ZupeiNie" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:niezupei24@mails.ucas.ac.cn" title="E-Mail → mailto:niezupei24@mails.ucas.ac.cn" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-CN" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+  <div class="links-of-blogroll motion-element">
+    <div class="links-of-blogroll-title"><i class="fa fa-link fa-fw"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="https://www.xi4oyu.top/" title="https:&#x2F;&#x2F;www.xi4oyu.top&#x2F;" rel="noopener" target="_blank">xi4oyu</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://fl0.top/" title="https:&#x2F;&#x2F;fl0.top&#x2F;" rel="noopener" target="_blank">qz</a>
+        </li>
+    </ul>
+  </div>
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">换个研究</span>
+</div>
+<!--
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+-->
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+          load: ['[tex]/mhchem'],
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+          packages: {'[+]': ['mhchem']},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+</body>
+</html>
