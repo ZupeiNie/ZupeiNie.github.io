@@ -1126,4 +1126,103 @@
         <tag>影片分享</tag>
       </tags>
   </entry>
+  <entry>
+    <title>Runtime Verification</title>
+    <url>/2025/04/07/Runtime%20Verification/</url>
+    <content><![CDATA[<h1 id="Runtime-Verification精读记录"><a href="#Runtime-Verification精读记录" class="headerlink" title="Runtime Verification精读记录"></a>Runtime Verification精读记录</h1><p>论文地址：<a href="https://ieeexplore.ieee.org/document/10225251">Runtime Verification of Crypto APIs: An Empirical Study | IEEE Journals &amp; Magazine | IEEE Xplore</a></p>
+<p>2023 TSE CCF-A</p>
+<p>总结：RVsec利用CrySl转化为JavaMOP规则实现RV（运行时验证）；三类方法四个工具对五个基准进行测评，详细描述了FN、FP的原因，在三类和五个分别进行展开描述（感觉重复内容有点多）<br><span id="more"></span></p>
+<h2 id="背景和实验设置"><a href="#背景和实验设置" class="headerlink" title="背景和实验设置"></a>背景和实验设置</h2><p>出现加密API误用原因：1.开发人员不清楚；2.现有分析工具挺好的，但还不够</p>
+<p>RV的优势：1.加强发现错误的能力；2.补充静态分析工具，减少误报；3.平衡规则编写的付出和运行开销</p>
+<p>本文RV方法：22条CrySl规则（CryLogger工具的规则）-——&gt;JavaMOP规则；不使用RV加速技术；</p>
+<p>基准：MASCBench、SmallCryptoAPIBench、OWASPBench、JulietBench、ApacheCryptoAPIBench（不全）</p>
+<p><img src="/2025/04/07/Runtime Verification/Snipaste_2025-04-06_23-18-25.png" alt="Snipaste_2025-04-06_23-18-25" style="zoom:80%;"></p>
+<p><img src="/2025/04/07/Runtime Verification/Snipaste_2025-04-06_23-21-26.png" alt="Snipaste_2025-04-06_23-21-26" style="zoom:80%;"></p>
+<p>指标：P（准确率）、R（召回率）、<mjx-container class="MathJax" jax="SVG"><svg style="vertical-align: -0.339ex;" xmlns="http://www.w3.org/2000/svg" width="2.442ex" height="1.878ex" role="img" focusable="false" viewbox="0 -680 1079.6 830"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="msub"><g data-mml-node="mi"><path data-c="1D439" d="M48 1Q31 1 31 11Q31 13 34 25Q38 41 42 43T65 46Q92 46 125 49Q139 52 144 61Q146 66 215 342T285 622Q285 629 281 629Q273 632 228 634H197Q191 640 191 642T193 659Q197 676 203 680H742Q749 676 749 669Q749 664 736 557T722 447Q720 440 702 440H690Q683 445 683 453Q683 454 686 477T689 530Q689 560 682 579T663 610T626 626T575 633T503 634H480Q398 633 393 631Q388 629 386 623Q385 622 352 492L320 363H375Q378 363 398 363T426 364T448 367T472 374T489 386Q502 398 511 419T524 457T529 475Q532 480 548 480H560Q567 475 567 470Q567 467 536 339T502 207Q500 200 482 200H470Q463 206 463 212Q463 215 468 234T473 274Q473 303 453 310T364 317H309L277 190Q245 66 245 60Q245 46 334 46H359Q365 40 365 39T363 19Q359 6 353 0H336Q295 2 185 2Q120 2 86 2T48 1Z"/></g><g data-mml-node="mn" transform="translate(676,-150) scale(0.707)"><path data-c="31" d="M213 578L200 573Q186 568 160 563T102 556H83V602H102Q149 604 189 617T245 641T273 663Q275 666 285 666Q294 666 302 660V361L303 61Q310 54 315 52T339 48T401 46H427V0H416Q395 3 257 3Q121 3 100 0H88V46H114Q136 46 152 46T177 47T193 50T201 52T207 57T213 61V578Z"/></g></g></g></g></svg></mjx-container></p>
+<p>TP：正确预测的正例；FP：错误预测的正例（误报）；FN：错误预测的负例（漏报）</p>
+<p>P：避免将负例误判为正例；R：覆盖真实正例的能力，避免漏判正例</p>
+<p><img src="/2025/04/07/Runtime Verification/Snipaste_2025-04-06_23-20-50.png" alt="Snipaste_2025-04-06_23-20-50" style="zoom:100%;"></p>
+<p>实验目标：1.RVsec的有效性；2.误报漏报的原因</p>
+<p>贡献总结：1.和现有工具进行了比较；2.发现和现有工具的互补作用；3.形成了22条JavaMOP规则；4.补充了不全基准的真实标签</p>
+<h2 id="RV是什么"><a href="#RV是什么" class="headerlink" title="RV是什么"></a>RV是什么</h2><p>静态分析存在误报（有滥用API代码，但实际没调用）和漏报（没检测到哈希功能滥用的API）问题</p>
+<p>RVsec作为动态分析的方法，和其他动态分析的工具做比较</p>
+<p>JavaMOP规范：1.事件定义（确定你要报告出什么问题）；2.属性（也就是事件的逻辑公式，使用ERE拓展正则描述，偶尔使用FSM有限状态机）；3.处理程序（ERE匹配成功触发执行程序，reset）</p>
+<h2 id="准确率描述"><a href="#准确率描述" class="headerlink" title="准确率描述"></a>准确率描述</h2><p><img src="/2025/04/07/Runtime Verification/Snipaste_2025-04-06_23-29-22.png" alt="Snipaste_2025-04-06_23-29-22" style="zoom:100%;"></p>
+<ol>
+<li>MASCBench：静态误报（Cipher.getInstance(keyGenerator.getInstance())，动态漏报（固定值初始化）</li>
+</ol>
+<p><img src="/2025/04/07/Runtime Verification/Snipaste_2025-04-06_23-32-25.png" alt="Snipaste_2025-04-06_23-32-25" style="zoom:80%;"></p>
+<ol>
+<li>SmallCryptoAPIBench：Rcsec7个漏报（硬编码生成密钥，RV运行无法验证硬编码问题），CryLogger误报（规则过于严格）漏报（可预测的种子或凭证）</li>
+</ol>
+<p><img src="/2025/04/07/Runtime Verification/Snipaste_2025-04-06_23-40-57.png" alt="Snipaste_2025-04-06_23-40-57" style="zoom:80%;"></p>
+<ol>
+<li>OWASPBench：CogniCrypt误报（控制流问题，不全部执行），CryptoGuard误报（配置文件问题），CryLogger误报（规则过于严格）</li>
+</ol>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>配置文件</th>
+<th>代码信息</th>
+<th>CryptoGuard</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>✅</td>
+<td>❌</td>
+<td>❌误报</td>
+</tr>
+<tr>
+<td>❌</td>
+<td>✅</td>
+<td>✅漏报</td>
+</tr>
+</tbody>
+</table>
+</div>
+<ol>
+<li><p>JulietBench：RVsec漏报（哈希算法的不确定性，一个安全一个不安全），CryptoGuard漏报（缺少所需的加密步骤）</p>
+</li>
+<li><p>ApacheCryptoAPIBench（该基准没有标准的真实标签，研究人员手动标记）</p>
+</li>
+</ol>
+<p><code>Summary: Results shows that RVSec is very accurate (F1=0.95), compared to CryLogger (F1=0.85), CogniCrypt (F1=0.83), and CryptoGuard (F1=0.78).</code></p>
+<h2 id="原因描述"><a href="#原因描述" class="headerlink" title="原因描述"></a>原因描述</h2><ol>
+<li><p>RVsec：</p>
+<p>8FP（过于严格的规则），22FN（10个输入测试样例缺乏、12个动态分析固有局限）</p>
+<p>加密API的使用仅限于一些由测试样例进行的覆盖类；检查初始化使用硬编码的规则编写困难</p>
+</li>
+<li><p>静态分析（CryptoGuard、CogniCrypt）：</p>
+<p>漏报（多次方法调用初始化Cipher类、路径敏感问题、条件判断、加密算法完整代码识别）</p>
+<p><img src="/2025/04/07/Runtime Verification/Snipaste_2025-04-06_23-50-33.png" alt="Snipaste_2025-04-06_23-50-33" style="zoom:80%;"></p>
+<p><img src="/2025/04/07/Runtime Verification/Snipaste_2025-04-06_23-52-30.png" alt="Snipaste_2025-04-06_23-52-30" style="zoom:80%;"></p>
+<p><img src="/2025/04/07/Runtime Verification/Snipaste_2025-04-06_23-54-48.png" alt="Snipaste_2025-04-06_23-54-48" style="zoom:80%;"></p>
+<p>误报漏报都有（配置文件问题，具体可见上文的表格，这里给一张图描述，fig15误报、fig16漏报）</p>
+<p><img src="/2025/04/07/Runtime Verification/Snipaste_2025-04-06_23-57-04.png" alt="Snipaste_2025-04-06_23-57-04" style="zoom:80%;"></p>
+</li>
+<li><p>动态分析（CryLogger）：</p>
+<p>误报（安全算法被认为不安全、不确定性问题）</p>
+<p>漏报（缺乏算法的完整步骤，随机数问题）</p>
+<p>对大项目扫描效果不佳，输出不合适</p>
+</li>
+</ol>
+<h2 id="讨论和未来工作"><a href="#讨论和未来工作" class="headerlink" title="讨论和未来工作"></a>讨论和未来工作</h2><p>RV开销：</p>
+<p><img src="/2025/04/07/Runtime Verification/Snipaste_2025-04-07_00-04-23.png" alt="Snipaste_2025-04-07_00-04-23" style="zoom:80%;"></p>
+<p>新技术evolution-aware可以减少RV的开销（10x，平均5x）</p>
+<p>未来工作：</p>
+<ol>
+<li>动静态分析的互补性</li>
+<li>更好的在检测中使用RV</li>
+<li>现有基准的问题</li>
+</ol>
+]]></content>
+      <categories>
+        <category>科研</category>
+      </categories>
+      <tags>
+        <tag>论文精读</tag>
+      </tags>
+  </entry>
 </search>
