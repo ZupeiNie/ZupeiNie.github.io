@@ -20,12 +20,12 @@
     var CONFIG = {"hostname":"gh0st.top","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":false,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta name="description" content="Runtime Verification精读记录论文地址：Runtime Verification of Crypto APIs: An Empirical Study | IEEE Journals &amp; Magazine | IEEE Xplore 2023 TSE CCF-A 总结：RVsec利用CrySl转化为JavaMOP规则实现RV（运行时验证）；三类方法四个工具对五个基准进行测">
+  <meta name="description" content="Runtime Verification精读记录 论文地址：Runtime Verification of Crypto APIs: An Empirical Study | IEEE Journals &amp; Magazine | IEEE Xplore 2023 TSE CCF-A 总结：RVsec利用CrySl转化为JavaMOP规则实现RV（运行时验证）；三类方法四个工具对五个基准进行">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Runtime Verification">
 <meta property="og:url" content="hhttps://gh0st.top/2025/04/07/Runtime Verification/index.html">
 <meta property="og:site_name" content="换个研究">
-<meta property="og:description" content="Runtime Verification精读记录论文地址：Runtime Verification of Crypto APIs: An Empirical Study | IEEE Journals &amp; Magazine | IEEE Xplore 2023 TSE CCF-A 总结：RVsec利用CrySl转化为JavaMOP规则实现RV（运行时验证）；三类方法四个工具对五个基准进行测">
+<meta property="og:description" content="Runtime Verification精读记录 论文地址：Runtime Verification of Crypto APIs: An Empirical Study | IEEE Journals &amp; Magazine | IEEE Xplore 2023 TSE CCF-A 总结：RVsec利用CrySl转化为JavaMOP规则实现RV（运行时验证）；三类方法四个工具对五个基准进行">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="hhttps://gh0st.top/2025/04/07/Runtime%20Verification/Snipaste_2025-04-06_23-18-25.png">
 <meta property="og:image" content="hhttps://gh0st.top/2025/04/07/Runtime%20Verification/Snipaste_2025-04-06_23-21-26.png">
@@ -39,7 +39,7 @@
 <meta property="og:image" content="hhttps://gh0st.top/2025/04/07/Runtime%20Verification/Snipaste_2025-04-06_23-57-04.png">
 <meta property="og:image" content="hhttps://gh0st.top/2025/04/07/Runtime%20Verification/Snipaste_2025-04-07_00-04-23.png">
 <meta property="article:published_time" content="2025-04-06T16:25:24.000Z">
-<meta property="article:modified_time" content="2025-04-06T16:27:23.274Z">
+<meta property="article:modified_time" content="2025-04-10T11:01:57.138Z">
 <meta property="article:author" content="换个研究">
 <meta property="article:tag" content="论文精读">
 <meta name="twitter:card" content="summary">
@@ -341,10 +341,16 @@ mjx-container[display="true"] + br {
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2025-04-07 00:25:24 / 修改时间：00:27:23" itemprop="dateCreated datePublished" datetime="2025-04-07T00:25:24+08:00">2025-04-07</time>
+              <time title="创建时间：2025-04-07 00:25:24" itemprop="dateCreated datePublished" datetime="2025-04-07T00:25:24+08:00">2025-04-07</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2025-04-10 19:01:57" itemprop="dateModified" datetime="2025-04-10T19:01:57+08:00">2025-04-10</time>
+              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
@@ -373,94 +379,258 @@ mjx-container[display="true"] + br {
     <div class="post-body" itemprop="articleBody">
 
       
-        <h1 id="Runtime-Verification精读记录"><a href="#Runtime-Verification精读记录" class="headerlink" title="Runtime Verification精读记录"></a>Runtime Verification精读记录</h1><p>论文地址：<a target="_blank" rel="noopener" href="https://ieeexplore.ieee.org/document/10225251">Runtime Verification of Crypto APIs: An Empirical Study | IEEE Journals &amp; Magazine | IEEE Xplore</a></p>
+        <h1 id="runtime-verification精读记录">Runtime Verification精读记录</h1>
+<p>论文地址：<a target="_blank" rel="noopener" href="https://ieeexplore.ieee.org/document/10225251">Runtime Verification of Crypto APIs: An Empirical Study | IEEE Journals &amp; Magazine | IEEE Xplore</a></p>
 <p>2023 TSE CCF-A</p>
-<p>总结：RVsec利用CrySl转化为JavaMOP规则实现RV（运行时验证）；三类方法四个工具对五个基准进行测评，详细描述了FN、FP的原因，在三类和五个分别进行展开描述（感觉重复内容有点多）<br><span id="more"></span></p>
-<h2 id="背景和实验设置"><a href="#背景和实验设置" class="headerlink" title="背景和实验设置"></a>背景和实验设置</h2><p>出现加密API误用原因：1.开发人员不清楚；2.现有分析工具挺好的，但还不够</p>
+<p>总结：RVsec利用CrySl转化为JavaMOP规则实现RV（运行时验证）；三类方法四个工具对五个基准进行测评，详细描述了FN、FP的原因，在三类和五个分别进行展开描述（感觉重复内容有点多） <span id="more"></span> ## 背景和实验设置</p>
+<p>出现加密API误用原因：1.开发人员不清楚；2.现有分析工具挺好的，但还不够</p>
 <p>RV的优势：1.加强发现错误的能力；2.补充静态分析工具，减少误报；3.平衡规则编写的付出和运行开销</p>
 <p>本文RV方法：22条CrySl规则（CryLogger工具的规则）-——&gt;JavaMOP规则；不使用RV加速技术；</p>
 <p>基准：MASCBench、SmallCryptoAPIBench、OWASPBench、JulietBench、ApacheCryptoAPIBench（不全）</p>
 <p><img src="/2025/04/07/Runtime Verification/Snipaste_2025-04-06_23-18-25.png" alt="Snipaste_2025-04-06_23-18-25" style="zoom:80%;"></p>
 <p><img src="/2025/04/07/Runtime Verification/Snipaste_2025-04-06_23-21-26.png" alt="Snipaste_2025-04-06_23-21-26" style="zoom:80%;"></p>
-<p>指标：P（准确率）、R（召回率）、<mjx-container class="MathJax" jax="SVG"><svg style="vertical-align: -0.339ex;" xmlns="http://www.w3.org/2000/svg" width="2.442ex" height="1.878ex" role="img" focusable="false" viewbox="0 -680 1079.6 830"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="msub"><g data-mml-node="mi"><path data-c="1D439" d="M48 1Q31 1 31 11Q31 13 34 25Q38 41 42 43T65 46Q92 46 125 49Q139 52 144 61Q146 66 215 342T285 622Q285 629 281 629Q273 632 228 634H197Q191 640 191 642T193 659Q197 676 203 680H742Q749 676 749 669Q749 664 736 557T722 447Q720 440 702 440H690Q683 445 683 453Q683 454 686 477T689 530Q689 560 682 579T663 610T626 626T575 633T503 634H480Q398 633 393 631Q388 629 386 623Q385 622 352 492L320 363H375Q378 363 398 363T426 364T448 367T472 374T489 386Q502 398 511 419T524 457T529 475Q532 480 548 480H560Q567 475 567 470Q567 467 536 339T502 207Q500 200 482 200H470Q463 206 463 212Q463 215 468 234T473 274Q473 303 453 310T364 317H309L277 190Q245 66 245 60Q245 46 334 46H359Q365 40 365 39T363 19Q359 6 353 0H336Q295 2 185 2Q120 2 86 2T48 1Z"/></g><g data-mml-node="mn" transform="translate(676,-150) scale(0.707)"><path data-c="31" d="M213 578L200 573Q186 568 160 563T102 556H83V602H102Q149 604 189 617T245 641T273 663Q275 666 285 666Q294 666 302 660V361L303 61Q310 54 315 52T339 48T401 46H427V0H416Q395 3 257 3Q121 3 100 0H88V46H114Q136 46 152 46T177 47T193 50T201 52T207 57T213 61V578Z"/></g></g></g></g></svg></mjx-container></p>
+<p>指标：P（准确率）、R（召回率）、<span class="math inline"><mjx-container class="MathJax" jax="SVG"><svg style="vertical-align: -0.339ex;" xmlns="http://www.w3.org/2000/svg" width="2.442ex" height="1.878ex" role="img" focusable="false" viewbox="0 -680 1079.6 830"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="msub"><g data-mml-node="mi"><path data-c="1D439" d="M48 1Q31 1 31 11Q31 13 34 25Q38 41 42 43T65 46Q92 46 125 49Q139 52 144 61Q146 66 215 342T285 622Q285 629 281 629Q273 632 228 634H197Q191 640 191 642T193 659Q197 676 203 680H742Q749 676 749 669Q749 664 736 557T722 447Q720 440 702 440H690Q683 445 683 453Q683 454 686 477T689 530Q689 560 682 579T663 610T626 626T575 633T503 634H480Q398 633 393 631Q388 629 386 623Q385 622 352 492L320 363H375Q378 363 398 363T426 364T448 367T472 374T489 386Q502 398 511 419T524 457T529 475Q532 480 548 480H560Q567 475 567 470Q567 467 536 339T502 207Q500 200 482 200H470Q463 206 463 212Q463 215 468 234T473 274Q473 303 453 310T364 317H309L277 190Q245 66 245 60Q245 46 334 46H359Q365 40 365 39T363 19Q359 6 353 0H336Q295 2 185 2Q120 2 86 2T48 1Z"/></g><g data-mml-node="mn" transform="translate(676,-150) scale(0.707)"><path data-c="31" d="M213 578L200 573Q186 568 160 563T102 556H83V602H102Q149 604 189 617T245 641T273 663Q275 666 285 666Q294 666 302 660V361L303 61Q310 54 315 52T339 48T401 46H427V0H416Q395 3 257 3Q121 3 100 0H88V46H114Q136 46 152 46T177 47T193 50T201 52T207 57T213 61V578Z"/></g></g></g></g></svg></mjx-container></span></p>
 <p>TP：正确预测的正例；FP：错误预测的正例（误报）；FN：错误预测的负例（漏报）</p>
 <p>P：避免将负例误判为正例；R：覆盖真实正例的能力，避免漏判正例</p>
 <p><img src="/2025/04/07/Runtime Verification/Snipaste_2025-04-06_23-20-50.png" alt="Snipaste_2025-04-06_23-20-50" style="zoom:100%;"></p>
 <p>实验目标：1.RVsec的有效性；2.误报漏报的原因</p>
 <p>贡献总结：1.和现有工具进行了比较；2.发现和现有工具的互补作用；3.形成了22条JavaMOP规则；4.补充了不全基准的真实标签</p>
-<h2 id="RV是什么"><a href="#RV是什么" class="headerlink" title="RV是什么"></a>RV是什么</h2><p>静态分析存在误报（有滥用API代码，但实际没调用）和漏报（没检测到哈希功能滥用的API）问题</p>
+<h2 id="rv是什么">RV是什么</h2>
+<p>静态分析存在误报（有滥用API代码，但实际没调用）和漏报（没检测到哈希功能滥用的API）问题</p>
 <p>RVsec作为动态分析的方法，和其他动态分析的工具做比较</p>
 <p>JavaMOP规范：1.事件定义（确定你要报告出什么问题）；2.属性（也就是事件的逻辑公式，使用ERE拓展正则描述，偶尔使用FSM有限状态机）；3.处理程序（ERE匹配成功触发执行程序，reset）</p>
-<h2 id="准确率描述"><a href="#准确率描述" class="headerlink" title="准确率描述"></a>准确率描述</h2><p><img src="/2025/04/07/Runtime Verification/Snipaste_2025-04-06_23-29-22.png" alt="Snipaste_2025-04-06_23-29-22" style="zoom:100%;"></p>
-<ol>
+<h2 id="准确率描述">准确率描述</h2>
+<p><img src="/2025/04/07/Runtime Verification/Snipaste_2025-04-06_23-29-22.png" alt="Snipaste_2025-04-06_23-29-22" style="zoom:100%;"></p>
+<ol type="1">
 <li>MASCBench：静态误报（Cipher.getInstance(keyGenerator.getInstance())，动态漏报（固定值初始化）</li>
 </ol>
 <p><img src="/2025/04/07/Runtime Verification/Snipaste_2025-04-06_23-32-25.png" alt="Snipaste_2025-04-06_23-32-25" style="zoom:80%;"></p>
-<ol>
+<ol start="2" type="1">
 <li>SmallCryptoAPIBench：Rcsec7个漏报（硬编码生成密钥，RV运行无法验证硬编码问题），CryLogger误报（规则过于严格）漏报（可预测的种子或凭证）</li>
 </ol>
 <p><img src="/2025/04/07/Runtime Verification/Snipaste_2025-04-06_23-40-57.png" alt="Snipaste_2025-04-06_23-40-57" style="zoom:80%;"></p>
-<ol>
+<ol start="3" type="1">
 <li>OWASPBench：CogniCrypt误报（控制流问题，不全部执行），CryptoGuard误报（配置文件问题），CryLogger误报（规则过于严格）</li>
 </ol>
-<div class="table-container">
 <table>
 <thead>
-<tr>
+<tr class="header">
 <th>配置文件</th>
 <th>代码信息</th>
 <th>CryptoGuard</th>
 </tr>
 </thead>
 <tbody>
-<tr>
+<tr class="odd">
 <td>✅</td>
 <td>❌</td>
 <td>❌误报</td>
 </tr>
-<tr>
+<tr class="even">
 <td>❌</td>
 <td>✅</td>
 <td>✅漏报</td>
 </tr>
 </tbody>
 </table>
-</div>
-<ol>
-<li><p>JulietBench：RVsec漏报（哈希算法的不确定性，一个安全一个不安全），CryptoGuard漏报（缺少所需的加密步骤）</p>
-</li>
-<li><p>ApacheCryptoAPIBench（该基准没有标准的真实标签，研究人员手动标记）</p>
-</li>
+<ol start="4" type="1">
+<li><p>JulietBench：RVsec漏报（哈希算法的不确定性，一个安全一个不安全），CryptoGuard漏报（缺少所需的加密步骤）</p></li>
+<li><p>ApacheCryptoAPIBench（该基准没有标准的真实标签，研究人员手动标记）</p></li>
 </ol>
 <p><code>Summary: Results shows that RVSec is very accurate (F1=0.95), compared to CryLogger (F1=0.85), CogniCrypt (F1=0.83), and CryptoGuard (F1=0.78).</code></p>
-<h2 id="原因描述"><a href="#原因描述" class="headerlink" title="原因描述"></a>原因描述</h2><ol>
+<h2 id="原因描述">原因描述</h2>
+<ol type="1">
 <li><p>RVsec：</p>
 <p>8FP（过于严格的规则），22FN（10个输入测试样例缺乏、12个动态分析固有局限）</p>
-<p>加密API的使用仅限于一些由测试样例进行的覆盖类；检查初始化使用硬编码的规则编写困难</p>
-</li>
+<p>加密API的使用仅限于一些由测试样例进行的覆盖类；检查初始化使用硬编码的规则编写困难</p></li>
 <li><p>静态分析（CryptoGuard、CogniCrypt）：</p>
 <p>漏报（多次方法调用初始化Cipher类、路径敏感问题、条件判断、加密算法完整代码识别）</p>
 <p><img src="/2025/04/07/Runtime Verification/Snipaste_2025-04-06_23-50-33.png" alt="Snipaste_2025-04-06_23-50-33" style="zoom:80%;"></p>
 <p><img src="/2025/04/07/Runtime Verification/Snipaste_2025-04-06_23-52-30.png" alt="Snipaste_2025-04-06_23-52-30" style="zoom:80%;"></p>
 <p><img src="/2025/04/07/Runtime Verification/Snipaste_2025-04-06_23-54-48.png" alt="Snipaste_2025-04-06_23-54-48" style="zoom:80%;"></p>
 <p>误报漏报都有（配置文件问题，具体可见上文的表格，这里给一张图描述，fig15误报、fig16漏报）</p>
-<p><img src="/2025/04/07/Runtime Verification/Snipaste_2025-04-06_23-57-04.png" alt="Snipaste_2025-04-06_23-57-04" style="zoom:80%;"></p>
-</li>
+<p><img src="/2025/04/07/Runtime Verification/Snipaste_2025-04-06_23-57-04.png" alt="Snipaste_2025-04-06_23-57-04" style="zoom:80%;"></p></li>
 <li><p>动态分析（CryLogger）：</p>
 <p>误报（安全算法被认为不安全、不确定性问题）</p>
 <p>漏报（缺乏算法的完整步骤，随机数问题）</p>
-<p>对大项目扫描效果不佳，输出不合适</p>
-</li>
+<p>对大项目扫描效果不佳，输出不合适</p></li>
 </ol>
-<h2 id="讨论和未来工作"><a href="#讨论和未来工作" class="headerlink" title="讨论和未来工作"></a>讨论和未来工作</h2><p>RV开销：</p>
+<h2 id="讨论和未来工作">讨论和未来工作</h2>
+<p>RV开销：</p>
 <p><img src="/2025/04/07/Runtime Verification/Snipaste_2025-04-07_00-04-23.png" alt="Snipaste_2025-04-07_00-04-23" style="zoom:80%;"></p>
 <p>新技术evolution-aware可以减少RV的开销（10x，平均5x）</p>
 <p>未来工作：</p>
-<ol>
+<ol type="1">
 <li>动静态分析的互补性</li>
 <li>更好的在检测中使用RV</li>
 <li>现有基准的问题</li>
 </ol>
+<h2 id="开源仓库具体展示">开源仓库具体展示</h2>
+<p>项目地址 <a target="_blank" rel="noopener" href="https://github.com/PAMunb/rvsec">GitHub - PAMunb/rvsec</a></p>
+<p>KeyGeneratorSpec-JavaMOP规范说明：<a target="_blank" rel="noopener" href="https://github.com/PAMunb/rvsec/blob/master/rvsec/rvsec-agent/src/main/mop/KeyGeneratorSpec.mop">rvsec/rvsec/rvsec-agent/src/main/mop/KeyGeneratorSpec.mop at master · PAMunb/rvsec · GitHub</a></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> mop;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> javax.crypto.KeyGenerator;</span><br><span class="line"><span class="keyword">import</span> javax.crypto.SecretKey;</span><br><span class="line"><span class="keyword">import</span> java.security.SecureRandom;</span><br><span class="line"><span class="keyword">import</span> java.security.spec.AlgorithmParameterSpec;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> br.unb.cic.mop.eh.*;</span><br><span class="line"><span class="keyword">import</span> br.unb.cic.mop.ExecutionContext;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * KeyGeneratorSpec</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * A JavaMOP specification of the correct usage of the</span></span><br><span class="line"><span class="comment"> * javax.crypto.KeyGenerator class.</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * https://github.com/CROSSINGTUD/Crypto-API-Rules/blob/master/JavaCryptographicArchitecture/src/KeyGenerator.crysl</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line">KeyGeneratorSpec(KeyGenerator k) {</span><br><span class="line"></span><br><span class="line">    List&lt;String&gt; safeAlgorithms = Arrays.asList(<span class="string">"AES"</span>, <span class="string">"HmacSHA256"</span>, <span class="string">"HmacSHA384"</span>, <span class="string">"HmacSHA512"</span>);</span><br><span class="line">    <span class="type">String</span> <span class="variable">currentAlgorithmInstance</span> <span class="operator">=</span> <span class="string">""</span>;</span><br><span class="line">    <span class="type">KeyGenerator</span> <span class="variable">keyGenerator</span> <span class="operator">=</span> <span class="literal">null</span>;</span><br><span class="line"></span><br><span class="line">    Key generatedKey;</span><br><span class="line"></span><br><span class="line">    event g1 <span class="title function_">after</span><span class="params">(String alg)</span> returning(KeyGenerator k):</span><br><span class="line">      call(<span class="keyword">public</span> <span class="keyword">static</span> KeyGenerator KeyGenerator.getInstance(String))</span><br><span class="line">      &amp;&amp; args(alg)</span><br><span class="line">      &amp;&amp; condition(safeAlgorithms.contains(alg)) {</span><br><span class="line">        keyGenerator = k;</span><br><span class="line">        currentAlgorithmInstance = alg;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    event g2 <span class="title function_">after</span><span class="params">(String alg, Object provider)</span> returning(KeyGenerator k):</span><br><span class="line">      call(<span class="keyword">public</span> <span class="keyword">static</span> KeyGenerator KeyGenerator.getInstance(String, Object+))</span><br><span class="line">      &amp;&amp; args(alg, provider)</span><br><span class="line">      &amp;&amp; condition(safeAlgorithms.contains(alg)) {</span><br><span class="line">        keyGenerator = k;</span><br><span class="line">        currentAlgorithmInstance = alg;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    event g3 <span class="title function_">after</span><span class="params">(String alg)</span> returning(KeyGenerator k):</span><br><span class="line">      call(<span class="keyword">public</span> <span class="keyword">static</span> KeyGenerator KeyGenerator.getInstance(String))</span><br><span class="line">      &amp;&amp; args(alg)</span><br><span class="line">      &amp;&amp; condition(!safeAlgorithms.contains(currentAlgorithmInstance))  {</span><br><span class="line">        currentAlgorithmInstance = alg;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    event init <span class="title function_">before</span><span class="params">(KeyGenerator k)</span>:</span><br><span class="line">       ( call(<span class="keyword">public</span> <span class="keyword">void</span> KeyGenerator.init(<span class="type">int</span>)) ||</span><br><span class="line">         call(<span class="keyword">public</span> <span class="keyword">void</span> KeyGenerator.init(<span class="type">int</span>, SecureRandom)) ||</span><br><span class="line">         call(<span class="keyword">public</span> <span class="keyword">void</span> KeyGenerator.init(AlgorithmParameterSpec)) ||</span><br><span class="line">         call(<span class="keyword">public</span> <span class="keyword">void</span> KeyGenerator.init(AlgorithmParameterSpec, SecureRandom)) ||</span><br><span class="line">         call(<span class="keyword">public</span> <span class="keyword">void</span> KeyGenerator.init(SecureRandom))</span><br><span class="line">       ) &amp;&amp; target(k) {  }</span><br><span class="line"></span><br><span class="line">    event gk1 <span class="title function_">after</span><span class="params">(KeyGenerator k)</span> returning(SecretKey key):</span><br><span class="line">      call(<span class="keyword">public</span> SecretKey KeyGenerator.generateKey())</span><br><span class="line">      &amp;&amp; target(k) {</span><br><span class="line">        <span class="keyword">if</span> (!safeAlgorithms.contains(currentAlgorithmInstance)) {</span><br><span class="line">            ErrorCollector.instance().addError(<span class="keyword">new</span> <span class="title class_">ErrorDescription</span>(ErrorType.UnsafeAlgorithm, <span class="string">"KeyGeneratorSpec"</span>, <span class="string">""</span> + __LOC,</span><br><span class="line">        <span class="string">"expecting one of"</span> + String.join(<span class="string">","</span>, safeAlgorithms) + <span class="string">" but found "</span> + currentAlgorithmInstance + <span class="string">"."</span>));</span><br><span class="line">        }</span><br><span class="line">        generatedKey = key;</span><br><span class="line">        ExecutionContext.instance().setProperty(ExecutionContext.Property.GENERATED_KEY, generatedKey);</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    ere : (g3* g1+ | g3* g2+) ((init gk1) | gk1)</span><br><span class="line"></span><br><span class="line">    <span class="meta">@fail</span> {</span><br><span class="line">        ErrorCollector.instance().addError(<span class="keyword">new</span> <span class="title class_">ErrorDescription</span>(ErrorType.InvalidSequenceOfMethodCalls, <span class="string">"KeyGeneratorSpec"</span>, <span class="string">""</span> + __LOC));</span><br><span class="line">        ExecutionContext.instance().unsetObjectAsInAcceptingState(keyGenerator);</span><br><span class="line">        ExecutionContext.instance().remove(ExecutionContext.Property.GENERATED_KEY, generatedKey);</span><br><span class="line"></span><br><span class="line">        __RESET;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="meta">@match</span> {</span><br><span class="line">       ExecutionContext.instance().setObjectAsInAcceptingState(keyGenerator);</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+<p>分析说明：</p>
+<p>这段代码是一个 JavaMOP (Java Monitoring and Pluggable) 的规范，用于监控和验证 <code>javax.crypto.KeyGenerator</code> 类的正确使用情况。它的目的是确保在使用 <code>KeyGenerator</code> 类时，仅允许特定的安全算法，并且遵循一定的调用顺序。JavaMOP 是一种用于 Java 程序运行时监控的工具，通常用于验证代码中某些条件是否被满足。</p>
+<p>下面是对代码的逐步分析：</p>
+<ol type="1">
+<li><strong>定义和目标</strong></li>
+</ol>
+<p>该规范的目标是监控 <code>KeyGenerator</code> 的使用，确保以下条件：</p>
+<ul>
+<li>使用的是一个安全的算法（如：<code>AES</code>、<code>HmacSHA256</code>、<code>HmacSHA384</code>、<code>HmacSHA512</code>）。</li>
+<li><code>KeyGenerator</code> 的方法调用顺序正确。</li>
+</ul>
+<ol start="2" type="1">
+<li><strong>变量声明</strong></li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">List&lt;String&gt; safeAlgorithms = Arrays.asList(<span class="string">"AES"</span>, <span class="string">"HmacSHA256"</span>, <span class="string">"HmacSHA384"</span>, <span class="string">"HmacSHA512"</span>);</span><br><span class="line"><span class="type">String</span> <span class="variable">currentAlgorithmInstance</span> <span class="operator">=</span> <span class="string">""</span>;</span><br><span class="line"><span class="type">KeyGenerator</span> <span class="variable">keyGenerator</span> <span class="operator">=</span> <span class="literal">null</span>;</span><br><span class="line">Key generatedKey;</span><br></pre></td></tr></table></figure>
+<ul>
+<li><code>safeAlgorithms</code> 列出了允许的安全算法。</li>
+<li><code>currentAlgorithmInstance</code> 用于追踪当前实例化的 <code>KeyGenerator</code> 使用的算法。</li>
+<li><code>keyGenerator</code> 和 <code>generatedKey</code> 用于追踪 <code>KeyGenerator</code> 实例和生成的密钥。</li>
+</ul>
+<ol start="3" type="1">
+<li><strong>事件 g1、g2、g3：</strong></li>
+</ol>
+<p>这些事件分别在 <code>KeyGenerator.getInstance()</code> 方法调用后触发，用于记录 <code>KeyGenerator</code> 的实例化。</p>
+<ul>
+<li><strong>g1</strong>：在 <code>KeyGenerator.getInstance(String)</code> 被调用时，如果算法在安全算法列表中，记录当前使用的算法。</li>
+<li><strong>g2</strong>：在 <code>KeyGenerator.getInstance(String, Object)</code> 被调用时，也类似地记录当前使用的算法。</li>
+<li><strong>g3</strong>：在其他情况下（例如，算法不在安全算法列表中），更新 <code>currentAlgorithmInstance</code>，但不做其他操作。</li>
+</ul>
+<ol start="4" type="1">
+<li><strong>事件 init：</strong></li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">event init <span class="title function_">before</span><span class="params">(KeyGenerator k)</span>:</span><br><span class="line">    ( call(<span class="keyword">public</span> <span class="keyword">void</span> KeyGenerator.init(<span class="type">int</span>)) ||</span><br><span class="line">      call(<span class="keyword">public</span> <span class="keyword">void</span> KeyGenerator.init(<span class="type">int</span>, SecureRandom)) ||</span><br><span class="line">      call(<span class="keyword">public</span> <span class="keyword">void</span> KeyGenerator.init(AlgorithmParameterSpec)) ||</span><br><span class="line">      call(<span class="keyword">public</span> <span class="keyword">void</span> KeyGenerator.init(AlgorithmParameterSpec, SecureRandom)) ||</span><br><span class="line">      call(<span class="keyword">public</span> <span class="keyword">void</span> KeyGenerator.init(SecureRandom))</span><br><span class="line">    ) &amp;&amp; target(k) {  }</span><br></pre></td></tr></table></figure>
+<p>这个事件在 <code>KeyGenerator</code> 的初始化方法（<code>init()</code>）调用之前触发，确保 <code>KeyGenerator</code> 被正确初始化。它监控了多个重载版本的 <code>init()</code> 方法。</p>
+<ol start="5" type="1">
+<li><strong>事件 gk1：</strong></li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">event gk1 <span class="title function_">after</span><span class="params">(KeyGenerator k)</span> returning(SecretKey key):</span><br><span class="line">    call(<span class="keyword">public</span> SecretKey KeyGenerator.generateKey())</span><br><span class="line">    &amp;&amp; target(k) {</span><br><span class="line">        <span class="keyword">if</span> (!safeAlgorithms.contains(currentAlgorithmInstance)) {</span><br><span class="line">            ErrorCollector.instance().addError(<span class="keyword">new</span> <span class="title class_">ErrorDescription</span>(ErrorType.UnsafeAlgorithm, <span class="string">"KeyGeneratorSpec"</span>, <span class="string">""</span> + __LOC,</span><br><span class="line">            <span class="string">"expecting one of"</span> + String.join(<span class="string">","</span>, safeAlgorithms) + <span class="string">" but found "</span> + currentAlgorithmInstance + <span class="string">"."</span>));</span><br><span class="line">        }</span><br><span class="line">        generatedKey = key;</span><br><span class="line">        ExecutionContext.instance().setProperty(ExecutionContext.Property.GENERATED_KEY, generatedKey);</span><br><span class="line">    }</span><br></pre></td></tr></table></figure>
+<ul>
+<li><code>gk1</code> 事件会在 <code>generateKey()</code> 方法被调用后触发。它检查当前算法是否在安全算法列表中。如果不在列表中，则会触发错误。</li>
+<li><code>generatedKey</code> 被保存并通过 <code>ExecutionContext</code> 设置。</li>
+</ul>
+<ol start="6" type="1">
+<li><strong>ere：</strong></li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ere : (g3* g1+ | g3* g2+) ((init gk1) | gk1)</span><br></pre></td></tr></table></figure>
+<p>这是一个事件规则，描述了事件之间的合法调用顺序：</p>
+<ul>
+<li>允许 <code>g3</code>（不安全算法）事件多次出现，但至少跟随一个 <code>g1</code> 或 <code>g2</code> 事件（这些是安全算法实例化的事件）。</li>
+<li><code>init</code> 和 <code>gk1</code> 事件可以在一起或者单独出现，但必须按顺序。</li>
+</ul>
+<ol start="7" type="1">
+<li><strong><span class="citation" data-cites="fail">@fail</span> 语句：</strong></li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@fail</span> {</span><br><span class="line">    ErrorCollector.instance().addError(<span class="keyword">new</span> <span class="title class_">ErrorDescription</span>(ErrorType.InvalidSequenceOfMethodCalls, <span class="string">"KeyGeneratorSpec"</span>, <span class="string">""</span> + __LOC));</span><br><span class="line">    ExecutionContext.instance().unsetObjectAsInAcceptingState(keyGenerator);</span><br><span class="line">    ExecutionContext.instance().remove(ExecutionContext.Property.GENERATED_KEY, generatedKey);</span><br><span class="line"></span><br><span class="line">    __RESET;</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+<ul>
+<li>如果事件顺序不正确或发生错误，这段代码会触发。</li>
+<li>它会记录错误、清除执行上下文中的相关信息，并重置状态。</li>
+</ul>
+<ol start="8" type="1">
+<li><strong><span class="citation" data-cites="match">@match</span> 语句：</strong></li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@match</span> {</span><br><span class="line">    ExecutionContext.instance().setObjectAsInAcceptingState(keyGenerator);</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+<ul>
+<li>这段代码用于当事件顺序正确时，设置 <code>keyGenerator</code> 为接受状态，表示其处于一个有效的状态。</li>
+</ul>
+<p>总结：</p>
+<p>这个 JavaMOP 规范旨在监控 <code>KeyGenerator</code> 类的使用，确保以下两个方面：</p>
+<ol type="1">
+<li>使用的算法是安全的，符合 <code>safeAlgorithms</code> 列表的规定。</li>
+<li><code>KeyGenerator</code> 的方法调用顺序是正确的。</li>
+</ol>
+<p>当不符合这些规则时，代码会触发错误并清理执行上下文。如果符合规则，则会将 <code>KeyGenerator</code> 设为有效状态。</p>
+<h2 id="javapom">JAVAPOM</h2>
+<p><strong>JavaMOP</strong>（Java Monitoring-Oriented Programming）是一个基于运行时验证（Runtime Verification，RV）的方法，旨在动态监控Java程序的执行，并验证程序在运行时是否遵循给定的正式规格。JavaMOP是用来检查程序是否满足一定的行为约束的一种工具，通常用于检测程序中潜在的错误或不符合预期的行为。</p>
+<p>开源仓库<a target="_blank" rel="noopener" href="https://github.com/runtimeverification/javamop/tree/master">runtimeverification/javamop: Runtime verification system for Java, using AspectJ for instrumentation. (github.com)</a></p>
+<p><strong>JavaMOP的特点</strong>：</p>
+<ol type="1">
+<li><p><strong>运行时验证</strong>：</p>
+<ul>
+<li>JavaMOP通过将正式的规格（例如，逻辑约束或事件序列）嵌入到Java程序中，在程序运行时检查这些规格是否被满足。如果某个规格没有被满足，它会触发一个警告或错误报告。</li>
+</ul></li>
+<li><p><strong>监控事件</strong>：</p>
+<ul>
+<li>JavaMOP关注事件驱动的编程模型。它通过在程序运行时监控特定的事件（如方法调用、字段访问等）来检查程序是否遵循了定义的行为。</li>
+<li>可以定义复杂的事件序列（例如方法调用的顺序）来验证程序的行为。</li>
+</ul></li>
+<li><p><strong>规格语言</strong>：</p>
+<ul>
+<li>JavaMOP允许用户使用各种规格语言来定义监控规则。常用的语言包括：
+<ul>
+<li><strong>扩展正则表达式（ERE）</strong>：用于描述方法调用的序列。</li>
+<li><strong>上下文无关语法（CFG）、有限状态机（FSM）、线性时序逻辑（LTL）</strong>等，适用于更复杂的约束。</li>
+</ul></li>
+</ul>
+<p>在仓库<a target="_blank" rel="noopener" href="https://github.com/runtimeverification/javamop/tree/master/examples">javamop/examples at master · runtimeverification/javamop (github.com)</a>的例子中，包含多种规格语言的例子。</p></li>
+<li><p><strong>错误检测和报告</strong>：</p>
+<ul>
+<li>当程序在运行时违反了定义的规则时，JavaMOP会记录违规信息，并通过日志或警报向开发者报告错误。这使得开发者能够在早期阶段识别潜在的问题，并进行修复。</li>
+</ul></li>
+<li><p><strong>灵活性与可扩展性</strong>：</p>
+<ul>
+<li>JavaMOP支持与其他工具和框架的集成，可以与现有的Java应用程序一起使用，而无需对源代码进行大量修改。</li>
+<li>JavaMOP还支持动态监控，可以与现有的测试用例一起使用，以提高测试的覆盖率。</li>
+</ul></li>
+</ol>
+<p><strong>JavaMOP的工作原理</strong>：</p>
+<ol type="1">
+<li><strong>规格编写</strong>：用户使用JavaMOP的规格语言（如ERE、FSM）编写正式规格，定义程序应遵循的行为。</li>
+<li><strong>代码插桩</strong>：JavaMOP通过插桩技术在程序的执行过程中添加监控代码，这些代码在程序运行时触发并监控相关的事件。</li>
+<li><strong>执行监控</strong>：程序按照规格运行，JavaMOP实时监控并检查程序是否违反了任何规格。如果发现违规，它会记录并报告。</li>
+</ol>
+<p><strong>应用场景</strong>：</p>
+<ul>
+<li><strong>软件测试</strong>：在单元测试、集成测试过程中，使用JavaMOP动态监控程序的执行，以验证程序是否符合规范。</li>
+<li><strong>安全验证</strong>：用于检查程序是否遵循安全协议，例如确保加密API按照规定的顺序和规则进行调用。</li>
+<li><strong>程序行为分析</strong>：在复杂系统中，动态监控特定的行为或状态，以确保系统按照预期运行。</li>
+</ul>
+<p><strong>优点</strong>：</p>
+<ul>
+<li><strong>实时性</strong>：能够在程序运行时即时发现错误，避免了静态分析可能遗漏的动态行为问题。</li>
+<li><strong>高精度</strong>：可以精确地监控程序的每个方法调用或事件，减少误报。</li>
+<li><strong>易于集成</strong>：可以在现有的Java项目中轻松集成，无需大规模修改代码。</li>
+</ul>
+<p><strong>缺点</strong>：</p>
+<ul>
+<li><strong>运行时开销</strong>：插桩和动态监控可能会导致一定的性能开销，尤其是在大规模程序中。</li>
+<li><strong>规格编写困难</strong>：编写精确的正式规格可能需要深厚的领域知识和对程序行为的深入理解。</li>
+<li><strong>覆盖限制</strong>：如果测试用例不足或覆盖范围不广，动态分析可能无法发现所有的潜在问题。</li>
+</ul>
+<p><strong>总结</strong>：</p>
+<p>JavaMOP是一个强大的工具，特别适用于动态监控Java程序的执行，并检查是否符合预定的行为规范。它的灵活性和高精度使其在软件工程中具有广泛的应用价值，尤其是在复杂系统和高安全性要求的场景下。</p>
+<p>JavaMOP（Java Monitoring Oriented Programming）是一个基于监控导向编程（Monitoring Oriented Programming）的工具，主要用于在Java程序中动态监控和检测程序行为。它允许开发者定义监控逻辑，并将这些逻辑与应用程序运行时状态相结合，从而捕捉到运行时的特定事件。</p>
+<p><strong>JAVAMOP一个简单的应用实例</strong>：</p>
+<p>假设我们有一个简单的Java应用程序，其中包含了一个账户类（<code>Account</code>），该类允许存款和取款操作。我们希望监控每次取款操作时账户余额是否足够，如果余额不足，打印错误日志。</p>
+<ol type="1">
+<li>定义监控规范（Monitor）</li>
+</ol>
+<p>首先，我们需要定义监控规范，这个规范将在JavaMOP中进行编译。这里我们编写一个简单的监控规则：当调用<code>Account.withdraw()</code>方法时，如果余额不足，监控到的结果将触发一条错误信息。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Account.mop</span></span><br><span class="line">monitor AccountMonitor {</span><br><span class="line">    <span class="comment">// 绑定到Account类的withdraw方法</span></span><br><span class="line">    event <span class="title function_">withdraw</span><span class="params">(Account a, <span class="type">int</span> amount)</span> after (a.withdraw(amount)) {</span><br><span class="line">        <span class="keyword">if</span> (a.getBalance() &lt; <span class="number">0</span>) {  <span class="comment">// 检查余额是否不足</span></span><br><span class="line">            System.out.println(<span class="string">"ERROR: Insufficient funds for withdrawal of "</span> + amount);</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+<ol start="2" type="1">
+<li>编译监控规范</li>
+</ol>
+<p>使用JavaMOP编译器来编译这个监控规范文件。编译后的代码将作为工具的一部分插入到我们的Java项目中。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">java -jar JavaMOP.jar -m Account.mop</span><br></pre></td></tr></table></figure>
+<p>编译后的代码将生成与<code>Account</code>类相关的监控类，用于插入到应用程序中。</p>
+<ol start="3" type="1">
+<li>集成监控代码</li>
+</ol>
+<p>然后，我们将监控代码集成到我们的应用程序中。我们假设有一个简单的<code>Account</code>类，其中包括存款和取款操作。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Account.java</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Account</span> {</span><br><span class="line">    <span class="keyword">private</span> <span class="type">int</span> balance;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">Account</span><span class="params">(<span class="type">int</span> balance)</span> {</span><br><span class="line">        <span class="built_in">this</span>.balance = balance;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">deposit</span><span class="params">(<span class="type">int</span> amount)</span> {</span><br><span class="line">        balance += amount;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">withdraw</span><span class="params">(<span class="type">int</span> amount)</span> {</span><br><span class="line">    <span class="keyword">if</span> (amount &gt; balance) {</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">IllegalArgumentException</span>(<span class="string">"余额不足"</span>);</span><br><span class="line">    }</span><br><span class="line">    balance -= amount;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">getBalance</span><span class="params">()</span> {</span><br><span class="line">        <span class="keyword">return</span> balance;</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+<ol start="4" type="1">
+<li>运行监控</li>
+</ol>
+<p>现在我们运行程序，并监控每次取款操作。如果余额不足，监控将触发相应的错误信息输出。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Main.java</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Main</span> {</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> {</span><br><span class="line">        <span class="type">Account</span> <span class="variable">account</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Account</span>(<span class="number">100</span>);</span><br><span class="line">        account.withdraw(<span class="number">50</span>);  <span class="comment">// 应该正常执行</span></span><br><span class="line">        account.withdraw(<span class="number">100</span>); <span class="comment">// 会触发错误，因为余额不足</span></span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+<ol start="5" type="1">
+<li>输出</li>
+</ol>
+<p>运行程序时，我们应该看到如下输出：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ERROR: Insufficient funds for withdrawal of 100</span><br></pre></td></tr></table></figure>
+<p>在这个简单的例子中，JavaMOP通过插入监控代码，能够动态监控<code>Account.withdraw()</code>方法的行为，并在特定条件（余额不足）下输出错误信息。这种方式非常适合用于调试、性能监控或检测程序中的潜在错误。</p>
 
     </div>
 
@@ -558,7 +728,7 @@ mjx-container[display="true"] + br {
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Runtime-Verification%E7%B2%BE%E8%AF%BB%E8%AE%B0%E5%BD%95"><span class="nav-number">1.</span> <span class="nav-text">Runtime Verification精读记录</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%83%8C%E6%99%AF%E5%92%8C%E5%AE%9E%E9%AA%8C%E8%AE%BE%E7%BD%AE"><span class="nav-number">1.1.</span> <span class="nav-text">背景和实验设置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#RV%E6%98%AF%E4%BB%80%E4%B9%88"><span class="nav-number">1.2.</span> <span class="nav-text">RV是什么</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%87%86%E7%A1%AE%E7%8E%87%E6%8F%8F%E8%BF%B0"><span class="nav-number">1.3.</span> <span class="nav-text">准确率描述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8E%9F%E5%9B%A0%E6%8F%8F%E8%BF%B0"><span class="nav-number">1.4.</span> <span class="nav-text">原因描述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AE%A8%E8%AE%BA%E5%92%8C%E6%9C%AA%E6%9D%A5%E5%B7%A5%E4%BD%9C"><span class="nav-number">1.5.</span> <span class="nav-text">讨论和未来工作</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#runtime-verification%E7%B2%BE%E8%AF%BB%E8%AE%B0%E5%BD%95"><span class="nav-number">1.</span> <span class="nav-text">Runtime Verification精读记录</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#rv%E6%98%AF%E4%BB%80%E4%B9%88"><span class="nav-number">1.1.</span> <span class="nav-text">RV是什么</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%87%86%E7%A1%AE%E7%8E%87%E6%8F%8F%E8%BF%B0"><span class="nav-number">1.2.</span> <span class="nav-text">准确率描述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8E%9F%E5%9B%A0%E6%8F%8F%E8%BF%B0"><span class="nav-number">1.3.</span> <span class="nav-text">原因描述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AE%A8%E8%AE%BA%E5%92%8C%E6%9C%AA%E6%9D%A5%E5%B7%A5%E4%BD%9C"><span class="nav-number">1.4.</span> <span class="nav-text">讨论和未来工作</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BC%80%E6%BA%90%E4%BB%93%E5%BA%93%E5%85%B7%E4%BD%93%E5%B1%95%E7%A4%BA"><span class="nav-number">1.5.</span> <span class="nav-text">开源仓库具体展示</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#javapom"><span class="nav-number">1.6.</span> <span class="nav-text">JAVAPOM</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
