@@ -1271,7 +1271,7 @@
       </tags>
   </entry>
   <entry>
-    <title>Automatic Detection of Java Cryptographic API Misuses Are We There Yet?</title>
+    <title>Automatic_Detection</title>
     <url>/2025/04/13/automatic-detection/</url>
     <content><![CDATA[<h2 id="automatic-detection-of-java-cryptographic-api-misuses-are-we-there-yet">Automatic Detection of Java Cryptographic API Misuses: Are We There Yet?</h2>
 <p>论文地址：<a href="https://ieeexplore.ieee.org/document/9711933">Automatic Detection of Java Cryptographic API Misuses: Are We There Yet? | IEEE Journals &amp; Magazine | IEEE Xplore</a></p>
@@ -1367,85 +1367,6 @@
 <li>提供详细的定制修复建议</li>
 <li>自动生成特定于项目的漏洞利用程序</li>
 </ul>
-]]></content>
-      <categories>
-        <category>科研</category>
-      </categories>
-      <tags>
-        <tag>论文精读</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>crylogger</title>
-    <url>/2025/04/12/crylogger/</url>
-    <content><![CDATA[<h1 id="crylogger精读记录">crylogger精读记录</h1>
-<p>论文地址：<a href="https://ieeexplore.ieee.org/document/9519501">CRYLOGGER: Detecting Crypto Misuses Dynamically | IEEE Conference Publication | IEEE Xplore</a></p>
-<p>2021 IEEE Symposium on Security and Privacy (SP) CCF-A</p>
-<p>总结：1.Logger+Checker；2.7类加密操作的参数，26条检测规则；3.动态插桩技术，4个检测流程；4.Monkey机制实现随机UI生成；5.两个基准+CryptoGuard对比；6.针对标准库JCA、JCE，三方库支持？</p>
-<span id="more"></span>
-<h2 id="研究背景与问题">研究背景与问题</h2>
-<p>核心问题：加密API的误用（如硬编码密钥、弱算法选择）是软件安全的重大威胁。研究显示，超过88%的Android应用存在至少1项加密误用</p>
-<p>现有方案局限：</p>
-<ul>
-<li>静态分析（如CryptoGuard）：虽能全代码覆盖，但误报率高（需人工验证）、漏报动态加载代码、无法检测跨应用复用问题</li>
-<li>动态分析：现有工具（如SMV-Hunter）仅覆盖SSL/TLS等少量规则，无法全面检测加密误用</li>
-</ul>
-<p>研究目标：设计首个开源动态分析工具CRYLOGGER，支持26项加密规则，解决静态分析的误报问题，并覆盖更多实际漏洞场景</p>
-<h2 id="核心方法动态检测框架">核心方法：动态检测框架</h2>
-<h3 id="总体架构">总体架构</h3>
-<p><img src="/2025/04/12/crylogger/Snipaste_2025-04-12_16-20-58.png" alt="Snipaste_2025-04-12_16-20-58" style="zoom:100%;"></p>
-<h3 id="logger模块">Logger模块</h3>
-<p>动态插桩Java/Android加密API（如<code>Cipher.init()</code>、<code>MessageDigest.digest()</code>），捕获7类加密操作的参数（算法、密钥、IV、盐值等）</p>
-<p><img src="/2025/04/12/crylogger/Snipaste_2025-04-12_16-23-04.png" alt="Snipaste_2025-04-12_16-23-04" style="zoom:100%;"></p>
-<h3 id="checker模块">Checker模块</h3>
-<p>离线验证规则，26条加密规则，分四类检测逻辑：</p>
-<ol type="1">
-<li>非法值检测（如R-01/R-02）：禁用MD5/SHA1等不安全算法。</li>
-<li>常量检测（如R-05/R-07）：对比多次运行日志，识别硬编码密钥/IV。</li>
-<li>随机性检测（如R-06/R-08）：结合NIST测试验证密钥/IV的随机性。</li>
-<li>复用检测（如R-09/R-12）：检查密钥-IV对或盐值的重复使用。</li>
-</ol>
-<p><img src="/2025/04/12/crylogger/Snipaste_2025-04-12_16-25-28.png" alt="Snipaste_2025-04-12_16-25-28" style="zoom:100%;"></p>
-<p><img src="/2025/04/12/crylogger/Snipaste_2025-04-12_16-27-18.png" alt="Snipaste_2025-04-12_16-27-18" style="zoom:100%;"></p>
-<h3 id="关键技术">关键技术</h3>
-<ul>
-<li>轻量级插桩：仅修改加密库关键类（如<code>javax.crypto.Cipher</code>），记录参数而不影响运行时性能</li>
-<li>自动化测试：集成Android Monkey生成随机UI事件（30k次/应用），模拟用户交互以触发加密逻辑</li>
-<li>规则扩展性：支持动态更新规则集（如NIST新标准），适配不同安全需求</li>
-</ul>
-<p><img src="/2025/04/12/crylogger/Snipaste_2025-04-12_16-39-52.png" alt="Snipaste_2025-04-12_16-39-52" style="zoom:100%;"></p>
-<h2 id="实验结果与验证">实验结果与验证</h2>
-<h3 id="对比静态分析工具cryptoguard">对比静态分析工具CryptoGuard</h3>
-<p>基准：150个Google Play应用 + 扩展版CryptoAPI-Bench（198个测试用例）</p>
-<p>规则：使用共有的16条规则</p>
-<p>检测能力：</p>
-<ul>
-<li>互补性：CRYLOGGER发现CryptoGuard未覆盖的16%漏洞（如动态加载代码的误用）；CryptoGuard检测到CRYLOGGER遗漏的路径敏感漏洞</li>
-<li>误报率：CryptoGuard在SSL/TLS规则（如R-24/R-25）中误报率超50%，CRYLOGGER零误报</li>
-<li>性能：单应用分析平均耗时287秒（30k事件），与CryptoGuard相当</li>
-</ul>
-<p><img src="/2025/04/12/crylogger/Snipaste_2025-04-12_16-37-26.png" alt="Snipaste_2025-04-12_16-37-26" style="zoom:100%;"></p>
-<p><img src="/2025/04/12/crylogger/Snipaste_2025-04-12_16-37-36.png" alt="Snipaste_2025-04-12_16-37-36" style="zoom:100%;"></p>
-<p><img src="/2025/04/12/crylogger/Snipaste_2025-04-12_16-40-22.png" alt="Snipaste_2025-04-12_16-40-22" style="zoom:70%;"></p>
-<p><img src="/2025/04/12/crylogger/Snipaste_2025-04-12_16-38-30.png" alt="Snipaste_2025-04-12_16-38-30" style="zoom:100%;"></p>
-<p><img src="/2025/04/12/crylogger/Snipaste_2025-04-12_16-42-26.png" alt="Snipaste_2025-04-12_16-42-26" style="zoom:100%;"></p>
-<p><img src="/2025/04/12/crylogger/Snipaste_2025-04-12_16-41-21.png" alt="Snipaste_2025-04-12_16-41-21" style="zoom:100%;"></p>
-<h3 id="大规模应用分析">大规模应用分析</h3>
-<p>基准：1780个Google Play热门应用（33个类别）</p>
-<p>主要发现</p>
-<ul>
-<li>普遍性问题：99.1%的应用使用不安全哈希（SHA1/MD5），99.7%使用非安全随机数生成器</li>
-<li>高风险漏洞：31.3%的应用重复使用密钥-IV对，36.1%的密钥随机性不足</li>
-<li>开发误区：开发者常忽略本地数据加密风险（如硬编码密码），认为需特权攻击才可能利用</li>
-</ul>
-<p><img src="/2025/04/12/crylogger/Snipaste_2025-04-12_16-39-04.png" alt="Snipaste_2025-04-12_16-39-04" style="zoom:100%;"></p>
-<h2 id="漏洞验证与反馈">漏洞验证与反馈</h2>
-<p>逆向分析：手动逆向28个应用，确认14个存在可被利用漏洞（如A-13密码管理器使用弱加密存储用户数据）</p>
-<p>开发者反馈：联系306个开发者，仅10%回应，多数认为本地数据加密风险“超出威胁模型”</p>
-<h2 id="局限与未来方向">局限与未来方向</h2>
-<p>覆盖率依赖：随机事件可能遗漏需特定交互触发的加密逻辑（如登录流程）</p>
-<p>威胁模型差异：开发者与研究者对“风险”定义不一致，需优化规则优先级</p>
-<p>扩展性：支持更多加密库（如OpenSSL）、跨平台（iOS）检测</p>
 ]]></content>
       <categories>
         <category>科研</category>
@@ -1833,6 +1754,85 @@
       </categories>
       <tags>
         <tag>SPA</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>crylogger</title>
+    <url>/2025/04/12/crylogger/</url>
+    <content><![CDATA[<h1 id="crylogger精读记录">crylogger精读记录</h1>
+<p>论文地址：<a href="https://ieeexplore.ieee.org/document/9519501">CRYLOGGER: Detecting Crypto Misuses Dynamically | IEEE Conference Publication | IEEE Xplore</a></p>
+<p>2021 IEEE Symposium on Security and Privacy (SP) CCF-A</p>
+<p>总结：1.Logger+Checker；2.7类加密操作的参数，26条检测规则；3.动态插桩技术，4个检测流程；4.Monkey机制实现随机UI生成；5.两个基准+CryptoGuard对比；6.针对标准库JCA、JCE，三方库支持？</p>
+<span id="more"></span>
+<h2 id="研究背景与问题">研究背景与问题</h2>
+<p>核心问题：加密API的误用（如硬编码密钥、弱算法选择）是软件安全的重大威胁。研究显示，超过88%的Android应用存在至少1项加密误用</p>
+<p>现有方案局限：</p>
+<ul>
+<li>静态分析（如CryptoGuard）：虽能全代码覆盖，但误报率高（需人工验证）、漏报动态加载代码、无法检测跨应用复用问题</li>
+<li>动态分析：现有工具（如SMV-Hunter）仅覆盖SSL/TLS等少量规则，无法全面检测加密误用</li>
+</ul>
+<p>研究目标：设计首个开源动态分析工具CRYLOGGER，支持26项加密规则，解决静态分析的误报问题，并覆盖更多实际漏洞场景</p>
+<h2 id="核心方法动态检测框架">核心方法：动态检测框架</h2>
+<h3 id="总体架构">总体架构</h3>
+<p><img src="/2025/04/12/crylogger/Snipaste_2025-04-12_16-20-58.png" alt="Snipaste_2025-04-12_16-20-58" style="zoom:100%;"></p>
+<h3 id="logger模块">Logger模块</h3>
+<p>动态插桩Java/Android加密API（如<code>Cipher.init()</code>、<code>MessageDigest.digest()</code>），捕获7类加密操作的参数（算法、密钥、IV、盐值等）</p>
+<p><img src="/2025/04/12/crylogger/Snipaste_2025-04-12_16-23-04.png" alt="Snipaste_2025-04-12_16-23-04" style="zoom:100%;"></p>
+<h3 id="checker模块">Checker模块</h3>
+<p>离线验证规则，26条加密规则，分四类检测逻辑：</p>
+<ol type="1">
+<li>非法值检测（如R-01/R-02）：禁用MD5/SHA1等不安全算法。</li>
+<li>常量检测（如R-05/R-07）：对比多次运行日志，识别硬编码密钥/IV。</li>
+<li>随机性检测（如R-06/R-08）：结合NIST测试验证密钥/IV的随机性。</li>
+<li>复用检测（如R-09/R-12）：检查密钥-IV对或盐值的重复使用。</li>
+</ol>
+<p><img src="/2025/04/12/crylogger/Snipaste_2025-04-12_16-25-28.png" alt="Snipaste_2025-04-12_16-25-28" style="zoom:100%;"></p>
+<p><img src="/2025/04/12/crylogger/Snipaste_2025-04-12_16-27-18.png" alt="Snipaste_2025-04-12_16-27-18" style="zoom:100%;"></p>
+<h3 id="关键技术">关键技术</h3>
+<ul>
+<li>轻量级插桩：仅修改加密库关键类（如<code>javax.crypto.Cipher</code>），记录参数而不影响运行时性能</li>
+<li>自动化测试：集成Android Monkey生成随机UI事件（30k次/应用），模拟用户交互以触发加密逻辑</li>
+<li>规则扩展性：支持动态更新规则集（如NIST新标准），适配不同安全需求</li>
+</ul>
+<p><img src="/2025/04/12/crylogger/Snipaste_2025-04-12_16-39-52.png" alt="Snipaste_2025-04-12_16-39-52" style="zoom:100%;"></p>
+<h2 id="实验结果与验证">实验结果与验证</h2>
+<h3 id="对比静态分析工具cryptoguard">对比静态分析工具CryptoGuard</h3>
+<p>基准：150个Google Play应用 + 扩展版CryptoAPI-Bench（198个测试用例）</p>
+<p>规则：使用共有的16条规则</p>
+<p>检测能力：</p>
+<ul>
+<li>互补性：CRYLOGGER发现CryptoGuard未覆盖的16%漏洞（如动态加载代码的误用）；CryptoGuard检测到CRYLOGGER遗漏的路径敏感漏洞</li>
+<li>误报率：CryptoGuard在SSL/TLS规则（如R-24/R-25）中误报率超50%，CRYLOGGER零误报</li>
+<li>性能：单应用分析平均耗时287秒（30k事件），与CryptoGuard相当</li>
+</ul>
+<p><img src="/2025/04/12/crylogger/Snipaste_2025-04-12_16-37-26.png" alt="Snipaste_2025-04-12_16-37-26" style="zoom:100%;"></p>
+<p><img src="/2025/04/12/crylogger/Snipaste_2025-04-12_16-37-36.png" alt="Snipaste_2025-04-12_16-37-36" style="zoom:100%;"></p>
+<p><img src="/2025/04/12/crylogger/Snipaste_2025-04-12_16-40-22.png" alt="Snipaste_2025-04-12_16-40-22" style="zoom:70%;"></p>
+<p><img src="/2025/04/12/crylogger/Snipaste_2025-04-12_16-38-30.png" alt="Snipaste_2025-04-12_16-38-30" style="zoom:100%;"></p>
+<p><img src="/2025/04/12/crylogger/Snipaste_2025-04-12_16-42-26.png" alt="Snipaste_2025-04-12_16-42-26" style="zoom:100%;"></p>
+<p><img src="/2025/04/12/crylogger/Snipaste_2025-04-12_16-41-21.png" alt="Snipaste_2025-04-12_16-41-21" style="zoom:100%;"></p>
+<h3 id="大规模应用分析">大规模应用分析</h3>
+<p>基准：1780个Google Play热门应用（33个类别）</p>
+<p>主要发现</p>
+<ul>
+<li>普遍性问题：99.1%的应用使用不安全哈希（SHA1/MD5），99.7%使用非安全随机数生成器</li>
+<li>高风险漏洞：31.3%的应用重复使用密钥-IV对，36.1%的密钥随机性不足</li>
+<li>开发误区：开发者常忽略本地数据加密风险（如硬编码密码），认为需特权攻击才可能利用</li>
+</ul>
+<p><img src="/2025/04/12/crylogger/Snipaste_2025-04-12_16-39-04.png" alt="Snipaste_2025-04-12_16-39-04" style="zoom:100%;"></p>
+<h2 id="漏洞验证与反馈">漏洞验证与反馈</h2>
+<p>逆向分析：手动逆向28个应用，确认14个存在可被利用漏洞（如A-13密码管理器使用弱加密存储用户数据）</p>
+<p>开发者反馈：联系306个开发者，仅10%回应，多数认为本地数据加密风险“超出威胁模型”</p>
+<h2 id="局限与未来方向">局限与未来方向</h2>
+<p>覆盖率依赖：随机事件可能遗漏需特定交互触发的加密逻辑（如登录流程）</p>
+<p>威胁模型差异：开发者与研究者对“风险”定义不一致，需优化规则优先级</p>
+<p>扩展性：支持更多加密库（如OpenSSL）、跨平台（iOS）检测</p>
+]]></content>
+      <categories>
+        <category>科研</category>
+      </categories>
+      <tags>
+        <tag>论文精读</tag>
       </tags>
   </entry>
   <entry>
