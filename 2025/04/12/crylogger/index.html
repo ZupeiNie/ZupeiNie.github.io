@@ -20,12 +20,12 @@
     var CONFIG = {"hostname":"gh0st.top","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":false,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta name="description" content="crylogger精读记录 论文地址：CRYLOGGER: Detecting Crypto Misuses Dynamically | IEEE Conference Publication | IEEE Xplore 2021 IEEE Symposium on Security and Privacy (SP) CCF-A 总结：1.Logger+Checker；2.7类加密操作的参数，26">
+  <meta name="description" content="crylogger精读记录 论文地址：CRYLOGGER: Detecting Crypto Misuses Dynamically | IEEE Conference Publication | IEEE Xplore 2021 IEEE Symposium on Security and Privacy (SP)  CCF-A 总结：1.Logger+Checker；2.7类加密操作的参数，2">
 <meta property="og:type" content="article">
 <meta property="og:title" content="crylogger">
 <meta property="og:url" content="hhttps://gh0st.top/2025/04/12/crylogger/index.html">
 <meta property="og:site_name" content="换个研究">
-<meta property="og:description" content="crylogger精读记录 论文地址：CRYLOGGER: Detecting Crypto Misuses Dynamically | IEEE Conference Publication | IEEE Xplore 2021 IEEE Symposium on Security and Privacy (SP) CCF-A 总结：1.Logger+Checker；2.7类加密操作的参数，26">
+<meta property="og:description" content="crylogger精读记录 论文地址：CRYLOGGER: Detecting Crypto Misuses Dynamically | IEEE Conference Publication | IEEE Xplore 2021 IEEE Symposium on Security and Privacy (SP)  CCF-A 总结：1.Logger+Checker；2.7类加密操作的参数，2">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="hhttps://gh0st.top/2025/04/12/crylogger/Snipaste_2025-04-12_16-20-58.png">
 <meta property="og:image" content="hhttps://gh0st.top/2025/04/12/crylogger/Snipaste_2025-04-12_16-23-04.png">
@@ -373,9 +373,9 @@ mjx-container[display="true"] + br {
     <div class="post-body" itemprop="articleBody">
 
       
-        <h1 id="crylogger精读记录">crylogger精读记录</h1>
+        <h1>crylogger精读记录</h1>
 <p>论文地址：<a target="_blank" rel="noopener" href="https://ieeexplore.ieee.org/document/9519501">CRYLOGGER: Detecting Crypto Misuses Dynamically | IEEE Conference Publication | IEEE Xplore</a></p>
-<p>2021 IEEE Symposium on Security and Privacy (SP) CCF-A</p>
+<p>2021 IEEE Symposium on Security and Privacy (SP)  CCF-A</p>
 <p>总结：1.Logger+Checker；2.7类加密操作的参数，26条检测规则；3.动态插桩技术，4个检测流程；4.Monkey机制实现随机UI生成；5.两个基准+CryptoGuard对比；6.针对标准库JCA、JCE，三方库支持？</p>
 <span id="more"></span>
 <h2 id="研究背景与问题">研究背景与问题</h2>
@@ -386,31 +386,31 @@ mjx-container[display="true"] + br {
 <li>动态分析：现有工具（如SMV-Hunter）仅覆盖SSL/TLS等少量规则，无法全面检测加密误用</li>
 </ul>
 <p>研究目标：设计首个开源动态分析工具CRYLOGGER，支持26项加密规则，解决静态分析的误报问题，并覆盖更多实际漏洞场景</p>
-<h2 id="核心方法动态检测框架">核心方法：动态检测框架</h2>
+<h2 id="核心方法：动态检测框架">核心方法：动态检测框架</h2>
 <h3 id="总体架构">总体架构</h3>
-<p><img src="/2025/04/12/crylogger/Snipaste_2025-04-12_16-20-58.png" alt="Snipaste_2025-04-12_16-20-58" style="zoom:100%;"></p>
-<h3 id="logger模块">Logger模块</h3>
+<img src="/2025/04/12/crylogger/Snipaste_2025-04-12_16-20-58.png" alt="Snipaste_2025-04-12_16-20-58" style="zoom:100%;">
+<h3 id="Logger模块">Logger模块</h3>
 <p>动态插桩Java/Android加密API（如<code>Cipher.init()</code>、<code>MessageDigest.digest()</code>），捕获7类加密操作的参数（算法、密钥、IV、盐值等）</p>
-<p><img src="/2025/04/12/crylogger/Snipaste_2025-04-12_16-23-04.png" alt="Snipaste_2025-04-12_16-23-04" style="zoom:100%;"></p>
-<h3 id="checker模块">Checker模块</h3>
+<img src="/2025/04/12/crylogger/Snipaste_2025-04-12_16-23-04.png" alt="Snipaste_2025-04-12_16-23-04" style="zoom:100%;">
+<h3 id="Checker模块">Checker模块</h3>
 <p>离线验证规则，26条加密规则，分四类检测逻辑：</p>
-<ol type="1">
+<ol>
 <li>非法值检测（如R-01/R-02）：禁用MD5/SHA1等不安全算法。</li>
 <li>常量检测（如R-05/R-07）：对比多次运行日志，识别硬编码密钥/IV。</li>
 <li>随机性检测（如R-06/R-08）：结合NIST测试验证密钥/IV的随机性。</li>
 <li>复用检测（如R-09/R-12）：检查密钥-IV对或盐值的重复使用。</li>
 </ol>
-<p><img src="/2025/04/12/crylogger/Snipaste_2025-04-12_16-25-28.png" alt="Snipaste_2025-04-12_16-25-28" style="zoom:100%;"></p>
-<p><img src="/2025/04/12/crylogger/Snipaste_2025-04-12_16-27-18.png" alt="Snipaste_2025-04-12_16-27-18" style="zoom:100%;"></p>
+<img src="/2025/04/12/crylogger/Snipaste_2025-04-12_16-25-28.png" alt="Snipaste_2025-04-12_16-25-28" style="zoom:100%;">
+<img src="/2025/04/12/crylogger/Snipaste_2025-04-12_16-27-18.png" alt="Snipaste_2025-04-12_16-27-18" style="zoom:100%;">
 <h3 id="关键技术">关键技术</h3>
 <ul>
 <li>轻量级插桩：仅修改加密库关键类（如<code>javax.crypto.Cipher</code>），记录参数而不影响运行时性能</li>
 <li>自动化测试：集成Android Monkey生成随机UI事件（30k次/应用），模拟用户交互以触发加密逻辑</li>
 <li>规则扩展性：支持动态更新规则集（如NIST新标准），适配不同安全需求</li>
 </ul>
-<p><img src="/2025/04/12/crylogger/Snipaste_2025-04-12_16-39-52.png" alt="Snipaste_2025-04-12_16-39-52" style="zoom:100%;"></p>
+<img src="/2025/04/12/crylogger/Snipaste_2025-04-12_16-39-52.png" alt="Snipaste_2025-04-12_16-39-52" style="zoom:100%;">
 <h2 id="实验结果与验证">实验结果与验证</h2>
-<h3 id="对比静态分析工具cryptoguard">对比静态分析工具CryptoGuard</h3>
+<h3 id="对比静态分析工具CryptoGuard">对比静态分析工具CryptoGuard</h3>
 <p>基准：150个Google Play应用 + 扩展版CryptoAPI-Bench（198个测试用例）</p>
 <p>规则：使用共有的16条规则</p>
 <p>检测能力：</p>
@@ -419,12 +419,12 @@ mjx-container[display="true"] + br {
 <li>误报率：CryptoGuard在SSL/TLS规则（如R-24/R-25）中误报率超50%，CRYLOGGER零误报</li>
 <li>性能：单应用分析平均耗时287秒（30k事件），与CryptoGuard相当</li>
 </ul>
-<p><img src="/2025/04/12/crylogger/Snipaste_2025-04-12_16-37-26.png" alt="Snipaste_2025-04-12_16-37-26" style="zoom:100%;"></p>
-<p><img src="/2025/04/12/crylogger/Snipaste_2025-04-12_16-37-36.png" alt="Snipaste_2025-04-12_16-37-36" style="zoom:100%;"></p>
-<p><img src="/2025/04/12/crylogger/Snipaste_2025-04-12_16-40-22.png" alt="Snipaste_2025-04-12_16-40-22" style="zoom:70%;"></p>
-<p><img src="/2025/04/12/crylogger/Snipaste_2025-04-12_16-38-30.png" alt="Snipaste_2025-04-12_16-38-30" style="zoom:100%;"></p>
-<p><img src="/2025/04/12/crylogger/Snipaste_2025-04-12_16-42-26.png" alt="Snipaste_2025-04-12_16-42-26" style="zoom:100%;"></p>
-<p><img src="/2025/04/12/crylogger/Snipaste_2025-04-12_16-41-21.png" alt="Snipaste_2025-04-12_16-41-21" style="zoom:100%;"></p>
+<img src="/2025/04/12/crylogger/Snipaste_2025-04-12_16-37-26.png" alt="Snipaste_2025-04-12_16-37-26" style="zoom:100%;">
+<img src="/2025/04/12/crylogger/Snipaste_2025-04-12_16-37-36.png" alt="Snipaste_2025-04-12_16-37-36" style="zoom:100%;">
+<img src="/2025/04/12/crylogger/Snipaste_2025-04-12_16-40-22.png" alt="Snipaste_2025-04-12_16-40-22" style="zoom:70%;">
+<img src="/2025/04/12/crylogger/Snipaste_2025-04-12_16-38-30.png" alt="Snipaste_2025-04-12_16-38-30" style="zoom:100%;">
+<img src="/2025/04/12/crylogger/Snipaste_2025-04-12_16-42-26.png" alt="Snipaste_2025-04-12_16-42-26" style="zoom:100%;">
+<img src="/2025/04/12/crylogger/Snipaste_2025-04-12_16-41-21.png" alt="Snipaste_2025-04-12_16-41-21" style="zoom:100%;">
 <h3 id="大规模应用分析">大规模应用分析</h3>
 <p>基准：1780个Google Play热门应用（33个类别）</p>
 <p>主要发现</p>
@@ -433,7 +433,7 @@ mjx-container[display="true"] + br {
 <li>高风险漏洞：31.3%的应用重复使用密钥-IV对，36.1%的密钥随机性不足</li>
 <li>开发误区：开发者常忽略本地数据加密风险（如硬编码密码），认为需特权攻击才可能利用</li>
 </ul>
-<p><img src="/2025/04/12/crylogger/Snipaste_2025-04-12_16-39-04.png" alt="Snipaste_2025-04-12_16-39-04" style="zoom:100%;"></p>
+<img src="/2025/04/12/crylogger/Snipaste_2025-04-12_16-39-04.png" alt="Snipaste_2025-04-12_16-39-04" style="zoom:100%;">
 <h2 id="漏洞验证与反馈">漏洞验证与反馈</h2>
 <p>逆向分析：手动逆向28个应用，确认14个存在可被利用漏洞（如A-13密码管理器使用弱加密存储用户数据）</p>
 <p>开发者反馈：联系306个开发者，仅10%回应，多数认为本地数据加密风险“超出威胁模型”</p>
@@ -479,10 +479,7 @@ mjx-container[display="true"] + br {
     <a href="/2025/04/11/CryptoGo/" rel="prev" title="CryptoGo">
       <i class="fa fa-chevron-left"></i> CryptoGo
     </a></div>
-      <div class="post-nav-item">
-    <a href="/2025/04/13/Automatic-Detection/" rel="next" title="Automatic_Detection">
-      Automatic_Detection <i class="fa fa-chevron-right"></i>
-    </a></div>
+      <div class="post-nav-item"></div>
     </div>
       </footer>
     
@@ -541,7 +538,7 @@ mjx-container[display="true"] + br {
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#crylogger%E7%B2%BE%E8%AF%BB%E8%AE%B0%E5%BD%95"><span class="nav-number">1.</span> <span class="nav-text">crylogger精读记录</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%A0%94%E7%A9%B6%E8%83%8C%E6%99%AF%E4%B8%8E%E9%97%AE%E9%A2%98"><span class="nav-number">1.1.</span> <span class="nav-text">研究背景与问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A0%B8%E5%BF%83%E6%96%B9%E6%B3%95%E5%8A%A8%E6%80%81%E6%A3%80%E6%B5%8B%E6%A1%86%E6%9E%B6"><span class="nav-number">1.2.</span> <span class="nav-text">核心方法：动态检测框架</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%80%BB%E4%BD%93%E6%9E%B6%E6%9E%84"><span class="nav-number">1.2.1.</span> <span class="nav-text">总体架构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#logger%E6%A8%A1%E5%9D%97"><span class="nav-number">1.2.2.</span> <span class="nav-text">Logger模块</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#checker%E6%A8%A1%E5%9D%97"><span class="nav-number">1.2.3.</span> <span class="nav-text">Checker模块</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%B3%E9%94%AE%E6%8A%80%E6%9C%AF"><span class="nav-number">1.2.4.</span> <span class="nav-text">关键技术</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%9E%E9%AA%8C%E7%BB%93%E6%9E%9C%E4%B8%8E%E9%AA%8C%E8%AF%81"><span class="nav-number">1.3.</span> <span class="nav-text">实验结果与验证</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AF%B9%E6%AF%94%E9%9D%99%E6%80%81%E5%88%86%E6%9E%90%E5%B7%A5%E5%85%B7cryptoguard"><span class="nav-number">1.3.1.</span> <span class="nav-text">对比静态分析工具CryptoGuard</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A4%A7%E8%A7%84%E6%A8%A1%E5%BA%94%E7%94%A8%E5%88%86%E6%9E%90"><span class="nav-number">1.3.2.</span> <span class="nav-text">大规模应用分析</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%BC%8F%E6%B4%9E%E9%AA%8C%E8%AF%81%E4%B8%8E%E5%8F%8D%E9%A6%88"><span class="nav-number">1.4.</span> <span class="nav-text">漏洞验证与反馈</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B1%80%E9%99%90%E4%B8%8E%E6%9C%AA%E6%9D%A5%E6%96%B9%E5%90%91"><span class="nav-number">1.5.</span> <span class="nav-text">局限与未来方向</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">1.</span> <span class="nav-text">crylogger精读记录</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%A0%94%E7%A9%B6%E8%83%8C%E6%99%AF%E4%B8%8E%E9%97%AE%E9%A2%98"><span class="nav-number">1.1.</span> <span class="nav-text">研究背景与问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A0%B8%E5%BF%83%E6%96%B9%E6%B3%95%EF%BC%9A%E5%8A%A8%E6%80%81%E6%A3%80%E6%B5%8B%E6%A1%86%E6%9E%B6"><span class="nav-number">1.2.</span> <span class="nav-text">核心方法：动态检测框架</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%80%BB%E4%BD%93%E6%9E%B6%E6%9E%84"><span class="nav-number">1.2.1.</span> <span class="nav-text">总体架构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Logger%E6%A8%A1%E5%9D%97"><span class="nav-number">1.2.2.</span> <span class="nav-text">Logger模块</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Checker%E6%A8%A1%E5%9D%97"><span class="nav-number">1.2.3.</span> <span class="nav-text">Checker模块</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%B3%E9%94%AE%E6%8A%80%E6%9C%AF"><span class="nav-number">1.2.4.</span> <span class="nav-text">关键技术</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%9E%E9%AA%8C%E7%BB%93%E6%9E%9C%E4%B8%8E%E9%AA%8C%E8%AF%81"><span class="nav-number">1.3.</span> <span class="nav-text">实验结果与验证</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AF%B9%E6%AF%94%E9%9D%99%E6%80%81%E5%88%86%E6%9E%90%E5%B7%A5%E5%85%B7CryptoGuard"><span class="nav-number">1.3.1.</span> <span class="nav-text">对比静态分析工具CryptoGuard</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A4%A7%E8%A7%84%E6%A8%A1%E5%BA%94%E7%94%A8%E5%88%86%E6%9E%90"><span class="nav-number">1.3.2.</span> <span class="nav-text">大规模应用分析</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%BC%8F%E6%B4%9E%E9%AA%8C%E8%AF%81%E4%B8%8E%E5%8F%8D%E9%A6%88"><span class="nav-number">1.4.</span> <span class="nav-text">漏洞验证与反馈</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B1%80%E9%99%90%E4%B8%8E%E6%9C%AA%E6%9D%A5%E6%96%B9%E5%90%91"><span class="nav-number">1.5.</span> <span class="nav-text">局限与未来方向</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -557,7 +554,7 @@ mjx-container[display="true"] + br {
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">9</span>
+          <span class="site-state-item-count">8</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
