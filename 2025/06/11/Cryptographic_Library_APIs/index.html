@@ -20,12 +20,12 @@
     var CONFIG = {"hostname":"gh0st.top","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":false,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta name="description" content="论文综述：《“I’m pretty expert and I still screw it up”》论文地址“I’m pretty expert and I still screw it up”: Qualitative Insights into Experiences and Challenges of Designing and Implementing Cryptographic Libr">
+  <meta name="description" content="《“I’m pretty expert and I still screw it up”》 论文地址:“I’m pretty expert and I still screw it up”: Qualitative Insights into Experiences and Challenges of Designing and Implementing Cryptographic Library">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Cryptographic_Library_APIs">
 <meta property="og:url" content="hhttps://gh0st.top/2025/06/11/Cryptographic_Library_APIs/index.html">
 <meta property="og:site_name" content="换个研究">
-<meta property="og:description" content="论文综述：《“I’m pretty expert and I still screw it up”》论文地址“I’m pretty expert and I still screw it up”: Qualitative Insights into Experiences and Challenges of Designing and Implementing Cryptographic Libr">
+<meta property="og:description" content="《“I’m pretty expert and I still screw it up”》 论文地址:“I’m pretty expert and I still screw it up”: Qualitative Insights into Experiences and Challenges of Designing and Implementing Cryptographic Library">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2025-06-11T13:36:27.000Z">
 <meta property="article:modified_time" content="2025-06-11T13:36:27.000Z">
@@ -360,27 +360,34 @@ mjx-container[display="true"] + br {
     <div class="post-body" itemprop="articleBody">
 
       
-        <h1 id="论文综述：《“I’m-pretty-expert-and-I-still-screw-it-up”》"><a href="#论文综述：《“I’m-pretty-expert-and-I-still-screw-it-up”》" class="headerlink" title="论文综述：《“I’m pretty expert and I still screw it up”》"></a>论文综述：《“I’m pretty expert and I still screw it up”》</h1><p>论文地址<a target="_blank" rel="noopener" href="https://www.computer.org/csdl/proceedings-article/sp/2025/223600a026/21B7QgMMl2M">“I’m pretty expert and I still screw it up”: Qualitative Insights into Experiences and Challenges of Designing and Implementing Cryptographic Library APIs (computer.org)</a></p>
+        <h1 id="im-pretty-expert-and-i-still-screw-it-up">《“I’m pretty expert and I still screw it up”》</h1>
+<p>论文地址:<a target="_blank" rel="noopener" href="https://www.computer.org/csdl/proceedings-article/sp/2025/223600a026/21B7QgMMl2M">“I’m pretty expert and I still screw it up”: Qualitative Insights into Experiences and Challenges of Designing and Implementing Cryptographic Library APIs (computer.org)</a></p>
 <p>2025 S&amp;P CCF-A</p>
 <p>总结：对21位加密库开发者进行半结构化采访，获取关于加密库相关的设计经验。</p>
 <span id="more"></span>
-<h2 id="一、研究背景与动机"><a href="#一、研究背景与动机" class="headerlink" title="一、研究背景与动机"></a>一、研究背景与动机</h2><p>加密库作为现代软件系统中基础且关键的安全组件，其设计和使用错误却频繁导致严重的安全问题。现有研究多集中在“开发者如何误用加密库”，而本研究首次聚焦“加密库API设计者是如何作出设计与实现决策的”。</p>
-<h2 id="二、研究目标与方法"><a href="#二、研究目标与方法" class="headerlink" title="二、研究目标与方法"></a>二、研究目标与方法</h2><h3 id="核心研究问题（RQs）："><a href="#核心研究问题（RQs）：" class="headerlink" title="核心研究问题（RQs）："></a>核心研究问题（RQs）：</h3><ol>
+<h2 id="一研究背景与动机">一、研究背景与动机</h2>
+<p>加密库作为现代软件系统中基础且关键的安全组件，其设计和使用错误却频繁导致严重的安全问题。现有研究多集中在“开发者如何误用加密库”，而本研究首次聚焦“加密库API设计者是如何作出设计与实现决策的”。</p>
+<h2 id="二研究目标与方法">二、研究目标与方法</h2>
+<h3 id="核心研究问题rqs">核心研究问题（RQs）：</h3>
+<ol type="1">
 <li><strong>RQ1</strong>：加密库API的设计与实现决策是如何做出的？ why &amp; how</li>
 <li><strong>RQ2</strong>：开发者在设计这些API过程中面临哪些挑战？</li>
 <li><strong>RQ3</strong>：如何更好地支持API设计者提高安全性与可用性？ 辅助作用</li>
 </ol>
-<h3 id="方法："><a href="#方法：" class="headerlink" title="方法："></a>方法：</h3><ul>
+<h3 id="方法">方法：</h3>
+<ul>
 <li>进行了21位加密库开发者的半结构化深度访谈；</li>
 <li>采用主题分析（Thematic Analysis）进行编码与归类；</li>
 <li>受访者来自开源、商业、嵌入式、微型和研究类库的核心开发者或维护者。</li>
 </ul>
-<h3 id="相关工作："><a href="#相关工作：" class="headerlink" title="相关工作："></a>相关工作：</h3><ul>
+<h3 id="相关工作">相关工作：</h3>
+<ul>
 <li>API设计的原则和进程</li>
 <li>密码库的可用性</li>
 <li>密码误用的影响</li>
 </ul>
-<h3 id="选人相关："><a href="#选人相关：" class="headerlink" title="选人相关："></a>选人相关：</h3><ol>
+<h3 id="选人相关">选人相关：</h3>
+<ol type="1">
 <li>怎么选人（大体背景）</li>
 <li>面试程序</li>
 <li>定性分析</li>
@@ -388,48 +395,57 @@ mjx-container[display="true"] + br {
 <li>限制（幸存者偏差）</li>
 </ol>
 <hr>
-<h2 id="三、核心发现"><a href="#三、核心发现" class="headerlink" title="三、核心发现"></a>三、核心发现</h2><h3 id="1-设计动因与影响因素（RQ1）"><a href="#1-设计动因与影响因素（RQ1）" class="headerlink" title="1. 设计动因与影响因素（RQ1）"></a>1. 设计动因与影响因素（RQ1）</h3><ul>
+<h2 id="三核心发现">三、核心发现</h2>
+<h3 id="设计动因与影响因素rq1">1. 设计动因与影响因素（RQ1）</h3>
+<ul>
 <li>API设计广泛受<strong>库的用途、标准、其他库、语言生态、遗留代码</strong>等因素影响；</li>
 <li><strong>抽象层次选择</strong>在设计中极其关键：高抽象利于误用防止，低抽象利于灵活性；</li>
 <li><strong>安全默认（safe defaults）</strong>广受推崇，但其设定常依赖设计者直觉；</li>
 <li>大部分库都<strong>在标准之上做了本地裁剪或补充设计</strong>，标准并非一锤定音；</li>
 <li>设计者高度依赖<strong>个人经验与社群反馈</strong>，缺乏系统的可用性参考依据。</li>
 </ul>
-<h3 id="2-面临的挑战（RQ2）"><a href="#2-面临的挑战（RQ2）" class="headerlink" title="2. 面临的挑战（RQ2）"></a>2. 面临的挑战（RQ2）</h3><ul>
+<h3 id="面临的挑战rq2">2. 面临的挑战（RQ2）</h3>
+<ul>
 <li><strong>缺乏对“API可用性”的明确定义和评价工具</strong>；</li>
 <li><strong>文档维护成本高、质量不稳定</strong>；</li>
 <li><strong>用户反馈多但有效信号少</strong>，尤其在开源社区中面临用户威胁或无效建议；</li>
 <li><strong>兼容性 vs 安全性冲突突出</strong>，很多功能因历史遗留难以彻底废弃；</li>
 <li><strong>资源受限严重</strong>：许多开发者兼职、志愿、缺乏资金支持，难以进行系统可用性测试。</li>
 </ul>
-<h3 id="3-设计三难困境：Usability-vs-Security-vs-Flexibility（RQ3）"><a href="#3-设计三难困境：Usability-vs-Security-vs-Flexibility（RQ3）" class="headerlink" title="3. 设计三难困境：Usability vs Security vs Flexibility（RQ3）"></a>3. 设计三难困境：Usability vs Security vs Flexibility（RQ3）</h3><ul>
+<h3 id="设计三难困境usability-vs-security-vs-flexibilityrq3">3. 设计三难困境：Usability vs Security vs Flexibility（RQ3）</h3>
+<ul>
 <li><strong>抽象程度的调整</strong>决定了API对不同用户的适配能力；</li>
 <li><strong>误用防止</strong>设计往往需要牺牲灵活性；</li>
 <li><strong>安全需求</strong>（如常数时间、形式化验证）可能会导致<strong>用户体验恶化</strong>；</li>
 <li><strong>开发者自测</strong>是主要的可用性评估方式，缺乏系统工具或方法支持。</li>
 </ul>
 <hr>
-<h2 id="四、研究贡献"><a href="#四、研究贡献" class="headerlink" title="四、研究贡献"></a>四、研究贡献</h2><ul>
+<h2 id="四研究贡献">四、研究贡献</h2>
+<ul>
 <li>首次系统性地从API设计者视角出发，揭示加密库API背后的设计权衡；</li>
 <li>明确指出当前<strong>标准化流程中严重缺乏对API设计与可用性的考虑</strong>；</li>
 <li>提出促进“人因密码学（Human-Centered Cryptography）”发展的建议：</li>
 </ul>
-<h3 id="建议："><a href="#建议：" class="headerlink" title="建议："></a>建议：</h3><ol>
+<h3 id="建议">建议：</h3>
+<ol type="1">
 <li><strong>将API设计指导纳入标准化流程</strong>；</li>
 <li><strong>推动基于经验和实证的可用性研究</strong>；</li>
 <li><strong>开发低成本的可用性评估工具</strong>，便于开发者在有限资源下测试API设计；</li>
 <li><strong>构建更系统化的误用场景分析与知识传播机制</strong>。</li>
 </ol>
 <hr>
-<h2 id="五、研究局限与未来方向"><a href="#五、研究局限与未来方向" class="headerlink" title="五、研究局限与未来方向"></a>五、研究局限与未来方向</h2><ul>
+<h2 id="五研究局限与未来方向">五、研究局限与未来方向</h2>
+<ul>
 <li>受访样本倾向于经验丰富、偏重可用性意识的开发者，<strong>样本选择存在偏倚</strong>；</li>
 <li><strong>为定性研究，不追求统计意义上的普适性</strong>，更重在提供深入洞察；</li>
 <li>未来需结合<strong>更大规模的量化分析</strong>、<strong>工具实验验证</strong>来强化结论的推广性。</li>
 </ul>
 <hr>
-<h2 id="六、总结语"><a href="#六、总结语" class="headerlink" title="六、总结语"></a>六、总结语</h2><p>本研究打破了以往“以使用者为中心”的单一视角，从“设计者为中心”出发，系统揭示了当前加密库API在现实设计与实现过程中的真实挑战，尤其在人因工程、标准化指导缺位、经验主义过重等方面提供了深入反思和建设性建议。它为未来<strong>设计更安全、可用、可维护的加密库</strong>提供了实证基础与方向引导。</p>
+<h2 id="六总结语">六、总结语</h2>
+<p>本研究打破了以往“以使用者为中心”的单一视角，从“设计者为中心”出发，系统揭示了当前加密库API在现实设计与实现过程中的真实挑战，尤其在人因工程、标准化指导缺位、经验主义过重等方面提供了深入反思和建设性建议。它为未来<strong>设计更安全、可用、可维护的加密库</strong>提供了实证基础与方向引导。</p>
 <hr>
-<h2 id="七、个人理解"><a href="#七、个人理解" class="headerlink" title="七、个人理解"></a>七、个人理解</h2><p>这个研究首先不能用复现，也不能用于复制（R+R，not），本质上这个工作是一个人脉的体现（大胆）。从加密API误用检测领域去考虑，这个工作属于如何避免加密API误用，从设计加密库的方法去避免，也就是从源头减少误用。之前有工作1（CogniCrypt: Supporting developers in using cryptography ASE-2017-ccfa）提出CogniCrypt，一个集安全代码生成与静态分析于一体的 Eclipse 插件，实现开发人员在写代码的过程中避免误用；有工作2（From Struggle to Simplicity with a Usable and Secure API for Encryption in Java ESEM-2024-ccfb）提出了SafEncrypt框架，通过”安全默认配置+流式API引导”的设计范式，解决了传统加密接口的三大安全漏洞问题，有点类似本文的加密库设计来避免误用。</p>
+<h2 id="七个人理解">七、个人理解</h2>
+<p>这个研究首先不能用复现，也不能用于复制（R+R，not），本质上这个工作是一个人脉的体现（大胆）。从加密API误用检测领域去考虑，这个工作属于如何避免加密API误用，从设计加密库的方法去避免，也就是从源头减少误用。之前有工作1（CogniCrypt: Supporting developers in using cryptography ASE-2017-ccfa）提出CogniCrypt，一个集安全代码生成与静态分析于一体的 Eclipse 插件，实现开发人员在写代码的过程中避免误用；有工作2（From Struggle to Simplicity with a Usable and Secure API for Encryption in Java ESEM-2024-ccfb）提出了SafEncrypt框架，通过"安全默认配置+流式API引导"的设计范式，解决了传统加密接口的三大安全漏洞问题，有点类似本文的加密库设计来避免误用。</p>
 <p>对于本文给出的结论，目前感觉并没有特别好的点（可能是我没发现），都算是一些老生常谈的问题，不过本文有条理有逻辑的梳理出来，对之后的相关工作肯定是有帮助的。</p>
 
     </div>
@@ -528,7 +544,7 @@ mjx-container[display="true"] + br {
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%AE%BA%E6%96%87%E7%BB%BC%E8%BF%B0%EF%BC%9A%E3%80%8A%E2%80%9CI%E2%80%99m-pretty-expert-and-I-still-screw-it-up%E2%80%9D%E3%80%8B"><span class="nav-number">1.</span> <span class="nav-text">论文综述：《“I’m pretty expert and I still screw it up”》</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E3%80%81%E7%A0%94%E7%A9%B6%E8%83%8C%E6%99%AF%E4%B8%8E%E5%8A%A8%E6%9C%BA"><span class="nav-number">1.1.</span> <span class="nav-text">一、研究背景与动机</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E3%80%81%E7%A0%94%E7%A9%B6%E7%9B%AE%E6%A0%87%E4%B8%8E%E6%96%B9%E6%B3%95"><span class="nav-number">1.2.</span> <span class="nav-text">二、研究目标与方法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A0%B8%E5%BF%83%E7%A0%94%E7%A9%B6%E9%97%AE%E9%A2%98%EF%BC%88RQs%EF%BC%89%EF%BC%9A"><span class="nav-number">1.2.1.</span> <span class="nav-text">核心研究问题（RQs）：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%96%B9%E6%B3%95%EF%BC%9A"><span class="nav-number">1.2.2.</span> <span class="nav-text">方法：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%9B%B8%E5%85%B3%E5%B7%A5%E4%BD%9C%EF%BC%9A"><span class="nav-number">1.2.3.</span> <span class="nav-text">相关工作：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%80%89%E4%BA%BA%E7%9B%B8%E5%85%B3%EF%BC%9A"><span class="nav-number">1.2.4.</span> <span class="nav-text">选人相关：</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89%E3%80%81%E6%A0%B8%E5%BF%83%E5%8F%91%E7%8E%B0"><span class="nav-number">1.3.</span> <span class="nav-text">三、核心发现</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E8%AE%BE%E8%AE%A1%E5%8A%A8%E5%9B%A0%E4%B8%8E%E5%BD%B1%E5%93%8D%E5%9B%A0%E7%B4%A0%EF%BC%88RQ1%EF%BC%89"><span class="nav-number">1.3.1.</span> <span class="nav-text">1. 设计动因与影响因素（RQ1）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E9%9D%A2%E4%B8%B4%E7%9A%84%E6%8C%91%E6%88%98%EF%BC%88RQ2%EF%BC%89"><span class="nav-number">1.3.2.</span> <span class="nav-text">2. 面临的挑战（RQ2）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E8%AE%BE%E8%AE%A1%E4%B8%89%E9%9A%BE%E5%9B%B0%E5%A2%83%EF%BC%9AUsability-vs-Security-vs-Flexibility%EF%BC%88RQ3%EF%BC%89"><span class="nav-number">1.3.3.</span> <span class="nav-text">3. 设计三难困境：Usability vs Security vs Flexibility（RQ3）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%9B%E3%80%81%E7%A0%94%E7%A9%B6%E8%B4%A1%E7%8C%AE"><span class="nav-number">1.4.</span> <span class="nav-text">四、研究贡献</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BB%BA%E8%AE%AE%EF%BC%9A"><span class="nav-number">1.4.1.</span> <span class="nav-text">建议：</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%94%E3%80%81%E7%A0%94%E7%A9%B6%E5%B1%80%E9%99%90%E4%B8%8E%E6%9C%AA%E6%9D%A5%E6%96%B9%E5%90%91"><span class="nav-number">1.5.</span> <span class="nav-text">五、研究局限与未来方向</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%AD%E3%80%81%E6%80%BB%E7%BB%93%E8%AF%AD"><span class="nav-number">1.6.</span> <span class="nav-text">六、总结语</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%83%E3%80%81%E4%B8%AA%E4%BA%BA%E7%90%86%E8%A7%A3"><span class="nav-number">1.7.</span> <span class="nav-text">七、个人理解</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#im-pretty-expert-and-i-still-screw-it-up"><span class="nav-number">1.</span> <span class="nav-text">《“I’m pretty expert and I still screw it up”》</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E7%A0%94%E7%A9%B6%E8%83%8C%E6%99%AF%E4%B8%8E%E5%8A%A8%E6%9C%BA"><span class="nav-number">1.1.</span> <span class="nav-text">一、研究背景与动机</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E7%A0%94%E7%A9%B6%E7%9B%AE%E6%A0%87%E4%B8%8E%E6%96%B9%E6%B3%95"><span class="nav-number">1.2.</span> <span class="nav-text">二、研究目标与方法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A0%B8%E5%BF%83%E7%A0%94%E7%A9%B6%E9%97%AE%E9%A2%98rqs"><span class="nav-number">1.2.1.</span> <span class="nav-text">核心研究问题（RQs）：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%96%B9%E6%B3%95"><span class="nav-number">1.2.2.</span> <span class="nav-text">方法：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%9B%B8%E5%85%B3%E5%B7%A5%E4%BD%9C"><span class="nav-number">1.2.3.</span> <span class="nav-text">相关工作：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%80%89%E4%BA%BA%E7%9B%B8%E5%85%B3"><span class="nav-number">1.2.4.</span> <span class="nav-text">选人相关：</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89%E6%A0%B8%E5%BF%83%E5%8F%91%E7%8E%B0"><span class="nav-number">1.3.</span> <span class="nav-text">三、核心发现</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AE%BE%E8%AE%A1%E5%8A%A8%E5%9B%A0%E4%B8%8E%E5%BD%B1%E5%93%8D%E5%9B%A0%E7%B4%A0rq1"><span class="nav-number">1.3.1.</span> <span class="nav-text">1. 设计动因与影响因素（RQ1）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%9D%A2%E4%B8%B4%E7%9A%84%E6%8C%91%E6%88%98rq2"><span class="nav-number">1.3.2.</span> <span class="nav-text">2. 面临的挑战（RQ2）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AE%BE%E8%AE%A1%E4%B8%89%E9%9A%BE%E5%9B%B0%E5%A2%83usability-vs-security-vs-flexibilityrq3"><span class="nav-number">1.3.3.</span> <span class="nav-text">3. 设计三难困境：Usability vs Security vs Flexibility（RQ3）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%9B%E7%A0%94%E7%A9%B6%E8%B4%A1%E7%8C%AE"><span class="nav-number">1.4.</span> <span class="nav-text">四、研究贡献</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BB%BA%E8%AE%AE"><span class="nav-number">1.4.1.</span> <span class="nav-text">建议：</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%94%E7%A0%94%E7%A9%B6%E5%B1%80%E9%99%90%E4%B8%8E%E6%9C%AA%E6%9D%A5%E6%96%B9%E5%90%91"><span class="nav-number">1.5.</span> <span class="nav-text">五、研究局限与未来方向</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%AD%E6%80%BB%E7%BB%93%E8%AF%AD"><span class="nav-number">1.6.</span> <span class="nav-text">六、总结语</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%83%E4%B8%AA%E4%BA%BA%E7%90%86%E8%A7%A3"><span class="nav-number">1.7.</span> <span class="nav-text">七、个人理解</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
