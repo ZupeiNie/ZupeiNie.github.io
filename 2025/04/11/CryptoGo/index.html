@@ -375,7 +375,7 @@ mjx-container[display="true"] + br {
     <div class="post-body" itemprop="articleBody">
 
       
-        <h1>CryptoGo精读记录</h1>
+        <h1 id="cryptogo精读记录">CryptoGo精读记录</h1>
 <p>论文地址：<a target="_blank" rel="noopener" href="https://dl.acm.org/doi/10.1145/3564625.3567989">CryptoGo: Automatic Detection of Go Cryptographic API Misuses | Proceedings of the 38th Annual Computer Security Applications Conference (acm.org)</a></p>
 <p>ACSAC '22 CCF-B</p>
 <p>总结：1.使用污点分析静态程序分析技术；2.设计5种污点分析规则；3.设计12种加密规则；4.说明不同API对应的source、sink、filter</p>
@@ -383,19 +383,25 @@ mjx-container[display="true"] + br {
 <h2 id="背景和相关工作">背景和相关工作</h2>
 <p>面对误用，开发人员存在1.readme文档写的不好2.自身知识不够两个问题</p>
 <p>当前Go领域还没有针对性的检测工具</p>
-<img src="/2025/04/11/CryptoGo/Snipaste_2025-04-11_00-13-38.png" alt="Snipaste_2025-04-11_00-13-38" style="zoom:50%;">
+<p><img src="/2025/04/11/CryptoGo/Snipaste_2025-04-11_00-13-38.png" alt="Snipaste_2025-04-11_00-13-38" style="zoom:50%;"></p>
 <h2 id="算法分类和加密规则">算法分类和加密规则</h2>
 <h3 id="算法分类">算法分类</h3>
 <p>梳理go官方提供的加密算法，标准库（v1.18.3）和补充库（v0.0.020220622213112-05595931fe9d）；针对密码算法类型和当前安全强度进行分类，见下表</p>
 <p><code>Insecure ceyptographic algorithms:不安全的算法</code></p>
 <p><code>Acceptable but not recommended cryptographic algorithms:可接受但不推荐的算法</code></p>
 <p><code>Recommended cryptographic algorithms:推荐的算法</code></p>
-<img src="/2025/04/11/CryptoGo/Snipaste_2025-04-11_00-15-48.png" alt="Snipaste_2025-04-11_00-15-48" style="zoom:80%;">
+<p><img src="/2025/04/11/CryptoGo/Snipaste_2025-04-11_00-15-48.png" alt="Snipaste_2025-04-11_00-15-48" style="zoom:80%;"></p>
 <h3 id="规则梳理">规则梳理</h3>
 <p>梳理出12条加密规则</p>
 <table>
+<colgroup>
+<col style="width: 2%">
+<col style="width: 17%">
+<col style="width: 37%">
+<col style="width: 41%">
+</colgroup>
 <thead>
-<tr>
+<tr class="header">
 <th>ID</th>
 <th>属性</th>
 <th>说明</th>
@@ -403,73 +409,73 @@ mjx-container[display="true"] + br {
 </tr>
 </thead>
 <tbody>
-<tr>
+<tr class="odd">
 <td>R-01</td>
 <td>算法本身</td>
 <td>禁止使用表2中Insecure的算法</td>
 <td></td>
 </tr>
-<tr>
+<tr class="even">
 <td>R-02</td>
 <td>算法本身</td>
 <td>推荐使用表2中Recommended的算法</td>
 <td></td>
 </tr>
-<tr>
+<tr class="odd">
 <td>R-03</td>
 <td>密钥生成</td>
 <td>禁止使用不安全的伪随机数生成器（PRNG）</td>
 <td>两个PRNG：math/rand（不安全）、crypto/rand（安全）</td>
 </tr>
-<tr>
+<tr class="even">
 <td>R-04</td>
 <td>密钥生成</td>
 <td>加密密钥随机生成，而不是常量硬编码</td>
 <td></td>
 </tr>
-<tr>
+<tr class="odd">
 <td>R-05</td>
 <td>共享</td>
 <td>禁止使用相同的密钥或salt进行密钥派生</td>
 <td>密钥派生函数KDF需要开发者输入随机密码和salt</td>
 </tr>
-<tr>
+<tr class="even">
 <td>R-06</td>
 <td>分组密码初始IV或计时器</td>
 <td>分组模式前四种要求IV或计数器唯一、后两种要求IV随机生成</td>
 <td>6种分组模式（CTR、OFB、GCM、XTS、CBC和CFB）</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>R-07</td>
 <td>RSA的padding oracle</td>
 <td>禁止使用不安全的padding oracle</td>
 <td>两种：PKCS#1-v1.5（不安全）、optimal asymmetric encryption padding (OAEP，安全)</td>
 </tr>
-<tr>
+<tr class="even">
 <td>R-08</td>
 <td>http</td>
 <td>禁止使用http</td>
 <td></td>
 </tr>
-<tr>
+<tr class="odd">
 <td>R-09</td>
 <td>SSL/TLS应用程序的加密使用</td>
 <td>不允许使用弱SSL/TLS协议（SSLv2.0, SSLv3.0, TLSv1.0）</td>
 <td></td>
 </tr>
-<tr>
+<tr class="even">
 <td>R-10</td>
 <td>SSL/TLS应用程序的加密使用</td>
 <td>禁止使用不安全的密码套件</td>
 <td>CBC有padding oracle attack、安全强度不高的弱密码</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>R-11</td>
 <td>SSL/TLS应用程序的加密使用</td>
 <td>正确验证证书和主机名？</td>
 <td></td>
 </tr>
-<tr>
+<tr class="even">
 <td>R-12</td>
 <td>Go加密库</td>
 <td>禁止使用Go加密库中不安全的api</td>
@@ -477,49 +483,49 @@ mjx-container[display="true"] + br {
 </tr>
 </tbody>
 </table>
-<img src="/2025/04/11/CryptoGo/Snipaste_2025-04-11_00-16-51.png" alt="Snipaste_2025-04-11_00-16-51" style="zoom:80%;">
-<h2 id="CryptoGo设计">CryptoGo设计</h2>
-<h3 id="转成中间格式IR">转成中间格式IR</h3>
+<p><img src="/2025/04/11/CryptoGo/Snipaste_2025-04-11_00-16-51.png" alt="Snipaste_2025-04-11_00-16-51" style="zoom:80%;"></p>
+<h2 id="cryptogo设计">CryptoGo设计</h2>
+<h3 id="转成中间格式ir">转成中间格式IR</h3>
 <p>使用go的<a target="_blank" rel="noopener" href="https://pkg.go.dev/golang.org/x/tools/go/analysis/passes/buildssa">buildssa</a>包将go项目源码转化成IR中间信息（SSA形式）这一步骤的目的是为后续的静态分析构建一个易于操作的表示形式。SSA形式的中间表示接近Go的源语言，并提供了控制流和数据流的信息流图，从而为污染分析器的构建提供了便利</p>
 <p>SSA:每次对变量x赋值都重新使用一个新的变量xi，并在后续使用中选择最新的变量</p>
 <p><a target="_blank" rel="noopener" href="https://tonybai.com/2022/10/21/understand-go-ssa-by-example/">通过实例理解Go静态单赋值（SSA） | Tony Bai</a></p>
-<img src="/2025/04/11/CryptoGo/Snipaste_2025-04-11_00-27-53.png" alt="Snipaste_2025-04-11_00-27-53" style="zoom:50%;">
+<p><img src="/2025/04/11/CryptoGo/Snipaste_2025-04-11_00-27-53.png" alt="Snipaste_2025-04-11_00-27-53" style="zoom:50%;"></p>
 <h3 id="构建污染分析器">构建污染分析器</h3>
 <p>定义四种类别：source、sink、propagator、filter</p>
 <table>
 <thead>
-<tr>
+<tr class="header">
 <th>类别</th>
 <th>功能描述</th>
 <th>示例函数</th>
 </tr>
 </thead>
 <tbody>
-<tr>
+<tr class="odd">
 <td>Source</td>
 <td>产生不可信数据</td>
 <td><code>scanf()</code>, <code>recv()</code>, <code>getenv()</code></td>
 </tr>
-<tr>
+<tr class="even">
 <td>Sink</td>
 <td>使用不可信数据执行敏感操作</td>
 <td><code>system()</code>, <code>exec()</code>, <code>fwrite()</code></td>
 </tr>
-<tr>
+<tr class="odd">
 <td>Propagator</td>
 <td>传播不可信数据</td>
 <td><code>strcpy()</code>, <code>x = y</code></td>
 </tr>
-<tr>
+<tr class="even">
 <td>Filter</td>
 <td>过滤不可信数据</td>
 <td><code>html_escape()</code>, <code>validate_input()</code></td>
 </tr>
 </tbody>
 </table>
-<img src="/2025/04/11/CryptoGo/Snipaste_2025-04-11_00-31-30.png" alt="Snipaste_2025-04-11_00-31-30" style="zoom:50%;">
+<p><img src="/2025/04/11/CryptoGo/Snipaste_2025-04-11_00-31-30.png" alt="Snipaste_2025-04-11_00-31-30" style="zoom:50%;"></p>
 <p>为了便于信息流的跟踪，CryptoGo定义了五种主要的污染分析器：</p>
-<ol>
+<ol type="1">
 <li><strong>不安全的API调用识别</strong>：识别和标记在Go项目中使用的不安全的加密API，如不安全的加密算法、不安全的RSA填充方式等</li>
 <li><strong>密钥长度跟踪</strong>：跟踪使用不同密钥长度的加密API，并确保其安全性。特别是，对于不同的密钥长度，CryptoGo会根据算法类型进行区分</li>
 <li><strong>函数嵌套跟踪</strong>：跟踪嵌套的加密函数调用，确保高层次的加密API调用使用的是安全的底层加密原语</li>
@@ -529,43 +535,37 @@ mjx-container[display="true"] + br {
 <h3 id="污染分析">污染分析</h3>
 <p>污染分析通过跟踪Go程序中的信息流来检测潜在的密码滥用。分析可以分为加密API调用识别、向后污染跟踪和正向污染跟踪：</p>
 <ul>
-<li>
-<p><strong>加密API调用识别</strong>：分析发现API调用数&gt;变量数，故而找到SSA中所有调用的形式，根据规则确定是否有误用</p>
-</li>
-<li>
-<p><strong>向后污染跟踪</strong>：用于跟踪从API参数到其定义之间的信息流，确保这些参数的定义符合安全要求。例如，在AES-CBC加密中，CryptoGo确保密钥和IV的生成是随机且不可预测的</p>
+<li><p><strong>加密API调用识别</strong>：分析发现API调用数&gt;变量数，故而找到SSA中所有调用的形式，根据规则确定是否有误用</p></li>
+<li><p><strong>向后污染跟踪</strong>：用于跟踪从API参数到其定义之间的信息流，确保这些参数的定义符合安全要求。例如，在AES-CBC加密中，CryptoGo确保密钥和IV的生成是随机且不可预测的</p>
 <table>
 <thead>
-<tr>
+<tr class="header">
 <th>类型</th>
 <th>追踪终止条件</th>
 <th>判定依据（是否安全）</th>
 </tr>
 </thead>
 <tbody>
-<tr>
+<tr class="odd">
 <td>key length tracking</td>
 <td>遇到 <code>*ssa.Const</code>（常量）</td>
 <td>若是合法长度常量 → 安全</td>
 </tr>
-<tr>
+<tr class="even">
 <td>function nesting tracking</td>
 <td>遇到 <code>*ssa.Call</code>（函数调用）</td>
 <td>进一步分析函数是否可信</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>randomness tracking</td>
 <td>遇到 <code>*ssa.Call</code> 且为过滤器函数</td>
 <td>有过滤器 → 安全；否则 → 加密误用</td>
 </tr>
 </tbody>
-</table>
-</li>
-<li>
-<p><strong>正向污染跟踪</strong>：用于跟踪从定义到使用之间的流向，特别是在SSL/TLS配置中，确保所有配置参数符合安全要求</p>
-</li>
+</table></li>
+<li><p><strong>正向污染跟踪</strong>：用于跟踪从定义到使用之间的流向，特别是在SSL/TLS配置中，确保所有配置参数符合安全要求</p></li>
 </ul>
-<img src="/2025/04/11/CryptoGo/Snipaste_2025-04-11_00-29-11.png" alt="Snipaste_2025-04-11_00-29-11" style="zoom:50%;">
+<p><img src="/2025/04/11/CryptoGo/Snipaste_2025-04-11_00-29-11.png" alt="Snipaste_2025-04-11_00-29-11" style="zoom:50%;"></p>
 <h2 id="实施与评估">实施与评估</h2>
 <h3 id="实施">实施</h3>
 <ul>
@@ -575,35 +575,25 @@ mjx-container[display="true"] + br {
 </ul>
 <h3 id="评估">评估</h3>
 <ul>
-<li>
-<p>实验设置</p>
+<li><p>实验设置</p>
 <ul>
 <li><strong>数据集选择</strong>: 研究团队从GitHub上选择了120个开源Go项目作为数据集，这些项目涉及区块链、公钥基础设施（PKI）、VPN、证书、加密工具和TLS等主题</li>
 <li><strong>执行环境</strong>: 实验是在配备Intel Xeon E5-2682 v4（2.50 GHz CPU和4GB内存）的PC上进行的，平均每千行代码的运行时间为86毫秒</li>
-</ul>
-</li>
-<li>
-<p>实验结果</p>
+</ul></li>
+<li><p>实验结果</p>
 <ul>
-<li>
-<p><strong>警报总数</strong>: 在120个Go项目中，CryptoGo共发出了622个加密API警报，涵盖了83.33%的项目，这些项目至少存在一次加密滥用</p>
-<img src="/2025/04/11/CryptoGo/Snipaste_2025-04-11_00-37-04.png" alt="Snipaste_2025-04-11_00-37-04" style="zoom:70%;">
-</li>
-<li>
-<p><strong>准确率</strong>: 手动源代码分析确认了622个警报中的594个为真阳性，导致CryptoGo的整体准确率为95.50%，28 例误报是由于路径不敏感和调用了非官方 Go 密码库的 API</p>
-</li>
-<li>
-<p>误用类型</p>
+<li><p><strong>警报总数</strong>: 在120个Go项目中，CryptoGo共发出了622个加密API警报，涵盖了83.33%的项目，这些项目至少存在一次加密滥用</p>
+<p><img src="/2025/04/11/CryptoGo/Snipaste_2025-04-11_00-37-04.png" alt="Snipaste_2025-04-11_00-37-04" style="zoom:70%;"></p></li>
+<li><p><strong>准确率</strong>: 手动源代码分析确认了622个警报中的594个为真阳性，导致CryptoGo的整体准确率为95.50%，28 例误报是由于路径不敏感和调用了非官方 Go 密码库的 API</p></li>
+<li><p>误用类型</p>
 <ul>
 <li><strong>不安全的加密算法</strong>: 在48个Go项目中共发现151个不安全的加密算法使用案例，其中包括MD5、SHA-1等不推荐使用的算法</li>
 <li><strong>随机性滥用</strong>: CryptoGo报告了85例随机性滥用，包括可预测的密钥生成、不安全的初始化向量（IV）等问题</li>
+</ul></li>
+</ul></li>
 </ul>
-</li>
-</ul>
-</li>
-</ul>
-<img src="/2025/04/11/CryptoGo/Snipaste_2025-04-11_00-38-28.png" alt="Snipaste_2025-04-11_00-38-28" style="zoom:50%;">
-<img src="/2025/04/11/CryptoGo/Snipaste_2025-04-11_00-39-44.png" alt="Snipaste_2025-04-11_00-39-44" style="zoom:60%;">
+<p><img src="/2025/04/11/CryptoGo/Snipaste_2025-04-11_00-38-28.png" alt="Snipaste_2025-04-11_00-38-28" style="zoom:50%;"></p>
+<p><img src="/2025/04/11/CryptoGo/Snipaste_2025-04-11_00-39-44.png" alt="Snipaste_2025-04-11_00-39-44" style="zoom:60%;"></p>
 <h2 id="限制和讨论">限制和讨论</h2>
 <h3 id="支持的加密库">支持的加密库</h3>
 <p><strong>局限性：</strong></p>
@@ -757,7 +747,7 @@ mjx-container[display="true"] + br {
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">1.</span> <span class="nav-text">CryptoGo精读记录</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%83%8C%E6%99%AF%E5%92%8C%E7%9B%B8%E5%85%B3%E5%B7%A5%E4%BD%9C"><span class="nav-number">1.1.</span> <span class="nav-text">背景和相关工作</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AE%97%E6%B3%95%E5%88%86%E7%B1%BB%E5%92%8C%E5%8A%A0%E5%AF%86%E8%A7%84%E5%88%99"><span class="nav-number">1.2.</span> <span class="nav-text">算法分类和加密规则</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AE%97%E6%B3%95%E5%88%86%E7%B1%BB"><span class="nav-number">1.2.1.</span> <span class="nav-text">算法分类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A7%84%E5%88%99%E6%A2%B3%E7%90%86"><span class="nav-number">1.2.2.</span> <span class="nav-text">规则梳理</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CryptoGo%E8%AE%BE%E8%AE%A1"><span class="nav-number">1.3.</span> <span class="nav-text">CryptoGo设计</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BD%AC%E6%88%90%E4%B8%AD%E9%97%B4%E6%A0%BC%E5%BC%8FIR"><span class="nav-number">1.3.1.</span> <span class="nav-text">转成中间格式IR</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9E%84%E5%BB%BA%E6%B1%A1%E6%9F%93%E5%88%86%E6%9E%90%E5%99%A8"><span class="nav-number">1.3.2.</span> <span class="nav-text">构建污染分析器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B1%A1%E6%9F%93%E5%88%86%E6%9E%90"><span class="nav-number">1.3.3.</span> <span class="nav-text">污染分析</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%9E%E6%96%BD%E4%B8%8E%E8%AF%84%E4%BC%B0"><span class="nav-number">1.4.</span> <span class="nav-text">实施与评估</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9E%E6%96%BD"><span class="nav-number">1.4.1.</span> <span class="nav-text">实施</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AF%84%E4%BC%B0"><span class="nav-number">1.4.2.</span> <span class="nav-text">评估</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%99%90%E5%88%B6%E5%92%8C%E8%AE%A8%E8%AE%BA"><span class="nav-number">1.5.</span> <span class="nav-text">限制和讨论</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%94%AF%E6%8C%81%E7%9A%84%E5%8A%A0%E5%AF%86%E5%BA%93"><span class="nav-number">1.5.1.</span> <span class="nav-text">支持的加密库</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%B7%AF%E5%BE%84%E4%B8%8D%E6%95%8F%E6%84%9F%E6%80%A7"><span class="nav-number">1.5.2.</span> <span class="nav-text">路径不敏感性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%9D%99%E6%80%81%E5%88%86%E6%9E%90%E7%9A%84%E5%9B%BA%E6%9C%89%E9%99%90%E5%88%B6"><span class="nav-number">1.5.3.</span> <span class="nav-text">静态分析的固有限制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%B4%A3%E4%BB%BB%E6%8A%AB%E9%9C%B2%E4%B8%8E%E5%BC%80%E5%8F%91%E8%80%85%E5%8F%8D%E9%A6%88"><span class="nav-number">1.5.4.</span> <span class="nav-text">责任披露与开发者反馈</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%AA%E6%9D%A5%E5%B7%A5%E4%BD%9C%E6%96%B9%E5%90%91"><span class="nav-number">1.5.5.</span> <span class="nav-text">未来工作方向</span></a></li></ol></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#cryptogo%E7%B2%BE%E8%AF%BB%E8%AE%B0%E5%BD%95"><span class="nav-number">1.</span> <span class="nav-text">CryptoGo精读记录</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%83%8C%E6%99%AF%E5%92%8C%E7%9B%B8%E5%85%B3%E5%B7%A5%E4%BD%9C"><span class="nav-number">1.1.</span> <span class="nav-text">背景和相关工作</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AE%97%E6%B3%95%E5%88%86%E7%B1%BB%E5%92%8C%E5%8A%A0%E5%AF%86%E8%A7%84%E5%88%99"><span class="nav-number">1.2.</span> <span class="nav-text">算法分类和加密规则</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AE%97%E6%B3%95%E5%88%86%E7%B1%BB"><span class="nav-number">1.2.1.</span> <span class="nav-text">算法分类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A7%84%E5%88%99%E6%A2%B3%E7%90%86"><span class="nav-number">1.2.2.</span> <span class="nav-text">规则梳理</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#cryptogo%E8%AE%BE%E8%AE%A1"><span class="nav-number">1.3.</span> <span class="nav-text">CryptoGo设计</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BD%AC%E6%88%90%E4%B8%AD%E9%97%B4%E6%A0%BC%E5%BC%8Fir"><span class="nav-number">1.3.1.</span> <span class="nav-text">转成中间格式IR</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9E%84%E5%BB%BA%E6%B1%A1%E6%9F%93%E5%88%86%E6%9E%90%E5%99%A8"><span class="nav-number">1.3.2.</span> <span class="nav-text">构建污染分析器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B1%A1%E6%9F%93%E5%88%86%E6%9E%90"><span class="nav-number">1.3.3.</span> <span class="nav-text">污染分析</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%9E%E6%96%BD%E4%B8%8E%E8%AF%84%E4%BC%B0"><span class="nav-number">1.4.</span> <span class="nav-text">实施与评估</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9E%E6%96%BD"><span class="nav-number">1.4.1.</span> <span class="nav-text">实施</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AF%84%E4%BC%B0"><span class="nav-number">1.4.2.</span> <span class="nav-text">评估</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%99%90%E5%88%B6%E5%92%8C%E8%AE%A8%E8%AE%BA"><span class="nav-number">1.5.</span> <span class="nav-text">限制和讨论</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%94%AF%E6%8C%81%E7%9A%84%E5%8A%A0%E5%AF%86%E5%BA%93"><span class="nav-number">1.5.1.</span> <span class="nav-text">支持的加密库</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%B7%AF%E5%BE%84%E4%B8%8D%E6%95%8F%E6%84%9F%E6%80%A7"><span class="nav-number">1.5.2.</span> <span class="nav-text">路径不敏感性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%9D%99%E6%80%81%E5%88%86%E6%9E%90%E7%9A%84%E5%9B%BA%E6%9C%89%E9%99%90%E5%88%B6"><span class="nav-number">1.5.3.</span> <span class="nav-text">静态分析的固有限制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%B4%A3%E4%BB%BB%E6%8A%AB%E9%9C%B2%E4%B8%8E%E5%BC%80%E5%8F%91%E8%80%85%E5%8F%8D%E9%A6%88"><span class="nav-number">1.5.4.</span> <span class="nav-text">责任披露与开发者反馈</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%AA%E6%9D%A5%E5%B7%A5%E4%BD%9C%E6%96%B9%E5%90%91"><span class="nav-number">1.5.5.</span> <span class="nav-text">未来工作方向</span></a></li></ol></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
